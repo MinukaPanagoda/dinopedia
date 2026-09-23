@@ -45,11 +45,6 @@ export default function Navbar({ activeTab, setActiveTab }) {
 
         {/* Right Action Area - Clean / Mobile toggle */}
         <div className="nav-actions">
-          <div className="nav-era-indicator">
-            <Sparkles size={14} color="#F59E0B" />
-            <span>Mesozoic Era (252–66 MYA)</span>
-          </div>
-
           <button 
             className="mobile-menu-btn" 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

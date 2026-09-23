@@ -90,11 +90,6 @@ export default function HomePage({ setActiveTab }) {
     <div className="home-container">
       {/* Age of Dinosaurs Header Banner */}
       <section className="hero-section">
-        <div className="hero-pill">
-          <Clock size={15} color="#F59E0B" />
-          <span>The Mesozoic Chronology • 252 to 66 Million Years Ago</span>
-        </div>
-
         <h1 className="hero-title">
           Age of <span className="hero-title-gradient">Dinosaurs</span>
         </h1>
