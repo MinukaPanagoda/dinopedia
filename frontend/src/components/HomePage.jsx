@@ -1,31 +1,22 @@
 import React, { useState, useMemo } from 'react';
-import { DINOSAURS, PERIODS, DINO_TYPES, FUN_FACTS } from '../data/dinosaurs';
+import { DINOSAURS, PERIODS, DINO_TYPES } from '../data/dinosaurs';
 import { 
   Clock, 
-  Sparkles, 
-  ArrowRight, 
   Search, 
   Layers, 
   Calendar, 
-  SlidersHorizontal, 
-  Compass, 
-  Check, 
-  RefreshCw,
-  Lightbulb,
-  ChevronRight,
-  Shield,
-  Activity
+  Activity,
+  ArrowRight
 } from 'lucide-react';
 import DinoModal from './DinoModal';
 
-export default function HomePage({ setActiveTab }) {
+export default function HomePage() {
   const [selectedEra, setSelectedEra] = useState('All');
   const [selectedType, setSelectedType] = useState('All');
   const [selectedDiet, setSelectedDiet] = useState('All');
   const [viewMode, setViewMode] = useState('timeline'); // 'timeline' | 'eras' | 'types'
   const [searchQuery, setSearchQuery] = useState('');
   const [activeModalDino, setActiveModalDino] = useState(null);
-  const [factIndex, setFactIndex] = useState(0);
 
   // Filtered dinosaurs
   const filteredDinos = useMemo(() => {
@@ -60,10 +51,6 @@ export default function HomePage({ setActiveTab }) {
     })).filter(group => group.dinosaurs.length > 0);
   }, [filteredDinos]);
 
-  const nextFact = () => {
-    setFactIndex((prev) => (prev + 1) % FUN_FACTS.length);
-  };
-
   const getEraColor = (era) => {
     switch (era) {
       case 'Triassic': return '#F59E0B';
@@ -89,7 +76,7 @@ export default function HomePage({ setActiveTab }) {
   return (
     <div className="home-container">
       {/* Age of Dinosaurs Header Banner */}
-      <section className="hero-section">
+      <section className="hero-section" style={{ paddingBottom: '2rem' }}>
         <h1 className="hero-title">
           Age of <span className="hero-title-gradient">Dinosaurs</span>
         </h1>
@@ -105,7 +92,7 @@ export default function HomePage({ setActiveTab }) {
             <span className="timeline-scale-title">
               <Activity size={14} /> Mesozoic Era Timeline Span (186 Million Years)
             </span>
-            <span className="timeline-scale-note">252 MYA (P-T Extinction) ➔ 66 MYA (K-Pg Extinction)</span>
+            <span className="timeline-scale-note">252 MYA ➔ 66 MYA</span>
           </div>
 
           <div className="timeline-segments-track">
@@ -133,90 +120,14 @@ export default function HomePage({ setActiveTab }) {
         </div>
       </section>
 
-      {/* 3 Great Eras Cards Overview */}
-      <section style={{ marginBottom: '3.5rem' }}>
-        <div className="section-header">
-          <div>
-            <div className="section-tag">
-              <Calendar size={14} /> Geological Eras
-            </div>
-            <h2 className="section-title">Categorization by Eras & Climate</h2>
-          </div>
-
-          {selectedEra !== 'All' && (
-            <button className="reset-filter-btn" onClick={() => setSelectedEra('All')}>
-              Show All Eras
-            </button>
-          )}
-        </div>
-
-        <div className="periods-grid">
-          {PERIODS.map((period) => {
-            const isSelected = selectedEra === period.name;
-            const count = DINOSAURS.filter(d => d.periodEra === period.name).length;
-
-            return (
-              <div 
-                key={period.name} 
-                className={`period-card glass-panel interactive-card ${isSelected ? 'period-card-selected' : ''}`}
-                style={{ '--period-color': period.color }}
-                onClick={() => setSelectedEra(selectedEra === period.name ? 'All' : period.name)}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-                  <span className="period-badge">{period.dates}</span>
-                  <span className="era-count-chip">{count} Species Documented</span>
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                  <span style={{ fontSize: '1.5rem' }}>{period.icon}</span>
-                  <h3 className="period-name">{period.full}</h3>
-                </div>
-
-                <p className="period-dates">{period.spanMYA} Span • {period.highlight}</p>
-                <p className="period-desc">{period.description}</p>
-
-                <div className="era-climate-box">
-                  <div className="climate-row">
-                    <strong>Climate:</strong> {period.climate}
-                  </div>
-                  <div className="climate-row">
-                    <strong>Atmosphere:</strong> {period.atmosphere}
-                  </div>
-                </div>
-
-                <div className="period-filter-indicator">
-                  <span>{isSelected ? '✓ Showing this Era' : 'Click to filter by Era'}</span>
-                  <ChevronRight size={16} />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Interactive Fact of the Day Banner */}
-      <section className="fact-banner glass-panel">
-        <div className="fact-content">
-          <div className="fact-title-row">
-            <Lightbulb size={18} color="#F59E0B" />
-            <span>Prehistoric Fact #{factIndex + 1}</span>
-          </div>
-          <p className="fact-text">"{FUN_FACTS[factIndex]}"</p>
-        </div>
-        <button className="fact-refresh-btn" onClick={nextFact}>
-          <RefreshCw size={16} />
-          <span>Next Fact</span>
-        </button>
-      </section>
-
       {/* Main Categorization & Compendium Section */}
-      <section id="age-of-dinosaurs-compendium" style={{ marginTop: '3.5rem' }}>
+      <section id="age-of-dinosaurs-compendium" style={{ marginTop: '2rem' }}>
         <div className="section-header">
           <div>
             <div className="section-tag">
               <Layers size={14} /> Species Compendium
             </div>
-            <h2 className="section-title">Categorized Prehistoric Archive</h2>
+            <h2 className="section-title">Prehistoric Archive</h2>
             <p style={{ color: '#9CA3AF', fontSize: '0.95rem', marginTop: '4px' }}>
               Showing <strong>{filteredDinos.length}</strong> dinosaurs categorized by eras, exact timelines, and clades.
             </p>
@@ -321,8 +232,6 @@ export default function HomePage({ setActiveTab }) {
         {/* View Mode 1: Exact Chronological Timeline */}
         {viewMode === 'timeline' && (
           <div className="timeline-flow-wrap">
-            <div className="timeline-spine-bar" />
-            
             <div className="dinosaurs-grid">
               {filteredDinos.length > 0 ? (
                 filteredDinos.map((dino) => (
