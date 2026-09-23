@@ -230,10 +230,25 @@ button {
 }
 
 /* Home Page */
+.home-page-wrapper {
+  position: relative;
+  min-height: calc(100vh - 72px);
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .home-container {
   max-width: 1300px;
+  width: 100%;
   margin: 0 auto;
-  padding: 2.5rem 1.5rem 6rem;
+  padding: 2.5rem 1.5rem 4rem;
+  position: relative;
+  z-index: 1;
 }
 
 /* Hero Section */
