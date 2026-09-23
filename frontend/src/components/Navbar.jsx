@@ -1,22 +1,28 @@
 import React, { useState } from 'react';
-import { Sparkles, BookOpen, Clock, Award, Scale, Search, Menu, X } from 'lucide-react';
+import { Clock, Menu, X, Sparkles } from 'lucide-react';
 import DinoSkull from './DinoSkull';
 
-export default function Navbar({ activeTab, setActiveTab, onSearchClick }) {
+export default function Navbar({ activeTab, setActiveTab }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navItems = [
-    { id: 'encyclopedia', label: 'Dinosaurs', icon: BookOpen },
-    { id: 'periods', label: 'Eras & Timeline', icon: Clock },
-    { id: 'quiz', label: 'Quiz Arena', icon: Award },
-    { id: 'compare', label: 'Compare Lab', icon: Scale },
-  ];
+  const handleNavClick = (tabId) => {
+    setActiveTab(tabId);
+    setMobileMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <nav className="navbar-container">
       <div className="navbar-inner">
         {/* Brand */}
-        <a href="#" className="nav-brand" onClick={(e) => { e.preventDefault(); setActiveTab('encyclopedia'); }}>
+        <a 
+          href="#" 
+          className="nav-brand" 
+          onClick={(e) => { 
+            e.preventDefault(); 
+            handleNavClick('age-of-dinosaurs'); 
+          }}
+        >
           <div className="nav-logo-icon">
             <DinoSkull size={24} />
           </div>
@@ -26,38 +32,23 @@ export default function Navbar({ activeTab, setActiveTab, onSearchClick }) {
           </div>
         </a>
 
-        {/* Desktop Links */}
+        {/* Desktop Navigation - Only Age of Dinosaurs */}
         <div className="nav-links">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-            return (
-              <button
-                key={item.id}
-                className={`nav-link-btn ${isActive ? 'active' : ''}`}
-                onClick={() => setActiveTab(item.id)}
-              >
-                <Icon size={16} />
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
+          <button
+            className={`nav-link-btn ${activeTab === 'age-of-dinosaurs' ? 'active' : ''}`}
+            onClick={() => handleNavClick('age-of-dinosaurs')}
+          >
+            <Clock size={17} />
+            <span>Age of Dinosaurs</span>
+          </button>
         </div>
 
-        {/* Right CTA & Search */}
+        {/* Right Action Area - Clean / Mobile toggle */}
         <div className="nav-actions">
-          <button className="nav-search-trigger" onClick={onSearchClick} title="Search prehistoric life">
-            <Search size={15} />
-            <span>Search species...</span>
-          </button>
-
-          <button 
-            className="nav-cta-btn" 
-            onClick={() => setActiveTab('quiz')}
-          >
-            <Sparkles size={16} />
-            <span>Dino Quiz</span>
-          </button>
+          <div className="nav-era-indicator">
+            <Sparkles size={14} color="#F59E0B" />
+            <span>Mesozoic Era (252–66 MYA)</span>
+          </div>
 
           <button 
             className="mobile-menu-btn" 
@@ -79,24 +70,14 @@ export default function Navbar({ activeTab, setActiveTab, onSearchClick }) {
           borderTop: '1px solid rgba(255,255,255,0.08)',
           marginTop: '0.75rem'
         }}>
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-            return (
-              <button
-                key={item.id}
-                className={`nav-link-btn ${isActive ? 'active' : ''}`}
-                style={{ width: '100%', justifyContent: 'flex-start', padding: '0.75rem 1rem' }}
-                onClick={() => {
-                  setActiveTab(item.id);
-                  setMobileMenuOpen(false);
-                }}
-              >
-                <Icon size={18} />
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
+          <button
+            className={`nav-link-btn ${activeTab === 'age-of-dinosaurs' ? 'active' : ''}`}
+            style={{ width: '100%', justifyContent: 'flex-start', padding: '0.75rem 1rem' }}
+            onClick={() => handleNavClick('age-of-dinosaurs')}
+          >
+            <Clock size={18} />
+            <span>Age of Dinosaurs</span>
+          </button>
         </div>
       )}
     </nav>

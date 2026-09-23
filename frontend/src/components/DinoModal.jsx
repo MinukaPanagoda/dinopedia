@@ -1,8 +1,16 @@
 import React from 'react';
-import { X, MapPin, Ruler, Weight, Gauge, Zap, Volume2, Sparkles } from 'lucide-react';
+import { X, MapPin, Ruler, Weight, Gauge, Sparkles, Clock, Layers } from 'lucide-react';
 
 export default function DinoModal({ dino, onClose }) {
   if (!dino) return null;
+
+  const eraColors = {
+    Triassic: '#F59E0B',
+    Jurassic: '#10B981',
+    Cretaceous: '#EC4899',
+  };
+
+  const periodColor = eraColors[dino.periodEra] || '#F59E0B';
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -17,12 +25,34 @@ export default function DinoModal({ dino, onClose }) {
           </div>
 
           <div className="modal-titles">
-            <span className="dino-period-tag">{dino.periodMYA} • {dino.period}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '8px' }}>
+              <span 
+                className="dino-period-tag"
+                style={{ background: `${periodColor}25`, color: periodColor, borderColor: `${periodColor}50` }}
+              >
+                {dino.periodEra} Era • {dino.periodMYA}
+              </span>
+              <span className="dino-type-pill" style={{ fontSize: '0.72rem', padding: '0.2rem 0.65rem' }}>
+                {dino.type}
+              </span>
+            </div>
+
             <h2 className="modal-dino-name">{dino.name}</h2>
             <p className="dino-meaning">"{dino.meaning}"</p>
-            <div className="modal-discovery-site">
-              <MapPin size={15} color="#10B981" />
-              <span>{dino.discovered}</span>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '6px' }}>
+              <div className="modal-discovery-site">
+                <Clock size={14} color={periodColor} />
+                <span><strong>Epoch / Stage:</strong> {dino.epoch} ({dino.period})</span>
+              </div>
+              <div className="modal-discovery-site">
+                <Layers size={14} color="#38BDF8" />
+                <span><strong>Clade / Subtype:</strong> {dino.subType}</span>
+              </div>
+              <div className="modal-discovery-site">
+                <MapPin size={14} color="#10B981" />
+                <span><strong>Fossil Locality:</strong> {dino.discovered}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -50,7 +80,7 @@ export default function DinoModal({ dino, onClose }) {
         </div>
 
         {/* Anatomical Traits */}
-        <h4 style={{ fontSize: '0.9rem', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
+        <h4 style={{ fontSize: '0.85rem', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
           Key Anatomical Traits
         </h4>
         <div className="traits-list">
@@ -62,17 +92,17 @@ export default function DinoModal({ dino, onClose }) {
         </div>
 
         {/* Description */}
-        <h4 style={{ fontSize: '0.9rem', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
+        <h4 style={{ fontSize: '0.85rem', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
           Paleobiological Overview
         </h4>
-        <p style={{ color: '#D1D5DB', fontSize: '0.95rem', lineHeight: '1.7', marginBottom: '1.5rem' }}>
+        <p style={{ color: '#D1D5DB', fontSize: '0.92rem', lineHeight: '1.7', marginBottom: '1.5rem' }}>
           {dino.description}
         </p>
 
         {/* Fun Fact */}
         <div className="modal-funfact">
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: '700', color: '#F59E0B', marginBottom: '4px' }}>
-            <Sparkles size={16} /> Did You Know?
+            <Sparkles size={16} /> Prehistoric Fact
           </div>
           <p>{dino.funFact}</p>
         </div>

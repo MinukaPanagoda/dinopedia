@@ -1,110 +1,201 @@
-import React, { useState } from 'react';
-import { DINOSAURS, PERIODS, FUN_FACTS } from '../data/dinosaurs';
-import { Sparkles, ArrowRight, Search, Clock, Compass, ShieldAlert, Award, Lightbulb, RefreshCw } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { DINOSAURS, PERIODS, DINO_TYPES, FUN_FACTS } from '../data/dinosaurs';
+import { 
+  Clock, 
+  Sparkles, 
+  ArrowRight, 
+  Search, 
+  Layers, 
+  Calendar, 
+  SlidersHorizontal, 
+  Compass, 
+  Check, 
+  RefreshCw,
+  Lightbulb,
+  ChevronRight,
+  Shield,
+  Activity
+} from 'lucide-react';
 import DinoModal from './DinoModal';
 
-export default function HomePage({ setActiveTab, searchInputRef }) {
-  const [selectedDiet, setSelectedDiet] = useState('All');
+export default function HomePage({ setActiveTab }) {
   const [selectedEra, setSelectedEra] = useState('All');
+  const [selectedType, setSelectedType] = useState('All');
+  const [selectedDiet, setSelectedDiet] = useState('All');
+  const [viewMode, setViewMode] = useState('timeline'); // 'timeline' | 'eras' | 'types'
   const [searchQuery, setSearchQuery] = useState('');
   const [activeModalDino, setActiveModalDino] = useState(null);
   const [factIndex, setFactIndex] = useState(0);
 
-  const filteredDinos = DINOSAURS.filter((d) => {
-    const matchesDiet = selectedDiet === 'All' || d.diet.toLowerCase().includes(selectedDiet.toLowerCase());
-    const matchesEra = selectedEra === 'All' || d.periodEra.toLowerCase() === selectedEra.toLowerCase();
-    const matchesSearch = d.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          d.meaning.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          d.period.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesDiet && matchesEra && matchesSearch;
-  });
+  // Filtered dinosaurs
+  const filteredDinos = useMemo(() => {
+    return DINOSAURS.filter((d) => {
+      const matchesEra = selectedEra === 'All' || d.periodEra.toLowerCase() === selectedEra.toLowerCase();
+      const matchesType = selectedType === 'All' || d.type.toLowerCase() === selectedType.toLowerCase();
+      const matchesDiet = selectedDiet === 'All' || d.diet.toLowerCase().includes(selectedDiet.toLowerCase());
+      const matchesSearch = 
+        d.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        d.meaning.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        d.period.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        d.epoch.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        d.subType.toLowerCase().includes(searchQuery.toLowerCase());
+
+      return matchesEra && matchesType && matchesDiet && matchesSearch;
+    }).sort((a, b) => b.myaStart - a.myaStart); // Chronological: oldest to youngest
+  }, [selectedEra, selectedType, selectedDiet, searchQuery]);
+
+  // Grouped by Eras
+  const dinosByEra = useMemo(() => {
+    return PERIODS.map(period => ({
+      period,
+      dinosaurs: filteredDinos.filter(d => d.periodEra.toLowerCase() === period.name.toLowerCase())
+    }));
+  }, [filteredDinos]);
+
+  // Grouped by Types
+  const dinosByType = useMemo(() => {
+    return DINO_TYPES.filter(t => t.id !== 'All').map(type => ({
+      type,
+      dinosaurs: filteredDinos.filter(d => d.type.toLowerCase() === type.id.toLowerCase())
+    })).filter(group => group.dinosaurs.length > 0);
+  }, [filteredDinos]);
 
   const nextFact = () => {
     setFactIndex((prev) => (prev + 1) % FUN_FACTS.length);
   };
 
+  const getEraColor = (era) => {
+    switch (era) {
+      case 'Triassic': return '#F59E0B';
+      case 'Jurassic': return '#10B981';
+      case 'Cretaceous': return '#EC4899';
+      default: return '#F59E0B';
+    }
+  };
+
+  const getTypeColor = (type) => {
+    const found = DINO_TYPES.find(t => t.id === type);
+    return found ? found.badgeColor : '#38BDF8';
+  };
+
+  // Calculate percentage along 252 - 66 MYA scale (186 MY total)
+  const getTimelineBarPosition = (startMya, endMya) => {
+    const totalSpan = 252 - 66; // 186
+    const leftPercent = Math.max(0, Math.min(100, ((252 - startMya) / totalSpan) * 100));
+    const widthPercent = Math.max(3, Math.min(100 - leftPercent, ((startMya - endMya) / totalSpan) * 100));
+    return { left: `${leftPercent}%`, width: `${widthPercent}%` };
+  };
+
   return (
     <div className="home-container">
-      {/* Hero Section */}
+      {/* Age of Dinosaurs Header Banner */}
       <section className="hero-section">
         <div className="hero-pill">
-          <Sparkles size={14} />
-          <span>Mesozoic Era • 252 to 66 Million Years Ago</span>
+          <Clock size={15} color="#F59E0B" />
+          <span>The Mesozoic Chronology • 252 to 66 Million Years Ago</span>
         </div>
 
         <h1 className="hero-title">
-          Journey Into The <br />
-          <span className="hero-title-gradient">Realm of Ancient Giants</span>
+          Age of <span className="hero-title-gradient">Dinosaurs</span>
         </h1>
 
         <p className="hero-subtitle">
-          An interactive scientific encyclopedia exploring the apex predators, towering herbivores, 
-          and prehistoric ecosystems that ruled our planet for over 180 million years.
+          Comprehensive prehistoric classification. Explore every species categorized by their 
+          <strong> geological era</strong>, <strong>exact lived timeline</strong>, and <strong>anatomical clade</strong>.
         </p>
 
-        <div className="hero-actions">
-          <a href="#encyclopedia" className="btn-primary">
-            <Compass size={18} />
-            <span>Explore Species</span>
-          </a>
-          <button 
-            className="btn-secondary" 
-            onClick={() => setActiveTab('quiz')}
-          >
-            <Award size={18} />
-            <span>Test Your Knowledge</span>
-          </button>
-        </div>
+        {/* Geological Macro Timeline Visualizer */}
+        <div className="timeline-visual-scale glass-panel">
+          <div className="timeline-scale-header">
+            <span className="timeline-scale-title">
+              <Activity size={14} /> Mesozoic Era Timeline Span (186 Million Years)
+            </span>
+            <span className="timeline-scale-note">252 MYA (P-T Extinction) ➔ 66 MYA (K-Pg Extinction)</span>
+          </div>
 
-        {/* Hero Stats */}
-        <div className="hero-stats-grid">
-          <div className="stat-card glass-panel">
-            <div className="stat-num" style={{ color: '#F59E0B' }}>1,000+</div>
-            <div className="stat-label">Documented Species</div>
-          </div>
-          <div className="stat-card glass-panel">
-            <div className="stat-num" style={{ color: '#10B981' }}>3 Epochs</div>
-            <div className="stat-label">Geological Periods</div>
-          </div>
-          <div className="stat-card glass-panel">
-            <div className="stat-num" style={{ color: '#38BDF8' }}>186 MYA</div>
-            <div className="stat-label">Reign on Earth</div>
-          </div>
-          <div className="stat-card glass-panel">
-            <div className="stat-num" style={{ color: '#EC4899' }}>100%</div>
-            <div className="stat-label">Fossil Backed</div>
+          <div className="timeline-segments-track">
+            {PERIODS.map(p => {
+              const isSelected = selectedEra === p.name;
+              return (
+                <button
+                  key={p.id}
+                  className={`timeline-segment-block ${isSelected ? 'active-era' : ''}`}
+                  style={{ 
+                    '--segment-color': p.color,
+                    flex: p.name === 'Triassic' ? '51' : p.name === 'Jurassic' ? '56' : '79'
+                  }}
+                  onClick={() => setSelectedEra(selectedEra === p.name ? 'All' : p.name)}
+                >
+                  <div className="segment-indicator" />
+                  <div className="segment-info">
+                    <span className="segment-name">{p.name}</span>
+                    <span className="segment-dates">{p.dates}</span>
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* Geological Periods Section */}
-      <section style={{ marginBottom: '4rem' }}>
+      {/* 3 Great Eras Cards Overview */}
+      <section style={{ marginBottom: '3.5rem' }}>
         <div className="section-header">
           <div>
             <div className="section-tag">
-              <Clock size={14} /> Geological Timeline
+              <Calendar size={14} /> Geological Eras
             </div>
-            <h2 className="section-title">The Three Great Mesozoic Eras</h2>
+            <h2 className="section-title">Categorization by Eras & Climate</h2>
           </div>
+
+          {selectedEra !== 'All' && (
+            <button className="reset-filter-btn" onClick={() => setSelectedEra('All')}>
+              Show All Eras
+            </button>
+          )}
         </div>
 
         <div className="periods-grid">
-          {PERIODS.map((period) => (
-            <div 
-              key={period.name} 
-              className="period-card glass-panel"
-              style={{ '--period-color': period.color }}
-            >
-              <span className="period-badge">{period.dates}</span>
-              <h3 className="period-name">{period.full}</h3>
-              <p className="period-dates">Dominant Epoch</p>
-              <p className="period-desc">{period.description}</p>
-              <div className="period-highlight">
-                <Sparkles size={16} />
-                <span>{period.highlight}</span>
+          {PERIODS.map((period) => {
+            const isSelected = selectedEra === period.name;
+            const count = DINOSAURS.filter(d => d.periodEra === period.name).length;
+
+            return (
+              <div 
+                key={period.name} 
+                className={`period-card glass-panel interactive-card ${isSelected ? 'period-card-selected' : ''}`}
+                style={{ '--period-color': period.color }}
+                onClick={() => setSelectedEra(selectedEra === period.name ? 'All' : period.name)}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
+                  <span className="period-badge">{period.dates}</span>
+                  <span className="era-count-chip">{count} Species Documented</span>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                  <span style={{ fontSize: '1.5rem' }}>{period.icon}</span>
+                  <h3 className="period-name">{period.full}</h3>
+                </div>
+
+                <p className="period-dates">{period.spanMYA} Span • {period.highlight}</p>
+                <p className="period-desc">{period.description}</p>
+
+                <div className="era-climate-box">
+                  <div className="climate-row">
+                    <strong>Climate:</strong> {period.climate}
+                  </div>
+                  <div className="climate-row">
+                    <strong>Atmosphere:</strong> {period.atmosphere}
+                  </div>
+                </div>
+
+                <div className="period-filter-indicator">
+                  <span>{isSelected ? '✓ Showing this Era' : 'Click to filter by Era'}</span>
+                  <ChevronRight size={16} />
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -112,123 +203,238 @@ export default function HomePage({ setActiveTab, searchInputRef }) {
       <section className="fact-banner glass-panel">
         <div className="fact-content">
           <div className="fact-title-row">
-            <Lightbulb size={18} />
+            <Lightbulb size={18} color="#F59E0B" />
             <span>Prehistoric Fact #{factIndex + 1}</span>
           </div>
           <p className="fact-text">"{FUN_FACTS[factIndex]}"</p>
         </div>
         <button className="fact-refresh-btn" onClick={nextFact}>
           <RefreshCw size={16} />
-          <span>New Fact</span>
+          <span>Next Fact</span>
         </button>
       </section>
 
-      {/* Dinosaurs Encyclopedia Section */}
-      <section id="encyclopedia">
+      {/* Main Categorization & Compendium Section */}
+      <section id="age-of-dinosaurs-compendium" style={{ marginTop: '3.5rem' }}>
         <div className="section-header">
           <div>
             <div className="section-tag">
-              <Compass size={14} /> Species Compendium
+              <Layers size={14} /> Species Compendium
             </div>
-            <h2 className="section-title">Explore Prehistoric Life</h2>
+            <h2 className="section-title">Categorized Prehistoric Archive</h2>
+            <p style={{ color: '#9CA3AF', fontSize: '0.95rem', marginTop: '4px' }}>
+              Showing <strong>{filteredDinos.length}</strong> dinosaurs categorized by eras, exact timelines, and clades.
+            </p>
+          </div>
+
+          {/* View Mode Switcher */}
+          <div className="view-mode-tabs glass-panel">
+            <button
+              className={`view-tab-btn ${viewMode === 'timeline' ? 'active' : ''}`}
+              onClick={() => setViewMode('timeline')}
+              title="Arrange chronologically by exact timeline"
+            >
+              <Clock size={15} />
+              <span>Exact Timeline</span>
+            </button>
+            <button
+              className={`view-tab-btn ${viewMode === 'eras' ? 'active' : ''}`}
+              onClick={() => setViewMode('eras')}
+              title="Group into Triassic, Jurassic, and Cretaceous"
+            >
+              <Calendar size={15} />
+              <span>By Eras</span>
+            </button>
+            <button
+              className={`view-tab-btn ${viewMode === 'types' ? 'active' : ''}`}
+              onClick={() => setViewMode('types')}
+              title="Group by Dinosaur anatomical clades"
+            >
+              <Layers size={15} />
+              <span>By Clades / Types</span>
+            </button>
           </div>
         </div>
 
-        {/* Filter Bar */}
-        <div className="filter-bar">
-          <div className="filter-pills">
-            <span style={{ fontSize: '0.85rem', color: '#6B7280', fontWeight: '600', marginRight: '0.25rem' }}>Diet:</span>
-            {['All', 'Carnivore', 'Herbivore'].map((diet) => (
-              <button
-                key={diet}
-                className={`filter-pill-btn ${selectedDiet === diet ? 'active' : ''}`}
-                onClick={() => setSelectedDiet(diet)}
-              >
-                {diet}
-              </button>
-            ))}
-
-            <span style={{ fontSize: '0.85rem', color: '#6B7280', fontWeight: '600', margin: '0 0.25rem 0 0.75rem' }}>Era:</span>
-            {['All', 'Jurassic', 'Cretaceous'].map((era) => (
-              <button
-                key={era}
-                className={`filter-pill-btn ${selectedEra === era ? 'active' : ''}`}
-                onClick={() => setSelectedEra(era)}
-              >
-                {era}
-              </button>
-            ))}
+        {/* Multi-Criteria Categorization Filters */}
+        <div className="categorization-panel glass-panel">
+          {/* Era Filter Row */}
+          <div className="cat-filter-row">
+            <span className="cat-filter-label">
+              <Calendar size={14} color="#F59E0B" /> Era / Period:
+            </span>
+            <div className="cat-pill-group">
+              {['All', 'Triassic', 'Jurassic', 'Cretaceous'].map(era => (
+                <button
+                  key={era}
+                  className={`cat-pill-btn ${selectedEra === era ? 'active' : ''}`}
+                  style={selectedEra === era && era !== 'All' ? { background: getEraColor(era), borderColor: getEraColor(era) } : {}}
+                  onClick={() => setSelectedEra(era)}
+                >
+                  {era === 'All' ? 'All Eras (252–66 MYA)' : `${era} Period`}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="search-input-wrap">
-            <Search size={16} className="search-icon" />
-            <input
-              ref={searchInputRef}
-              type="text"
-              className="search-input"
-              placeholder="Search by name, meaning..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+          {/* Dinosaur Type / Clade Filter Row */}
+          <div className="cat-filter-row">
+            <span className="cat-filter-label">
+              <Layers size={14} color="#38BDF8" /> Type of Dinosaur:
+            </span>
+            <div className="cat-pill-group">
+              {DINO_TYPES.map(type => (
+                <button
+                  key={type.id}
+                  className={`cat-pill-btn ${selectedType === type.id ? 'active' : ''}`}
+                  onClick={() => setSelectedType(type.id)}
+                >
+                  {type.name} {type.subtitle ? `(${type.subtitle})` : ''}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Diet & Search Row */}
+          <div className="cat-filter-bottom-row">
+            <div className="cat-filter-diet">
+              <span className="cat-filter-label" style={{ minWidth: 'auto' }}>Diet:</span>
+              {['All', 'Carnivore', 'Herbivore'].map(diet => (
+                <button
+                  key={diet}
+                  className={`cat-pill-btn-sm ${selectedDiet === diet ? 'active' : ''}`}
+                  onClick={() => setSelectedDiet(diet)}
+                >
+                  {diet}
+                </button>
+              ))}
+            </div>
+
+            <div className="search-input-wrap" style={{ flex: '1', maxWidth: '380px' }}>
+              <Search size={16} className="search-icon" />
+              <input
+                type="text"
+                className="search-input"
+                placeholder="Search species, clades, formations..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
           </div>
         </div>
 
-        {/* Dino Grid */}
-        <div className="dinosaurs-grid">
-          {filteredDinos.length > 0 ? (
-            filteredDinos.map((dino) => (
-              <div key={dino.id} className="dino-card glass-panel">
-                <div className="dino-card-media">
-                  <img src={dino.image} alt={dino.name} className="dino-card-img" loading="lazy" />
-                  <div className="dino-media-overlay" />
-                  <span className={`dino-diet-badge ${dino.diet.includes('Carnivore') ? 'Carnivore' : 'Herbivore'}`}>
-                    {dino.diet}
+        {/* View Mode 1: Exact Chronological Timeline */}
+        {viewMode === 'timeline' && (
+          <div className="timeline-flow-wrap">
+            <div className="timeline-spine-bar" />
+            
+            <div className="dinosaurs-grid">
+              {filteredDinos.length > 0 ? (
+                filteredDinos.map((dino) => (
+                  <DinoCard 
+                    key={dino.id} 
+                    dino={dino} 
+                    getEraColor={getEraColor} 
+                    getTypeColor={getTypeColor}
+                    getTimelineBarPosition={getTimelineBarPosition}
+                    onOpenModal={setActiveModalDino} 
+                  />
+                ))
+              ) : (
+                <EmptyFilterState onReset={() => { setSelectedEra('All'); setSelectedType('All'); setSelectedDiet('All'); setSearchQuery(''); }} />
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* View Mode 2: Grouped by Eras */}
+        {viewMode === 'eras' && (
+          <div className="grouped-eras-flow">
+            {dinosByEra.map(({ period, dinosaurs }) => {
+              if (dinosaurs.length === 0 && selectedEra !== 'All') return null;
+
+              return (
+                <div key={period.id} className="era-section-group">
+                  <div 
+                    className="era-group-header glass-panel"
+                    style={{ borderLeft: `5px solid ${period.color}` }}
+                  >
+                    <div className="era-group-meta">
+                      <span className="era-group-icon">{period.icon}</span>
+                      <div>
+                        <h3 className="era-group-title">{period.full}</h3>
+                        <p className="era-group-sub">
+                          {period.dates} • {period.spanMYA} Span • {period.highlight}
+                        </p>
+                      </div>
+                    </div>
+                    <span className="era-group-count" style={{ background: `${period.color}25`, color: period.color }}>
+                      {dinosaurs.length} Species Documented
+                    </span>
+                  </div>
+
+                  {dinosaurs.length > 0 ? (
+                    <div className="dinosaurs-grid">
+                      {dinosaurs.map(dino => (
+                        <DinoCard 
+                          key={dino.id} 
+                          dino={dino} 
+                          getEraColor={getEraColor} 
+                          getTypeColor={getTypeColor}
+                          getTimelineBarPosition={getTimelineBarPosition}
+                          onOpenModal={setActiveModalDino} 
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <p style={{ color: '#6B7280', padding: '1rem', fontStyle: 'italic' }}>
+                      No dinosaurs in this era match the active filters.
+                    </p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* View Mode 3: Grouped by Dinosaur Types */}
+        {viewMode === 'types' && (
+          <div className="grouped-types-flow">
+            {dinosByType.map(({ type, dinosaurs }) => (
+              <div key={type.id} className="type-section-group">
+                <div 
+                  className="type-group-header glass-panel"
+                  style={{ borderLeft: `5px solid ${type.badgeColor}` }}
+                >
+                  <div className="type-group-meta">
+                    <div>
+                      <h3 className="type-group-title">
+                        {type.name} <span style={{ color: '#9CA3AF', fontWeight: '400', fontSize: '1.1rem' }}>({type.subtitle})</span>
+                      </h3>
+                      <p className="type-group-desc">{type.description}</p>
+                    </div>
+                  </div>
+                  <span className="type-group-count" style={{ background: `${type.badgeColor}25`, color: type.badgeColor }}>
+                    {dinosaurs.length} Species
                   </span>
                 </div>
 
-                <div className="dino-card-body">
-                  <span className="dino-period-tag">{dino.period}</span>
-                  <h3 className="dino-card-title">{dino.name}</h3>
-                  <p className="dino-meaning">"{dino.meaning}"</p>
-                  <p className="dino-card-desc">{dino.description}</p>
-
-                  <div className="dino-stats-row">
-                    <div className="dino-stat-item">
-                      <span className="dino-stat-val">{dino.lengthM}m</span>
-                      <span className="dino-stat-lbl">Length</span>
-                    </div>
-                    <div className="dino-stat-item">
-                      <span className="dino-stat-val">{dino.weightTons}T</span>
-                      <span className="dino-stat-lbl">Weight</span>
-                    </div>
-                    <div className="dino-stat-item">
-                      <span className="dino-stat-val">{dino.speedKmh} km/h</span>
-                      <span className="dino-stat-lbl">Speed</span>
-                    </div>
-                  </div>
-
-                  <button 
-                    className="dino-card-btn" 
-                    onClick={() => setActiveModalDino(dino)}
-                  >
-                    <span>View Anatomy & Stats</span>
-                    <ArrowRight size={15} />
-                  </button>
+                <div className="dinosaurs-grid">
+                  {dinosaurs.map(dino => (
+                    <DinoCard 
+                      key={dino.id} 
+                      dino={dino} 
+                      getEraColor={getEraColor} 
+                      getTypeColor={getTypeColor}
+                      getTimelineBarPosition={getTimelineBarPosition}
+                      onOpenModal={setActiveModalDino} 
+                    />
+                  ))}
                 </div>
               </div>
-            ))
-          ) : (
-            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem', color: '#9CA3AF' }}>
-              <p style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>No prehistoric species match your filter.</p>
-              <button 
-                className="btn-secondary" 
-                onClick={() => { setSelectedDiet('All'); setSelectedEra('All'); setSearchQuery(''); }}
-              >
-                Reset Filters
-              </button>
-            </div>
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Dinosaur Detail Modal */}
@@ -238,6 +444,113 @@ export default function HomePage({ setActiveTab, searchInputRef }) {
           onClose={() => setActiveModalDino(null)} 
         />
       )}
+    </div>
+  );
+}
+
+// Reusable Dino Card Component with Era, Exact Timeline & Dinosaur Type
+function DinoCard({ dino, getEraColor, getTypeColor, getTimelineBarPosition, onOpenModal }) {
+  const eraColor = getEraColor(dino.periodEra);
+  const typeColor = getTypeColor(dino.type);
+  const barPos = getTimelineBarPosition(dino.myaStart, dino.myaEnd);
+
+  return (
+    <div className="dino-card glass-panel">
+      {/* Media and Badges */}
+      <div className="dino-card-media">
+        <img src={dino.image} alt={dino.name} className="dino-card-img" loading="lazy" />
+        <div className="dino-media-overlay" />
+        
+        {/* Top Badges */}
+        <div className="dino-card-badge-row">
+          <span 
+            className="dino-era-badge"
+            style={{ background: eraColor, color: '#000' }}
+          >
+            {dino.periodEra}
+          </span>
+          <span className="dino-type-badge" style={{ background: `${typeColor}30`, color: typeColor, border: `1px solid ${typeColor}50` }}>
+            {dino.type}
+          </span>
+        </div>
+
+        <span className={`dino-diet-badge ${dino.diet.includes('Carnivore') ? 'Carnivore' : 'Herbivore'}`}>
+          {dino.diet}
+        </span>
+      </div>
+
+      {/* Card Body */}
+      <div className="dino-card-body">
+        {/* Exact Timeline & Geological Stage */}
+        <div className="dino-timeline-block">
+          <div className="dino-exact-timeline-row">
+            <span className="dino-exact-mya" style={{ color: eraColor }}>
+              <Clock size={13} /> {dino.periodMYA}
+            </span>
+            <span className="dino-stage-name">{dino.epoch}</span>
+          </div>
+
+          {/* Mini Mesozoic Timeline Span indicator */}
+          <div className="dino-mini-timeline-bar" title={`Lived ${dino.periodMYA} within Mesozoic (252–66 MYA)`}>
+            <div 
+              className="dino-mini-timeline-fill"
+              style={{ 
+                left: barPos.left, 
+                width: barPos.width, 
+                background: eraColor 
+              }}
+            />
+          </div>
+        </div>
+
+        <h3 className="dino-card-title">{dino.name}</h3>
+        <p className="dino-meaning">"{dino.meaning}"</p>
+        <p className="dino-subclade-text">
+          <strong>Clade:</strong> {dino.subType}
+        </p>
+        <p className="dino-card-desc">{dino.description}</p>
+
+        {/* Vital Stats Row */}
+        <div className="dino-stats-row">
+          <div className="dino-stat-item">
+            <span className="dino-stat-val">{dino.lengthM}m</span>
+            <span className="dino-stat-lbl">Length</span>
+          </div>
+          <div className="dino-stat-item">
+            <span className="dino-stat-val">{dino.weightTons}T</span>
+            <span className="dino-stat-lbl">Weight</span>
+          </div>
+          <div className="dino-stat-item">
+            <span className="dino-stat-val">{dino.speedKmh} km/h</span>
+            <span className="dino-stat-lbl">Speed</span>
+          </div>
+        </div>
+
+        {/* View Anatomy Button */}
+        <button 
+          className="dino-card-btn" 
+          onClick={() => onOpenModal(dino)}
+        >
+          <span>Examine Anatomy & Timeline</span>
+          <ArrowRight size={15} />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function EmptyFilterState({ onReset }) {
+  return (
+    <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3.5rem 1rem', color: '#9CA3AF' }}>
+      <p style={{ fontSize: '1.25rem', fontWeight: '600', color: '#fff', marginBottom: '0.5rem' }}>
+        No dinosaur species match this combination of filters.
+      </p>
+      <p style={{ marginBottom: '1.5rem', color: '#9CA3AF' }}>
+        Try changing the Era, Clade, or search keyword.
+      </p>
+      <button className="btn-secondary" onClick={onReset}>
+        Reset All Filters
+      </button>
     </div>
   );
 }

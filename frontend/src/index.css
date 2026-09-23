@@ -897,6 +897,451 @@ button {
   color: var(--text-dim);
 }
 
+/* ========================================================
+   Age of Dinosaurs: Timeline, Eras & Clade Categorization
+   ======================================================== */
+
+.nav-era-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+}
+
+/* Macro Timeline Scale */
+.timeline-visual-scale {
+  margin: 2.5rem auto 0;
+  max-width: 860px;
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-lg);
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid var(--border-subtle);
+  backdrop-filter: blur(12px);
+}
+
+.timeline-scale-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.timeline-scale-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #fff;
+  font-weight: 700;
+}
+
+.timeline-scale-note {
+  font-family: monospace;
+  color: var(--amber-primary);
+}
+
+.timeline-segments-track {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 4px;
+}
+
+.timeline-segment-block {
+  border: none;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+  padding: 0.65rem 0.75rem;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.timeline-segment-block:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.timeline-segment-block.active-era {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.4);
+}
+
+.timeline-segment-block::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--segment-color, #F59E0B);
+}
+
+.segment-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.segment-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.segment-dates {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  font-family: monospace;
+}
+
+/* Era Cards Enhanced */
+.interactive-card {
+  cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.interactive-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.period-card-selected {
+  border-color: var(--period-color, #F59E0B) !important;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(255, 255, 255, 0.03);
+}
+
+.era-count-chip {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-full);
+}
+
+.era-climate-box {
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 8px;
+  padding: 0.75rem 0.85rem;
+  margin-bottom: 1rem;
+  font-size: 0.82rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.climate-row strong {
+  color: #fff;
+}
+
+.climate-row {
+  color: var(--text-muted);
+}
+
+.period-filter-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--period-color, #F59E0B);
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.reset-filter-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reset-filter-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* View Mode Tabs */
+.view-mode-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.view-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.view-tab-btn:hover {
+  color: #fff;
+}
+
+.view-tab-btn.active {
+  background: var(--amber-primary);
+  color: #000;
+  font-weight: 700;
+  box-shadow: 0 0 14px var(--amber-glow);
+}
+
+/* Categorization Filter Panel */
+.categorization-panel {
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  margin-bottom: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.cat-filter-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.cat-filter-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  min-width: 140px;
+  padding-top: 0.3rem;
+}
+
+.cat-pill-group {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.cat-pill-btn {
+  padding: 0.4rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cat-pill-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.cat-pill-btn.active {
+  background: var(--amber-primary);
+  border-color: var(--amber-primary);
+  color: #000;
+  font-weight: 700;
+}
+
+.cat-filter-bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  flex-wrap: wrap;
+}
+
+.cat-filter-diet {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cat-pill-btn-sm {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cat-pill-btn-sm.active {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+  font-weight: 700;
+}
+
+/* Dino Card Badges & Timeline Details */
+.dino-card-badge-row {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 2;
+}
+
+.dino-era-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.dino-type-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(8px);
+}
+
+.dino-timeline-block {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 0.65rem 0.75rem;
+  margin-bottom: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.dino-exact-timeline-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.dino-exact-mya {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  font-family: monospace;
+}
+
+.dino-stage-name {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+
+.dino-mini-timeline-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.dino-mini-timeline-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 4px;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
+}
+
+.dino-subclade-text {
+  font-size: 0.82rem;
+  color: #38BDF8;
+  margin-bottom: 0.5rem;
+}
+
+.dino-subclade-text strong {
+  color: var(--text-dim);
+}
+
+/* Grouped View Section Headers */
+.era-section-group, .type-section-group {
+  margin-bottom: 3.5rem;
+}
+
+.era-group-header, .type-group-header {
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-lg);
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.era-group-meta, .type-group-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.era-group-icon {
+  font-size: 2rem;
+}
+
+.era-group-title, .type-group-title {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.2rem;
+}
+
+.era-group-sub, .type-group-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.era-group-count, .type-group-count {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.35rem 0.8rem;
+  border-radius: var(--radius-full);
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.98); }
   to { opacity: 1; transform: scale(1); }
@@ -913,4 +1358,12 @@ button {
     flex-direction: column;
     align-items: flex-start;
   }
+  .nav-era-indicator {
+    display: none;
+  }
+  .view-mode-tabs {
+    width: 100%;
+    justify-content: space-around;
+  }
 }
+
