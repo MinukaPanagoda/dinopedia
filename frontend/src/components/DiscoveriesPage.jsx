@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, Calendar, MapPin, ExternalLink, Bookmark } from 'lucide-react';
+import { Sparkles, Calendar, MapPin } from 'lucide-react';
 
 const DISCOVERIES = [
   {

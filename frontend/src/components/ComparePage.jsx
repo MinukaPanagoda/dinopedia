@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { DINOSAURS } from '../data/dinosaurs';
-import { Scale, ArrowRight, Zap, Ruler, Weight, Gauge, Clock, Shield } from 'lucide-react';
+import { Scale, Ruler, Weight, Gauge, Clock } from 'lucide-react';
 
 export default function ComparePage() {
   const [dino1Id, setDino1Id] = useState(DINOSAURS[0]?.id || '');

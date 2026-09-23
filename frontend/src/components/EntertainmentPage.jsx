@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MOVIES, ENTERTAINMENT_CATEGORIES } from '../data/entertainment';
+import { MOVIES } from '../data/entertainment';
 import { Film, Gamepad2, BookOpen, Star, ExternalLink, ChevronLeft, ChevronRight, Sparkles, Clock } from 'lucide-react';
 
 const ITEMS_PER_PAGE = 8;
