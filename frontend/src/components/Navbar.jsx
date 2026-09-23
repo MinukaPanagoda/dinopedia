@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
-import { Clock, Menu, X, Sparkles } from 'lucide-react';
+import { Clock, Scale, Sparkles, Award, Gamepad2, Menu, X } from 'lucide-react';
 import DinoSkull from './DinoSkull';
 
 export default function Navbar({ activeTab, setActiveTab }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const navItems = [
+    { id: 'age-of-dinosaurs', label: 'Age of Dinosaurs', icon: Clock },
+    { id: 'compare', label: 'Compare Dinosaurs', icon: Scale },
+    { id: 'discoveries', label: 'New Discoveries', icon: Sparkles },
+    { id: 'quizzes', label: 'Quizzes', icon: Award },
+    { id: 'entertainment', label: 'Entertainment', icon: Gamepad2 },
+  ];
 
   const handleNavClick = (tabId) => {
     setActiveTab(tabId);
@@ -32,18 +40,25 @@ export default function Navbar({ activeTab, setActiveTab }) {
           </div>
         </a>
 
-        {/* Desktop Navigation - Only Age of Dinosaurs */}
+        {/* Desktop Navigation */}
         <div className="nav-links">
-          <button
-            className={`nav-link-btn ${activeTab === 'age-of-dinosaurs' ? 'active' : ''}`}
-            onClick={() => handleNavClick('age-of-dinosaurs')}
-          >
-            <Clock size={17} />
-            <span>Age of Dinosaurs</span>
-          </button>
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = activeTab === item.id;
+            return (
+              <button
+                key={item.id}
+                className={`nav-link-btn ${isActive ? 'active' : ''}`}
+                onClick={() => handleNavClick(item.id)}
+              >
+                <Icon size={16} />
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
         </div>
 
-        {/* Right Action Area - Clean / Mobile toggle */}
+        {/* Right Action Area - Mobile toggle */}
         <div className="nav-actions">
           <button 
             className="mobile-menu-btn" 
@@ -65,14 +80,21 @@ export default function Navbar({ activeTab, setActiveTab }) {
           borderTop: '1px solid rgba(255,255,255,0.08)',
           marginTop: '0.75rem'
         }}>
-          <button
-            className={`nav-link-btn ${activeTab === 'age-of-dinosaurs' ? 'active' : ''}`}
-            style={{ width: '100%', justifyContent: 'flex-start', padding: '0.75rem 1rem' }}
-            onClick={() => handleNavClick('age-of-dinosaurs')}
-          >
-            <Clock size={18} />
-            <span>Age of Dinosaurs</span>
-          </button>
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = activeTab === item.id;
+            return (
+              <button
+                key={item.id}
+                className={`nav-link-btn ${isActive ? 'active' : ''}`}
+                style={{ width: '100%', justifyContent: 'flex-start', padding: '0.75rem 1rem' }}
+                onClick={() => handleNavClick(item.id)}
+              >
+                <Icon size={18} />
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
         </div>
       )}
     </nav>
