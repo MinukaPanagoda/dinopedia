@@ -1383,27 +1383,41 @@ button {
 }
 
 /* ==========================================================================
-   Compact Movie Cards & Interactive Hover-Reveal Styles
+   Compact Movie Cards & Interactive Hover-Reveal Styles (4 Cards Per Row)
    ========================================================================== */
 .movie-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
-  gap: 1.35rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
   margin-bottom: 3rem;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 1100px) {
+  .movie-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
   .movie-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.85rem;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .movie-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
 }
 
 .movie-card {
   position: relative;
-  border-radius: 14px;
+  border-radius: 16px;
   overflow: hidden;
-  height: 330px;
+  height: 380px;
   background: #0B1015;
   border: 1px solid var(--border-subtle);
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
@@ -1413,10 +1427,16 @@ button {
   cursor: pointer;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .movie-card {
-    height: 275px;
-    border-radius: 12px;
+    height: 330px;
+    border-radius: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .movie-card {
+    height: 380px;
   }
 }
 
