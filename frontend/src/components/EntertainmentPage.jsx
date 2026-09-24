@@ -44,34 +44,34 @@ export default function EntertainmentPage() {
         </div>
       </div>
 
-      {/* Category Filter Tabs: Movies, Games, Books */}
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem', marginBottom: '2.5rem', flexWrap: 'wrap' }}>
-        <button
-          className={`filter-pill-btn ${activeCategory === 'movies' ? 'active' : ''}`}
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.4rem', fontSize: '0.95rem' }}
-          onClick={() => handleCategoryChange('movies')}
-        >
-          <Film size={17} />
-          <span>Movies ({MOVIES.length})</span>
-        </button>
+      {/* Sticky Floating Category Filter Bar (Movies, Games, Books) */}
+      <div className="sticky-category-wrapper">
+        <div className="sticky-category-bar">
+          <button
+            className={`category-tab-btn ${activeCategory === 'movies' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('movies')}
+          >
+            <Film size={18} />
+            <span>Movies</span>
+            <span className="category-tab-badge">{MOVIES.length}</span>
+          </button>
 
-        <button
-          className={`filter-pill-btn ${activeCategory === 'games' ? 'active' : ''}`}
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.4rem', fontSize: '0.95rem' }}
-          onClick={() => handleCategoryChange('games')}
-        >
-          <Gamepad2 size={17} />
-          <span>Games</span>
-        </button>
+          <button
+            className={`category-tab-btn ${activeCategory === 'games' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('games')}
+          >
+            <Gamepad2 size={18} />
+            <span>Games</span>
+          </button>
 
-        <button
-          className={`filter-pill-btn ${activeCategory === 'books' ? 'active' : ''}`}
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.4rem', fontSize: '0.95rem' }}
-          onClick={() => handleCategoryChange('books')}
-        >
-          <BookOpen size={17} />
-          <span>Books</span>
-        </button>
+          <button
+            className={`category-tab-btn ${activeCategory === 'books' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('books')}
+          >
+            <BookOpen size={18} />
+            <span>Books</span>
+          </button>
+        </div>
       </div>
 
       {/* Content Area */}
@@ -156,20 +156,16 @@ export default function EntertainmentPage() {
             ))}
           </div>
 
-          {/* Pagination Controls (Max 10 per page) */}
+          {/* Pagination Controls */}
           {totalPages > 1 && (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', marginTop: '1rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', marginTop: '1.5rem' }}>
               <button
-                className="filter-pill-btn"
+                className="pagination-btn"
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
                 style={{ 
-                  opacity: currentPage === 1 ? 0.4 : 1, 
+                  opacity: currentPage === 1 ? 0.35 : 1, 
                   cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  padding: '0.5rem 1rem'
                 }}
               >
                 <ChevronLeft size={16} />
@@ -179,25 +175,21 @@ export default function EntertainmentPage() {
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
                 <button
                   key={pageNum}
-                  className={`filter-pill-btn ${currentPage === pageNum ? 'active' : ''}`}
+                  className={`pagination-btn ${currentPage === pageNum ? 'active' : ''}`}
                   onClick={() => handlePageChange(pageNum)}
-                  style={{ minWidth: '40px', padding: '0.5rem 0.85rem' }}
+                  style={{ minWidth: '40px' }}
                 >
                   {pageNum}
                 </button>
               ))}
 
               <button
-                className="filter-pill-btn"
+                className="pagination-btn"
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
                 style={{ 
-                  opacity: currentPage === totalPages ? 0.4 : 1, 
+                  opacity: currentPage === totalPages ? 0.35 : 1, 
                   cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  padding: '0.5rem 1rem'
                 }}
               >
                 <span>Next</span>

@@ -1583,4 +1583,129 @@ button {
   transform: translateX(3px) translateY(-1px);
 }
 
+/* ==========================================================================
+   Sticky Category Filter Bar for Entertainment Page
+   ========================================================================== */
+.sticky-category-wrapper {
+  position: sticky;
+  top: 68px;
+  z-index: 900;
+  display: flex;
+  justify-content: center;
+  padding: 0.75rem 0;
+  margin-bottom: 2rem;
+  pointer-events: none; /* Let clicks pass through outside the pill */
+  transition: all 0.3s ease;
+}
+
+.sticky-category-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem;
+  background: rgba(11, 16, 22, 0.88);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-full);
+  box-shadow: 0 12px 36px -8px rgba(0, 0, 0, 0.85), 0 0 20px rgba(0, 0, 0, 0.4);
+  pointer-events: auto; /* Buttons are clickable */
+  max-width: 95vw;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.sticky-category-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.category-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 1.45rem;
+  border-radius: var(--radius-full);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.category-tab-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.category-tab-btn.active {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(180, 83, 9, 0.2));
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  box-shadow: 0 0 20px -2px rgba(245, 158, 11, 0.35);
+}
+
+.category-tab-btn.active svg {
+  color: var(--amber-primary);
+}
+
+.category-tab-badge {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.09);
+  color: var(--text-muted);
+  font-weight: 700;
+  transition: all 0.25s ease;
+}
+
+.category-tab-btn.active .category-tab-badge {
+  background: var(--amber-primary);
+  color: #000;
+}
+
+/* Pagination styles */
+.pagination-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
+}
+
+.pagination-btn.active {
+  color: #000;
+  background: var(--amber-primary);
+  border-color: var(--amber-primary);
+  font-weight: 800;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.4);
+}
+
+@media (max-width: 900px) {
+  .sticky-category-wrapper {
+    top: 60px;
+    padding: 0.5rem 0;
+  }
+}
+
+
 
