@@ -86,78 +86,39 @@ export default function EntertainmentPage() {
           </div>
 
           {/* Movies Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.75rem', marginBottom: '3rem' }}>
+          <div className="movie-grid">
             {currentMovies.map((movie) => (
               <div 
                 key={movie.id} 
-                className="glass-panel" 
-                style={{ 
-                  borderRadius: '16px', 
-                  overflow: 'hidden', 
-                  display: 'flex', 
-                  flexDirection: 'column',
-                  transition: 'transform 0.25s ease, box-shadow 0.25s ease',
-                  border: '1px solid var(--border-subtle)'
-                }}
+                className="movie-card"
               >
                 {/* Poster Frame */}
-                <div style={{ position: 'relative', height: '360px', overflow: 'hidden', background: '#0E141B' }}>
+                <div className="movie-card-poster-wrap">
                   <img 
                     src={movie.poster} 
                     alt={movie.title} 
                     loading="lazy"
+                    className="movie-card-img"
                     onError={(e) => {
                       // Fallback to high quality dinosaur art if poster fails
                       e.target.src = 'https://images.unsplash.com/photo-1559827291-72ee739d0d9a?auto=format&fit=crop&w=600&q=80';
                     }}
-                    style={{ 
-                      width: '100%', 
-                      height: '100%', 
-                      objectFit: 'cover',
-                      transition: 'transform 0.35s ease'
-                    }} 
                   />
-                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(14,20,27,0.92) 0%, rgba(14,20,27,0.2) 60%, transparent 100%)' }} />
+                  <div className="movie-card-gradient" />
 
                   {/* IMDb Rating Chip */}
-                  <div style={{ 
-                    position: 'absolute', 
-                    top: '1rem', 
-                    right: '1rem', 
-                    background: '#F5C518', 
-                    color: '#000', 
-                    padding: '0.3rem 0.65rem', 
-                    borderRadius: '8px', 
-                    fontWeight: '800', 
-                    fontSize: '0.82rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.5)'
-                  }}>
+                  <div className="movie-card-rating">
                     <Star size={13} fill="#000" />
                     <span>{movie.rating}</span>
                   </div>
 
                   {/* Release Year Badge */}
-                  <div style={{ 
-                    position: 'absolute', 
-                    top: '1rem', 
-                    left: '1rem', 
-                    background: 'rgba(0,0,0,0.65)', 
-                    color: '#fff', 
-                    padding: '0.3rem 0.65rem', 
-                    borderRadius: '8px', 
-                    fontWeight: '700', 
-                    fontSize: '0.78rem',
-                    backdropFilter: 'blur(8px)',
-                    border: '1px solid rgba(255,255,255,0.1)'
-                  }}>
+                  <div className="movie-card-year">
                     {movie.year}
                   </div>
 
                   {/* Runtime & Genre overlay */}
-                  <div style={{ position: 'absolute', bottom: '0.85rem', left: '1rem', right: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ position: 'absolute', bottom: '0.85rem', left: '1rem', right: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 2 }}>
                     <span style={{ color: 'var(--amber-light)', fontSize: '0.78rem', fontWeight: '700' }}>
                       {movie.genre}
                     </span>
@@ -168,15 +129,15 @@ export default function EntertainmentPage() {
                 </div>
 
                 {/* Movie Details */}
-                <div style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'space-between' }}>
+                <div style={{ padding: '1.35rem', display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'space-between' }}>
                   <div>
-                    <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#fff', marginBottom: '0.3rem', lineHeight: '1.3' }}>
+                    <h3 className="movie-card-title">
                       {movie.title}
                     </h3>
-                    <p style={{ color: 'var(--text-dim)', fontSize: '0.8rem', marginBottom: '0.75rem' }}>
-                      Directed by <strong>{movie.director}</strong>
+                    <p style={{ color: 'var(--text-dim)', fontSize: '0.82rem', marginBottom: '0.75rem' }}>
+                      Directed by <strong style={{ color: '#E5E7EB' }}>{movie.director}</strong>
                     </p>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.86rem', lineHeight: '1.55', marginBottom: '1.25rem' }}>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', lineHeight: '1.6', marginBottom: '1.35rem' }}>
                       {movie.desc}
                     </p>
                   </div>
@@ -185,19 +146,10 @@ export default function EntertainmentPage() {
                     href={movie.imdbUrl} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="btn-secondary"
-                    style={{ 
-                      width: '100%', 
-                      justifyContent: 'center', 
-                      fontSize: '0.85rem', 
-                      padding: '0.6rem 1rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '6px'
-                    }}
+                    className="movie-card-action-btn"
                   >
                     <span>View on IMDb</span>
-                    <ExternalLink size={14} />
+                    <ExternalLink size={15} />
                   </a>
                 </div>
               </div>

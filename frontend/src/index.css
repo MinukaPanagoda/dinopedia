@@ -1382,3 +1382,205 @@ button {
   }
 }
 
+/* ==========================================================================
+   Entertainment & Movie Cards Interactive & Responsive Styles
+   ========================================================================== */
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+@media (max-width: 640px) {
+  .movie-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.movie-card {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.4s ease;
+  will-change: transform, box-shadow;
+}
+
+.movie-card:hover {
+  transform: translateY(-10px) scale(1.015);
+  border-color: rgba(245, 158, 11, 0.5);
+  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.75),
+              0 0 30px -4px rgba(245, 158, 11, 0.35);
+  background: rgba(22, 32, 45, 0.9);
+}
+
+.movie-card-poster-wrap {
+  position: relative;
+  height: 380px;
+  overflow: hidden;
+  background: #0A0E13;
+}
+
+.movie-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.6s ease;
+}
+
+.movie-card:hover .movie-card-img {
+  transform: scale(1.09) translateY(-3px);
+  filter: brightness(1.08) contrast(1.03);
+}
+
+.movie-card-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(14, 20, 27, 0.98) 0%,
+    rgba(14, 20, 27, 0.6) 40%,
+    rgba(14, 20, 27, 0.15) 75%,
+    transparent 100%
+  );
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.movie-card:hover .movie-card-gradient {
+  opacity: 0.9;
+}
+
+/* Light sweep reflection effect on hover */
+.movie-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 80%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 100%
+  );
+  transform: skewX(-25deg);
+  transition: left 0.75s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.movie-card:hover::before {
+  left: 150%;
+}
+
+.movie-card-rating {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #F5C518;
+  color: #000;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s ease;
+  z-index: 2;
+}
+
+.movie-card:hover .movie-card-rating {
+  transform: scale(1.08);
+  box-shadow: 0 6px 18px rgba(245, 197, 24, 0.55);
+}
+
+.movie-card-year {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(10, 14, 20, 0.75);
+  color: #fff;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.movie-card:hover .movie-card-year {
+  border-color: rgba(245, 158, 11, 0.4);
+  background: rgba(245, 158, 11, 0.18);
+  color: #FDE68A;
+}
+
+.movie-card-title {
+  font-size: 1.28rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.35rem;
+  line-height: 1.3;
+  transition: color 0.3s ease;
+}
+
+.movie-card:hover .movie-card-title {
+  color: var(--amber-light);
+}
+
+.movie-card-action-btn {
+  width: 100%;
+  justify-content: center;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.7rem 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-main);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.movie-card:hover .movie-card-action-btn {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.22), rgba(245, 158, 11, 0.08));
+  border-color: rgba(245, 158, 11, 0.5);
+  color: #FDE68A;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.2);
+}
+
+.movie-card-action-btn:hover {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.35), rgba(245, 158, 11, 0.15)) !important;
+  border-color: var(--amber-primary) !important;
+  color: #fff !important;
+  transform: translateY(-2px);
+}
+
+.movie-card-action-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.movie-card:hover .movie-card-action-btn svg {
+  transform: translateX(3px) translateY(-1px);
+}
+
+
