@@ -92,52 +92,47 @@ export default function EntertainmentPage() {
                 key={movie.id} 
                 className="movie-card"
               >
-                {/* Poster Frame */}
-                <div className="movie-card-poster-wrap">
-                  <img 
-                    src={movie.poster} 
-                    alt={movie.title} 
-                    loading="lazy"
-                    className="movie-card-img"
-                    onError={(e) => {
-                      // Fallback to high quality dinosaur art if poster fails
-                      e.target.src = 'https://images.unsplash.com/photo-1559827291-72ee739d0d9a?auto=format&fit=crop&w=600&q=80';
-                    }}
-                  />
-                  <div className="movie-card-gradient" />
+                {/* Poster Image */}
+                <img 
+                  src={movie.poster} 
+                  alt={movie.title} 
+                  loading="lazy"
+                  className="movie-card-img"
+                  onError={(e) => {
+                    e.target.src = 'https://images.unsplash.com/photo-1559827291-72ee739d0d9a?auto=format&fit=crop&w=600&q=80';
+                  }}
+                />
 
-                  {/* IMDb Rating Chip */}
-                  <div className="movie-card-rating">
-                    <Star size={13} fill="#000" />
-                    <span>{movie.rating}</span>
-                  </div>
-
-                  {/* Release Year Badge */}
-                  <div className="movie-card-year">
-                    {movie.year}
-                  </div>
-
-                  {/* Runtime & Genre overlay */}
-                  <div style={{ position: 'absolute', bottom: '0.85rem', left: '1rem', right: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 2 }}>
-                    <span style={{ color: 'var(--amber-light)', fontSize: '0.78rem', fontWeight: '700' }}>
-                      {movie.genre}
-                    </span>
-                    <span style={{ color: 'var(--text-dim)', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                      <Clock size={11} /> {movie.runtime}
-                    </span>
-                  </div>
+                {/* Rating Badge (Always visible at top-right) */}
+                <div className="movie-card-rating">
+                  <Star size={12} fill="#000" />
+                  <span>{movie.rating}</span>
                 </div>
 
-                {/* Movie Details */}
-                <div style={{ padding: '1.35rem', display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'space-between' }}>
+                {/* Normal State: Photo + Name + Rating */}
+                <div className="movie-card-normal-info">
+                  <h3 className="movie-card-normal-title">{movie.title}</h3>
+                </div>
+
+                {/* Hover-Reveal Overlay with Complete Details */}
+                <div className="movie-card-hover-overlay">
                   <div>
-                    <h3 className="movie-card-title">
-                      {movie.title}
-                    </h3>
-                    <p style={{ color: 'var(--text-dim)', fontSize: '0.82rem', marginBottom: '0.75rem' }}>
-                      Directed by <strong style={{ color: '#E5E7EB' }}>{movie.director}</strong>
-                    </p>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', lineHeight: '1.6', marginBottom: '1.35rem' }}>
+                    <div className="movie-hover-header">
+                      <span className="movie-hover-tag">{movie.year}</span>
+                      <span className="movie-hover-tag genre">{movie.genre}</span>
+                    </div>
+
+                    <h3 className="movie-hover-title">{movie.title}</h3>
+
+                    <div className="movie-hover-meta">
+                      <span>Dir. <strong style={{ color: '#F3F4F6' }}>{movie.director}</strong></span>
+                      <span>•</span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                        <Clock size={11} /> {movie.runtime}
+                      </span>
+                    </div>
+
+                    <p className="movie-hover-desc">
                       {movie.desc}
                     </p>
                   </div>
@@ -146,10 +141,10 @@ export default function EntertainmentPage() {
                     href={movie.imdbUrl} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="movie-card-action-btn"
+                    className="movie-hover-btn"
                   >
                     <span>View on IMDb</span>
-                    <ExternalLink size={15} />
+                    <ExternalLink size={13} />
                   </a>
                 </div>
               </div>
