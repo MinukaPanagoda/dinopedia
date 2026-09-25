@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Award, CheckCircle, XCircle, RotateCcw, Sparkles } from 'lucide-react';
+import { Award, CheckCircle, XCircle, RotateCcw, Sparkles, Gamepad2 } from 'lucide-react';
+import TRexHangman from './TRexHangman';
 
 const QUESTIONS = [
   {
@@ -29,6 +30,7 @@ const QUESTIONS = [
 ];
 
 export default function QuizPage() {
+  const [activeMode, setActiveMode] = useState('hangman'); // 'hangman' or 'trivia'
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedOpt, setSelectedOpt] = useState(null);
   const [score, setScore] = useState(0);
@@ -61,118 +63,149 @@ export default function QuizPage() {
   };
 
   return (
-    <div className="home-container" style={{ padding: '3rem 1.5rem 6rem', maxWidth: '800px' }}>
-      <div className="section-header" style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+    <div className="home-container" style={{ padding: '3rem 1.5rem 6rem', maxWidth: '880px' }}>
+      {/* Page Header */}
+      <div className="section-header" style={{ textAlign: 'center', marginBottom: '2rem' }}>
         <div style={{ margin: '0 auto' }}>
           <div className="section-tag" style={{ justifyContent: 'center' }}>
-            <Award size={15} /> Knowledge Arena
+            <Award size={15} /> Prehistoric Challenge Arena
           </div>
           <h1 className="section-title" style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>
-            Dinosaur <span className="hero-title-gradient">Quizzes</span>
+            Dino <span className="hero-title-gradient">Quiz & Games</span>
           </h1>
           <p style={{ color: 'var(--text-muted)' }}>
-            Challenge your paleontology expertise with authentic scientific trivia questions.
+            Survive the hungry T-Rex in Word Escape or test your scientific paleontology knowledge.
           </p>
         </div>
       </div>
 
-      {!finished ? (
-        <div className="glass-panel" style={{ padding: '2.5rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-dim)', fontSize: '0.85rem', marginBottom: '1.5rem' }}>
-            <span>Question {currentIdx + 1} of {QUESTIONS.length}</span>
-            <span>Score: {score}</span>
-          </div>
+      {/* Mode Switcher Tabs (Hangman vs Trivia) */}
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem', marginBottom: '2.5rem', flexWrap: 'wrap' }}>
+        <button
+          className={`category-tab-btn ${activeMode === 'hangman' ? 'active' : ''}`}
+          onClick={() => setActiveMode('hangman')}
+          style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.65rem 1.5rem', fontSize: '0.95rem' }}
+        >
+          <Gamepad2 size={18} />
+          <span>T-Rex Escape (Hangman Game)</span>
+        </button>
 
-          <h2 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#fff', marginBottom: '1.75rem', lineHeight: '1.4' }}>
-            {question.q}
-          </h2>
+        <button
+          className={`category-tab-btn ${activeMode === 'trivia' ? 'active' : ''}`}
+          onClick={() => setActiveMode('trivia')}
+          style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.65rem 1.5rem', fontSize: '0.95rem' }}
+        >
+          <Award size={18} />
+          <span>Trivia Questions</span>
+        </button>
+      </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginBottom: '2rem' }}>
-            {question.options.map((opt, i) => {
-              const isChosen = selectedOpt === i;
-              const isCorrect = i === question.correct;
-              let bg = 'rgba(255,255,255,0.04)';
-              let border = 'var(--border-subtle)';
-              let color = '#fff';
+      {/* Render Playable T-Rex Hangman Game */}
+      {activeMode === 'hangman' && (
+        <TRexHangman />
+      )}
 
-              if (selectedOpt !== null) {
-                if (isCorrect) {
-                  bg = 'rgba(16, 185, 129, 0.2)';
-                  border = '#10B981';
-                } else if (isChosen) {
-                  bg = 'rgba(239, 68, 68, 0.2)';
-                  border = '#EF4444';
-                }
-              }
-
-              return (
-                <button
-                  key={i}
-                  onClick={() => handleSelect(i)}
-                  disabled={selectedOpt !== null}
-                  style={{
-                    padding: '1rem 1.25rem',
-                    borderRadius: '12px',
-                    background: bg,
-                    border: `1px solid ${border}`,
-                    color,
-                    textAlign: 'left',
-                    fontWeight: '600',
-                    fontSize: '0.95rem',
-                    transition: 'all 0.2s',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                  }}
-                >
-                  <span>{opt}</span>
-                  {selectedOpt !== null && isCorrect && <CheckCircle size={18} color="#10B981" />}
-                  {selectedOpt !== null && isChosen && !isCorrect && <XCircle size={18} color="#EF4444" />}
-                </button>
-              );
-            })}
-          </div>
-
-          {selectedOpt !== null && (
-            <div style={{ background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.25)', borderRadius: '12px', padding: '1rem 1.25rem', marginBottom: '1.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--amber-primary)', fontWeight: '700', fontSize: '0.85rem', marginBottom: '4px' }}>
-                <Sparkles size={15} /> Explanation
-              </div>
-              <p style={{ color: '#E5E7EB', fontSize: '0.9rem', lineHeight: '1.5' }}>
-                {question.explanation}
-              </p>
+      {/* Render Multiple Choice Trivia Quiz */}
+      {activeMode === 'trivia' && (
+        !finished ? (
+          <div className="glass-panel" style={{ padding: '2.5rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-dim)', fontSize: '0.85rem', marginBottom: '1.5rem' }}>
+              <span>Question {currentIdx + 1} of {QUESTIONS.length}</span>
+              <span>Score: {score}</span>
             </div>
-          )}
 
-          {selectedOpt !== null && (
-            <button
-              onClick={handleNext}
-              className="btn-primary"
-              style={{ width: '100%', justifyContent: 'center' }}
-            >
-              {currentIdx + 1 < QUESTIONS.length ? 'Next Question ➔' : 'View Results ➔'}
-            </button>
-          )}
-        </div>
-      ) : (
-        <div className="glass-panel" style={{ padding: '3.5rem 2rem', textAlign: 'center' }}>
-          <div style={{ width: '70px', height: '70px', borderRadius: '50%', background: 'rgba(245, 158, 11, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', color: 'var(--amber-primary)' }}>
-            <Award size={36} />
+            <h2 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#fff', marginBottom: '1.75rem', lineHeight: '1.4' }}>
+              {question.q}
+            </h2>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginBottom: '2rem' }}>
+              {question.options.map((opt, i) => {
+                const isChosen = selectedOpt === i;
+                const isCorrect = i === question.correct;
+                let bg = 'rgba(255,255,255,0.04)';
+                let border = 'var(--border-subtle)';
+                let color = '#fff';
+
+                if (selectedOpt !== null) {
+                  if (isCorrect) {
+                    bg = 'rgba(16, 185, 129, 0.2)';
+                    border = '#10B981';
+                  } else if (isChosen) {
+                    bg = 'rgba(239, 68, 68, 0.2)';
+                    border = '#EF4444';
+                  }
+                }
+
+                return (
+                  <button
+                    key={i}
+                    onClick={() => handleSelect(i)}
+                    disabled={selectedOpt !== null}
+                    style={{
+                      padding: '1rem 1.25rem',
+                      borderRadius: '12px',
+                      background: bg,
+                      border: `1px solid ${border}`,
+                      color,
+                      textAlign: 'left',
+                      fontWeight: '600',
+                      fontSize: '0.95rem',
+                      transition: 'all 0.2s',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      cursor: selectedOpt !== null ? 'default' : 'pointer'
+                    }}
+                  >
+                    <span>{opt}</span>
+                    {selectedOpt !== null && isCorrect && <CheckCircle size={18} color="#10B981" />}
+                    {selectedOpt !== null && isChosen && !isCorrect && <XCircle size={18} color="#EF4444" />}
+                  </button>
+                );
+              })}
+            </div>
+
+            {selectedOpt !== null && (
+              <div style={{ background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.25)', borderRadius: '12px', padding: '1rem 1.25rem', marginBottom: '1.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--amber-primary)', fontWeight: '700', fontSize: '0.85rem', marginBottom: '4px' }}>
+                  <Sparkles size={15} /> Explanation
+                </div>
+                <p style={{ color: '#E5E7EB', fontSize: '0.9rem', lineHeight: '1.5' }}>
+                  {question.explanation}
+                </p>
+              </div>
+            )}
+
+            {selectedOpt !== null && (
+              <button
+                onClick={handleNext}
+                className="btn-primary"
+                style={{ width: '100%', justifyContent: 'center' }}
+              >
+                {currentIdx + 1 < QUESTIONS.length ? 'Next Question ➔' : 'View Results ➔'}
+              </button>
+            )}
           </div>
-          <h2 style={{ fontSize: '2rem', fontWeight: '800', color: '#fff', marginBottom: '0.5rem' }}>
-            Quiz Completed!
-          </h2>
-          <p style={{ fontSize: '1.25rem', color: 'var(--text-muted)', marginBottom: '2rem' }}>
-            You scored <strong style={{ color: 'var(--amber-primary)' }}>{score}</strong> out of <strong>{QUESTIONS.length}</strong>!
-          </p>
-          <button
-            onClick={handleRestart}
-            className="btn-primary"
-            style={{ margin: '0 auto' }}
-          >
-            <RotateCcw size={16} /> Try Again
-          </button>
-        </div>
+        ) : (
+          <div className="glass-panel" style={{ padding: '3.5rem 2rem', textAlign: 'center' }}>
+            <div style={{ width: '70px', height: '70px', borderRadius: '50%', background: 'rgba(245, 158, 11, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', color: 'var(--amber-primary)' }}>
+              <Award size={36} />
+            </div>
+            <h2 style={{ fontSize: '2rem', fontWeight: '800', color: '#fff', marginBottom: '0.5rem' }}>
+              Quiz Completed!
+            </h2>
+            <p style={{ fontSize: '1.25rem', color: 'var(--text-muted)', marginBottom: '2rem' }}>
+              You scored <strong style={{ color: 'var(--amber-primary)' }}>{score}</strong> out of <strong>{QUESTIONS.length}</strong>!
+            </p>
+            <button
+              onClick={handleRestart}
+              className="btn-primary"
+              style={{ margin: '0 auto' }}
+            >
+              <RotateCcw size={16} /> Try Again
+            </button>
+          </div>
+        )
       )}
     </div>
   );
