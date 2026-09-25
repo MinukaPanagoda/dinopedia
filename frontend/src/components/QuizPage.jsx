@@ -63,41 +63,38 @@ export default function QuizPage() {
   };
 
   return (
-    <div className="home-container" style={{ padding: '3rem 1.5rem 6rem', maxWidth: '880px' }}>
-      {/* Page Header */}
-      <div className="section-header" style={{ textAlign: 'center', marginBottom: '2rem' }}>
-        <div style={{ margin: '0 auto' }}>
-          <div className="section-tag" style={{ justifyContent: 'center' }}>
-            <Award size={15} /> Prehistoric Challenge Arena
-          </div>
-          <h1 className="section-title" style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>
-            Dino <span className="hero-title-gradient">Quiz & Games</span>
+    <div className="home-container" style={{ padding: '1.25rem 1rem 2.5rem', maxWidth: '860px' }}>
+      {/* Sleek Compact Header & Mode Switcher */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+        <div>
+          <h1 style={{ fontSize: '1.45rem', fontWeight: '800', color: '#fff', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span>🦖 T-Rex Escape</span>
+            <span style={{ fontSize: '0.72rem', padding: '0.2rem 0.55rem', borderRadius: '999px', background: 'rgba(245,158,11,0.15)', color: 'var(--amber-light)', border: '1px solid rgba(245,158,11,0.3)', fontWeight: '700' }}>
+              Hangman Survival
+            </span>
           </h1>
-          <p style={{ color: 'var(--text-muted)' }}>
-            Survive the hungry T-Rex in Word Escape or test your scientific paleontology knowledge.
-          </p>
         </div>
-      </div>
 
-      {/* Mode Switcher Tabs (Hangman vs Trivia) */}
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem', marginBottom: '2.5rem', flexWrap: 'wrap' }}>
-        <button
-          className={`category-tab-btn ${activeMode === 'hangman' ? 'active' : ''}`}
-          onClick={() => setActiveMode('hangman')}
-          style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.65rem 1.5rem', fontSize: '0.95rem' }}
-        >
-          <Gamepad2 size={18} />
-          <span>T-Rex Escape (Hangman Game)</span>
-        </button>
+        {/* Mode Switcher Tabs (Hangman vs Trivia) */}
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <button
+            className={`category-tab-btn ${activeMode === 'hangman' ? 'active' : ''}`}
+            onClick={() => setActiveMode('hangman')}
+            style={{ padding: '0.4rem 0.95rem', fontSize: '0.85rem' }}
+          >
+            <Gamepad2 size={15} />
+            <span>T-Rex Game</span>
+          </button>
 
-        <button
-          className={`category-tab-btn ${activeMode === 'trivia' ? 'active' : ''}`}
-          onClick={() => setActiveMode('trivia')}
-          style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.65rem 1.5rem', fontSize: '0.95rem' }}
-        >
-          <Award size={18} />
-          <span>Trivia Questions</span>
-        </button>
+          <button
+            className={`category-tab-btn ${activeMode === 'trivia' ? 'active' : ''}`}
+            onClick={() => setActiveMode('trivia')}
+            style={{ padding: '0.4rem 0.95rem', fontSize: '0.85rem' }}
+          >
+            <Award size={15} />
+            <span>Trivia Quiz</span>
+          </button>
+        </div>
       </div>
 
       {/* Render Playable T-Rex Hangman Game */}
