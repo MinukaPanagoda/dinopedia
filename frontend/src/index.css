@@ -2484,6 +2484,64 @@ button {
   opacity: 0.6;
 }
 
+/* Realistic T-Rex Figure & Container */
+.realistic-trex-wrapper {
+  position: relative;
+  display: inline-block;
+  user-select: none;
+}
+
+.realistic-trex-img-container {
+  position: relative;
+  width: 165px;
+  height: 114px;
+}
+
+.realistic-trex-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.65));
+  pointer-events: none;
+  transform-origin: 30% 85%;
+  transition: transform 0.3s ease;
+}
+
+/* Eye Glow Positioned directly on dinosaur's eye */
+.trex-eye-glow {
+  position: absolute;
+  left: 80.1%;
+  top: 13.5%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #FBBF24;
+  box-shadow: 0 0 6px #F59E0B;
+  opacity: 0.65;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.trex-eye-glow.eye-enraged {
+  background: #EF4444;
+  box-shadow: 0 0 12px #EF4444, 0 0 4px #F87171;
+  opacity: 1;
+  animation: eyePulse 0.35s infinite alternate;
+}
+
+.trex-eye-glow.eye-bloodlust {
+  background: #DC2626;
+  box-shadow: 0 0 16px #EF4444, 0 0 6px #FFF;
+  opacity: 1;
+  transform: scale(1.5);
+}
+
+@keyframes eyePulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.6); opacity: 1; }
+}
+
 /* T-Rex Track Positioning across 6 stages */
 .trex-track-container {
   position: absolute;
@@ -2494,69 +2552,88 @@ button {
   z-index: 10;
 }
 
-.pos-step-0 { left: 2%; }
-.pos-step-1 { left: 14%; }
-.pos-step-2 { left: 26%; }
-.pos-step-3 { left: 38%; }
-.pos-step-4 { left: 50%; }
-.pos-step-5 { left: 62%; }
-.pos-step-6 { left: calc(100% - 145px); } /* T-Rex lunges right on top of explorer! */
+.pos-step-0 { left: 1%; }
+.pos-step-0 .realistic-trex-img { animation: trexStalkSlow 2.4s infinite ease-in-out; }
 
-/* Articulated Jaws Transform & Rotation Origins */
-.trex-jaw-upper {
-  transform-origin: 120px 32px;
-  transition: transform 0.3s ease;
+.pos-step-1 { left: 13%; }
+.pos-step-1 .realistic-trex-img { animation: trexStalkSlow 2s infinite ease-in-out; }
+
+.pos-step-2 { left: 25%; }
+.pos-step-2 .realistic-trex-img { animation: trexStalkMed 1.6s infinite ease-in-out; }
+
+.pos-step-3 { left: 37%; }
+.pos-step-3 .realistic-trex-img { animation: trexStalkMed 1.3s infinite ease-in-out; }
+
+.pos-step-4 { left: 49%; }
+.pos-step-4 .realistic-trex-img { animation: trexStalkFast 1s infinite ease-in-out; }
+
+.pos-step-5 { left: 60%; }
+.pos-step-5 .realistic-trex-img { animation: trexThreatVibrate 0.22s infinite alternate ease-in-out; }
+
+.pos-step-6 { 
+  left: calc(100% - 170px); /* T-Rex jaws align directly over explorer */
 }
 
-.trex-jaw-lower {
-  transform-origin: 120px 42px;
-  transition: transform 0.3s ease;
+/* Natural Stalking & Breathing Gait Animations */
+@keyframes trexStalkSlow {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(3px, -4px) rotate(-1.5deg); }
 }
 
-/* Progressive Jaw Opening as T-Rex gets closer */
-.jaw-open-0 { transform: rotate(0deg); }
-.jaw-open-1 { transform: rotate(-5deg); }
-.jaw-open-2 { transform: rotate(-10deg); }
-.jaw-open-3 { transform: rotate(-16deg); }
-.jaw-open-4 { transform: rotate(-22deg); }
-.jaw-open-5 { transform: rotate(-30deg); }
+@keyframes trexStalkMed {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(4px, -5px) rotate(-2deg); }
+}
 
-.jaw-drop-0 { transform: rotate(0deg); }
-.jaw-drop-1 { transform: rotate(5deg); }
-.jaw-drop-2 { transform: rotate(10deg); }
-.jaw-drop-3 { transform: rotate(16deg); }
-.jaw-drop-4 { transform: rotate(22deg); }
-.jaw-drop-5 { transform: rotate(30deg); }
+@keyframes trexStalkFast {
+  0%, 100% { transform: translate(0, 0) rotate(1deg); }
+  50% { transform: translate(5px, -6px) rotate(-3deg); }
+}
+
+@keyframes trexThreatVibrate {
+  0% { transform: translate(0, 0) rotate(2deg); }
+  100% { transform: translate(2px, -3px) rotate(4deg); }
+}
 
 /* ==========================================================================
-   EATING ANIMATION KEYFRAMES (Violent Chomp & Chewing Sequence)
+   DEVOURING & CHOMPING SEQUENCE (Stage 6 - Eating the Explorer)
    ========================================================================== */
-.anim-upper-chomp {
-  animation: violentUpperChomp 0.75s infinite ease-in-out !important;
+.trex-eating-mode .realistic-trex-img {
+  animation: trexRealisticChompEat 1.4s cubic-bezier(0.22, 1, 0.36, 1) infinite !important;
+  transform-origin: 28% 85% !important;
 }
 
-.anim-lower-chomp {
-  animation: violentLowerChomp 0.75s infinite ease-in-out !important;
-}
-
-@keyframes violentUpperChomp {
-  0% { transform: rotate(-45deg); }
-  25% { transform: rotate(-55deg); }
-  45% { transform: rotate(8deg); } /* Violent crunch down! */
-  60% { transform: rotate(-18deg); } /* Chewing */
-  75% { transform: rotate(6deg); } /* Violent crunch down! */
-  90% { transform: rotate(-10deg); }
-  100% { transform: rotate(0deg); }
-}
-
-@keyframes violentLowerChomp {
-  0% { transform: rotate(45deg); }
-  25% { transform: rotate(55deg); }
-  45% { transform: rotate(-8deg); } /* Violent crunch up! */
-  60% { transform: rotate(18deg); } /* Chewing */
-  75% { transform: rotate(-6deg); } /* Violent crunch up! */
-  90% { transform: rotate(10deg); }
-  100% { transform: rotate(0deg); }
+@keyframes trexRealisticChompEat {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  15% {
+    /* Rears head back preparing massive bite */
+    transform: translate(-14px, -10px) rotate(-10deg) scale(1.06);
+  }
+  32% {
+    /* VIOLENT CHOMP DOWN DIRECTLY ONTO THE EXPLORER */
+    transform: translate(26px, 12px) rotate(16deg) scale(1.2);
+  }
+  44% {
+    /* Chewing and crushing */
+    transform: translate(20px, 8px) rotate(8deg) scale(1.15);
+  }
+  58% {
+    /* SECOND DEVOURING CRUNCH! */
+    transform: translate(30px, 14px) rotate(19deg) scale(1.24);
+  }
+  72% {
+    /* Head shake / tearing flesh */
+    transform: translate(18px, 0px) rotate(-2deg) scale(1.14);
+  }
+  86% {
+    /* Final swallow crunch */
+    transform: translate(25px, 8px) rotate(13deg) scale(1.18);
+  }
+  100% {
+    transform: translate(20px, 4px) rotate(8deg) scale(1.16);
+  }
 }
 
 /* Explorer Track Positioning */

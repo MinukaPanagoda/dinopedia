@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import trexImage from '../assets/trex_transparent.png';
 import { 
   Flame, 
   RotateCcw, 
@@ -175,58 +176,23 @@ function playSound(type, soundEnabled = true) {
 }
 
 /**
- * Articulated Animated T-Rex SVG with Upper & Lower Chomping Jaws
+ * Realistic Animated T-Rex using the user-uploaded cut dinosaur model
  */
-function ArticulatedTRex({ stage = 0, isDead = false }) {
-  const eyeColor = stage >= 4 ? '#EF4444' : '#F59E0B';
+function RealisticTRex({ stage = 0, isDead = false }) {
+  const isEnraged = stage >= 4;
 
   return (
-    <div className={`trex-figure ${isDead ? 'trex-eating-mode' : `stage-${stage}`}`}>
-      <svg 
-        width="160" 
-        height="115" 
-        viewBox="0 0 160 115" 
-        fill="none" 
-        className="trex-svg-body"
-      >
-        {/* Tail */}
-        <path d="M12 78 C32 68, 52 58, 72 54 C52 70, 32 88, 8 85 Z" fill="#92400E" />
-        
-        {/* Main Body */}
-        <path d="M68 52 C82 38, 102 42, 116 46 C122 58, 116 78, 102 85 C88 88, 72 82, 68 52 Z" fill="#B45309" />
-        
-        {/* Tiny Theropod Forearm */}
-        <path d="M108 65 L114 71 L118 69" stroke="#F59E0B" strokeWidth="3" strokeLinecap="round" />
-        
-        {/* Muscular Hind Leg & Claws */}
-        <path d="M84 72 C92 78, 94 92, 88 102 L82 106 M88 102 L94 106" stroke="#78350F" strokeWidth="5" strokeLinecap="round" />
-        
-        {/* Powerful Neck */}
-        <path d="M106 46 C116 36, 126 32, 134 29 C128 42, 122 52, 114 58 Z" fill="#D97706" />
-
-        {/* ================= UPPER JAW & CRANIUM (Swings UP and CHOMPS DOWN) ================= */}
-        <g className={`trex-jaw-upper ${isDead ? 'anim-upper-chomp' : `jaw-open-${stage}`}`}>
-          {/* Cranium Base */}
-          <path d="M120 30 C130 18, 146 16, 156 22 C158 26, 156 32, 146 36 C136 38, 126 38, 120 35 Z" fill="#F59E0B" />
-          {/* Eye Socket & Fiery Eye */}
-          <circle cx="134" cy="23" r="3.2" fill={eyeColor} />
-          <circle cx="135" cy="22" r="1.2" fill="#fff" />
-          {/* Antorbital Fenestra cutout */}
-          <ellipse cx="144" cy="26" rx="3.5" ry="2" fill="#78350F" opacity="0.6" />
-          {/* Sharp Upper Teeth Row */}
-          <path d="M126 35 L129 41 L132 35 L135 42 L138 35 L141 41 L144 35 L147 41 L150 36 L153 40" stroke="#FFF" strokeWidth="2.2" strokeLinejoin="round" fill="#FFF" />
-        </g>
-
-        {/* ================= LOWER JAW / MANDIBLE (Swings DOWN and SNAPS UP) ================= */}
-        <g className={`trex-jaw-lower ${isDead ? 'anim-lower-chomp' : `jaw-drop-${stage}`}`}>
-          {/* Mandible Bone */}
-          <path d="M120 38 C128 41, 142 44, 154 38 C150 46, 134 48, 120 44 Z" fill="#B45309" />
-          {/* Pink Guttural Tongue */}
-          <path d="M124 40 C132 39, 140 41, 142 39" stroke="#EF4444" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Sharp Lower Teeth Row */}
-          <path d="M128 38 L131 33 L134 38 L137 32 L140 38 L143 33 L146 38 L149 34 L152 38" stroke="#FFF" strokeWidth="2" strokeLinejoin="round" fill="#FFF" />
-        </g>
-      </svg>
+    <div className={`realistic-trex-wrapper ${isDead ? 'trex-eating-mode' : `stage-${stage}`}`}>
+      <div className="realistic-trex-img-container">
+        <img 
+          src={trexImage} 
+          alt="Tyrannosaurus Rex" 
+          className="realistic-trex-img" 
+          draggable="false"
+        />
+        {/* Menacing glowing predator eye overlay */}
+        <div className={`trex-eye-glow ${isEnraged ? 'eye-enraged' : ''} ${isDead ? 'eye-bloodlust' : ''}`} />
+      </div>
     </div>
   );
 }
@@ -374,9 +340,9 @@ export default function TRexHangman() {
 
         {/* Viewport Scene */}
         <div className="compact-viewport">
-          {/* Moving T-Rex */}
+          {/* Moving Realistic T-Rex */}
           <div className={`trex-track-container pos-step-${mistakes}`}>
-            <ArticulatedTRex stage={mistakes} isDead={isDead} />
+            <RealisticTRex stage={mistakes} isDead={isDead} />
           </div>
 
           {/* Explorer Character */}
