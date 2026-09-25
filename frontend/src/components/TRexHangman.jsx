@@ -422,233 +422,305 @@ export default function TRexHangman() {
   ];
 
   return (
-    <div className={`trex-game-compact ${screenShaking ? 'shake-screen' : ''}`}>
-      {/* Top Header & Stats Bar */}
-      <div className="game-top-bar">
-        <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
-          <div className="game-stat-pill">
-            <Trophy size={14} color="#F59E0B" />
-            <span>Score: <strong>{score}</strong></span>
+    <div className={`trex-battlefield-wrapper ${screenShaking ? 'shake-screen' : ''}`}>
+      {/* ================= LEFT FLANK: CATEGORY SELECTOR & THREAT RADAR ================= */}
+      <aside className="battlefield-flank battlefield-flank-left">
+        {/* Category Selection Card */}
+        <div className="flank-card category-selector-flank">
+          <div className="flank-card-header">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <Compass size={14} color="#F59E0B" />
+              <span>Select Category</span>
+            </div>
           </div>
-          <div className="game-stat-pill">
-            <Flame size={14} color="#EF4444" />
-            <span>Streak: <strong>{streak}</strong></span>
+          <div className="flank-category-list">
+            <button 
+              type="button"
+              className={`flank-cat-btn ${selectedCategory === 'mix' ? 'active' : ''}`}
+              onClick={() => handleSelectCategory('mix')}
+            >
+              <span className="cat-icon">🎲</span>
+              <div className="cat-text">
+                <strong>Mix (All)</strong>
+                <small>Everything Prehistoric</small>
+              </div>
+            </button>
+
+            <button 
+              type="button"
+              className={`flank-cat-btn ${selectedCategory === 'dinosaurs' ? 'active' : ''}`}
+              onClick={() => handleSelectCategory('dinosaurs')}
+            >
+              <span className="cat-icon">🦖</span>
+              <div className="cat-text">
+                <strong>Dinosaurs</strong>
+                <small>Fossil Apex Predators</small>
+              </div>
+            </button>
+
+            <button 
+              type="button"
+              className={`flank-cat-btn ${selectedCategory === 'movies' ? 'active' : ''}`}
+              onClick={() => handleSelectCategory('movies')}
+            >
+              <span className="cat-icon">🎬</span>
+              <div className="cat-text">
+                <strong>Movies</strong>
+                <small>Cinema & Blockbusters</small>
+              </div>
+            </button>
+
+            <button 
+              type="button"
+              className={`flank-cat-btn ${selectedCategory === 'eras' ? 'active' : ''}`}
+              onClick={() => handleSelectCategory('eras')}
+            >
+              <span className="cat-icon">⏳</span>
+              <div className="cat-text">
+                <strong>Eras</strong>
+                <small>Deep Time & Epochs</small>
+              </div>
+            </button>
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-          <button 
-            className="btn-skip-word"
-            onClick={handleNextWord}
-            title="Skip to next word"
-          >
-            <SkipForward size={13} />
-            <span>Skip</span>
-          </button>
-
-          <button 
-            className="game-audio-toggle"
-            onClick={() => setSoundEnabled(!soundEnabled)}
-            title={soundEnabled ? "Mute Sounds" : "Unmute Sounds"}
-            aria-label="Toggle Sound"
-          >
-            {soundEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
-          </button>
-        </div>
-      </div>
-
-      {/* Cinematic Widescreen T-Rex Arena (Fits on 1 Screen) */}
-      <div className={`trex-arena-compact ${isDead ? 'arena-blood-flash' : ''}`}>
-        {/* Threat Distance Bar */}
-        <div className="compact-threat-bar">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', fontWeight: '700' }}>
-            <span className="threat-radar-dot" />
-            <span style={{ color: mistakes >= 4 ? '#F87171' : '#FBBF24' }}>
-              <strong>{currentDistance}m</strong> — {threatMessages[mistakes]}
-            </span>
+        {/* Survival Radar Card */}
+        <div className="flank-card survival-radar-card">
+          <div className="flank-card-header">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <Flame size={14} color="#EF4444" />
+              <span>Survival Radar</span>
+            </div>
           </div>
-          <div className="compact-meter-track">
+          <div className="threat-metric-row">
+            <span>T-Rex Distance:</span>
+            <strong style={{ color: mistakes >= 4 ? '#F87171' : '#FBBF24' }}>{currentDistance}m</strong>
+          </div>
+          <div className="threat-metric-row">
+            <span>Lives Left:</span>
+            <strong style={{ color: mistakes >= 4 ? '#EF4444' : '#34D399' }}>{MAX_MISTAKES - mistakes} / {MAX_MISTAKES}</strong>
+          </div>
+          <div className="threat-radar-mini-track">
             <div 
-              className="compact-meter-fill" 
+              className="threat-radar-mini-fill" 
               style={{ width: `${(mistakes / MAX_MISTAKES) * 100}%` }} 
             />
           </div>
         </div>
+      </aside>
 
-        {/* Viewport Scene */}
-        <div className="compact-viewport">
-          {/* Moving Realistic T-Rex */}
-          <div className={`trex-track-container pos-step-${mistakes}`}>
-            <RealisticTRex stage={mistakes} isDead={isDead} />
+      {/* ================= CENTER COLUMN: MAIN HANGMAN SURVIVAL GAME ================= */}
+      <main className="battlefield-center">
+        {/* Top Header & Stats Bar */}
+        <div className="game-top-bar">
+          <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
+            <div className="game-stat-pill">
+              <Trophy size={14} color="#F59E0B" />
+              <span>Score: <strong>{score}</strong></span>
+            </div>
+            <div className="game-stat-pill">
+              <Flame size={14} color="#EF4444" />
+              <span>Streak: <strong>{streak}</strong></span>
+            </div>
           </div>
 
-          {/* Explorer Character */}
-          <div className="explorer-track-container">
-            {isWon ? (
-              <div className="explorer-escaped-car">
-                <span style={{ fontSize: '1.8rem' }}>🚙💨</span>
-                <span className="escaped-text">ESCAPED!</span>
-              </div>
-            ) : isDead ? (
-              <div className="explorer-eaten-scene">
-                {/* Explorer's Hat Flying Off */}
-                <div className="flying-safari-hat">🤠</div>
-                {/* Blood / Dust Splatter */}
-                <div className="chomp-splatter-burst">💥 CHOMP!</div>
-                {/* Skeleton Bones Remaining */}
-                <div className="leftover-bones">🦴</div>
-              </div>
-            ) : (
-              <div className={`explorer-standing ${mistakes >= 4 ? 'explorer-panicking' : ''}`}>
-                <div style={{ fontSize: '1.9rem', lineHeight: 1 }}>🤠</div>
-                <div style={{ fontSize: '0.9rem', marginTop: '-4px' }}>🔦</div>
-                <div className="explorer-nametag">You</div>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <button 
+              className="btn-skip-word"
+              onClick={handleNextWord}
+              title="Skip to next word"
+            >
+              <SkipForward size={13} />
+              <span>Skip Word</span>
+            </button>
+
+            <button 
+              className="game-audio-toggle"
+              onClick={() => setSoundEnabled(!soundEnabled)}
+              title={soundEnabled ? "Mute Sounds" : "Unmute Sounds"}
+              aria-label="Toggle Sound"
+            >
+              {soundEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Cinematic Widescreen T-Rex Arena */}
+        <div className={`trex-arena-compact ${isDead ? 'arena-blood-flash' : ''}`}>
+          {/* Threat Distance Bar */}
+          <div className="compact-threat-bar">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', fontWeight: '700' }}>
+              <span className="threat-radar-dot" />
+              <span style={{ color: mistakes >= 4 ? '#F87171' : '#FBBF24' }}>
+                <strong>{currentDistance}m</strong> — {threatMessages[mistakes]}
+              </span>
+            </div>
+            <div className="compact-meter-track">
+              <div 
+                className="compact-meter-fill" 
+                style={{ width: `${(mistakes / MAX_MISTAKES) * 100}%` }} 
+              />
+            </div>
+          </div>
+
+          {/* Viewport Scene */}
+          <div className="compact-viewport">
+            {/* Moving Realistic T-Rex */}
+            <div className={`trex-track-container pos-step-${mistakes}`}>
+              <RealisticTRex stage={mistakes} isDead={isDead} />
+            </div>
+
+            {/* Explorer Character */}
+            <div className="explorer-track-container">
+              {isWon ? (
+                <div className="explorer-escaped-car">
+                  <span style={{ fontSize: '1.8rem' }}>🚙💨</span>
+                  <span className="escaped-text">ESCAPED!</span>
+                </div>
+              ) : isDead ? (
+                <div className="explorer-eaten-scene">
+                  <div className="flying-safari-hat">🤠</div>
+                  <div className="chomp-splatter-burst">💥 CHOMP!</div>
+                  <div className="leftover-bones">🦴</div>
+                </div>
+              ) : (
+                <div className={`explorer-standing ${mistakes >= 4 ? 'explorer-panicking' : ''}`}>
+                  <div style={{ fontSize: '1.9rem', lineHeight: 1 }}>🤠</div>
+                  <div style={{ fontSize: '0.9rem', marginTop: '-4px' }}>🔦</div>
+                  <div className="explorer-nametag">You</div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Ground Line */}
+          <div className="arena-ground-line" />
+        </div>
+
+        {/* Word Section with Secret Letters */}
+        <div className="word-section-compact">
+          <div className="secret-word-row">
+            {targetWord.split('').map((letter, idx) => {
+              if (letter === ' ') {
+                return <div key={idx} className="word-space-separator" />;
+              }
+              const revealed = isGameOver || guessedLetters.has(letter);
+              const isMissing = isDead && !guessedLetters.has(letter);
+              return (
+                <div 
+                  key={idx} 
+                  className={`compact-slot ${revealed ? 'revealed' : ''} ${isMissing ? 'missing' : ''}`}
+                >
+                  <span>{revealed ? letter : ''}</span>
+                  <div className="compact-slot-bar" />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Outcome Overlays (Win / Lose) */}
+        {isWon && (
+          <div className="compact-banner win">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              <ShieldCheck size={20} color="#34D399" />
+              <h3 style={{ margin: 0, fontSize: '1.15rem', color: '#34D399', fontWeight: '800' }}>YOU SURVIVED!</h3>
+            </div>
+            <p style={{ margin: '4px 0 10px', fontSize: '0.85rem', color: '#E5E7EB' }}>
+              You solved <strong>{targetWord}</strong> and escaped before the T-Rex caught you!
+            </p>
+            <button className="btn-primary" onClick={handleNextWord} style={{ padding: '0.45rem 1.25rem', fontSize: '0.88rem' }}>
+              <span>Next Word</span>
+              <ChevronRight size={15} />
+            </button>
+          </div>
+        )}
+
+        {isDead && (
+          <div className="compact-banner lose">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              <Skull size={20} color="#F87171" />
+              <h3 style={{ margin: 0, fontSize: '1.15rem', color: '#F87171', fontWeight: '900' }}>
+                CHOMPED! YOU WERE EATEN!
+              </h3>
+            </div>
+            <p style={{ margin: '4px 0 10px', fontSize: '0.85rem', color: '#E5E7EB' }}>
+              The dinosaur was <strong style={{ color: '#FBBF24' }}>{targetWord}</strong>!
+            </p>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem' }}>
+              <button className="btn-primary" onClick={handleNextWord} style={{ padding: '0.45rem 1.15rem', fontSize: '0.88rem' }}>
+                <RotateCcw size={14} />
+                <span>Try Again</span>
+              </button>
+              <button className="btn-secondary" onClick={handleRestartGame} style={{ padding: '0.45rem 1.15rem', fontSize: '0.88rem' }}>
+                <span>Reset Score</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Compact Keyboard */}
+        <div className="compact-keyboard">
+          {"QWERTYUIOPASDFGHJKLZXCVBNM".split('').map((char) => {
+            const isGuessed = guessedLetters.has(char);
+            const isCorrect = isGuessed && targetWord.includes(char);
+            const isWrong = isGuessed && !targetWord.includes(char);
+
+            return (
+              <button
+                key={char}
+                className={`compact-key ${isCorrect ? 'correct' : ''} ${isWrong ? 'wrong' : ''}`}
+                onClick={() => handleGuess(char)}
+                disabled={isGuessed || isGameOver}
+              >
+                {char}
+              </button>
+            );
+          })}
+        </div>
+      </main>
+
+      {/* ================= RIGHT FLANK: EXPEDITION CLUE & FIELD DOSSIER ================= */}
+      <aside className="battlefield-flank battlefield-flank-right">
+        {/* Expedition Clue Card */}
+        <div className="flank-card clue-dossier-card">
+          <div className="flank-card-header">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <Sparkles size={14} color="#F59E0B" />
+              <span>Expedition Clue</span>
+            </div>
+            <span className="clue-subgroup-pill">{currentItem.category}</span>
+          </div>
+          
+          <p className="clue-dossier-hint">"{currentItem.hint}"</p>
+
+          <div className="clue-dossier-footer">
+            <div className="dossier-stat">
+              <span>Word Length:</span>
+              <strong>{targetWord.replace(/ /g, '').length} Letters</strong>
+            </div>
+            {targetWord.includes(' ') && (
+              <div className="dossier-stat">
+                <span>Structure:</span>
+                <strong>{targetWord.split(' ').length} Words</strong>
               </div>
             )}
           </div>
         </div>
 
-        {/* Ground Line */}
-        <div className="arena-ground-line" />
-      </div>
-
-      {/* Interactive Strip: Category on Left, Clue on Right */}
-      <div className="game-interactive-strip">
-        {/* Left: Category Selector */}
-        <div className="category-selector-card">
-          <div className="card-micro-label">
-            <Compass size={12} color="#F59E0B" />
-            <span>Select Category</span>
-          </div>
-          <div className="category-pill-group">
-            <button 
-              type="button"
-              className={`cat-pill ${selectedCategory === 'mix' ? 'active' : ''}`}
-              onClick={() => handleSelectCategory('mix')}
-            >
-              <span>🎲 Mix</span>
-            </button>
-            <button 
-              type="button"
-              className={`cat-pill ${selectedCategory === 'dinosaurs' ? 'active' : ''}`}
-              onClick={() => handleSelectCategory('dinosaurs')}
-            >
-              <span>🦖 Dinosaurs</span>
-            </button>
-            <button 
-              type="button"
-              className={`cat-pill ${selectedCategory === 'movies' ? 'active' : ''}`}
-              onClick={() => handleSelectCategory('movies')}
-            >
-              <span>🎬 Movies</span>
-            </button>
-            <button 
-              type="button"
-              className={`cat-pill ${selectedCategory === 'eras' ? 'active' : ''}`}
-              onClick={() => handleSelectCategory('eras')}
-            >
-              <span>⏳ Eras</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Right: Expedition Clue */}
-        <div className="clue-display-card">
-          <div className="clue-card-header">
-            <div className="card-micro-label" style={{ marginBottom: 0 }}>
-              <Sparkles size={12} color="#F59E0B" />
-              <span>Expedition Clue</span>
+        {/* Field Guide Mission Card */}
+        <div className="flank-card field-guide-card">
+          <div className="flank-card-header">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <ShieldCheck size={14} color="#34D399" />
+              <span>Survival Mission</span>
             </div>
-            <span className="clue-type-badge">{currentItem.category}</span>
           </div>
-          <div className="clue-text-body">
-            <span>{currentItem.hint}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Word Category & Word Slots (Combined) */}
-      <div className="word-section-compact">
-        {/* Secret Word Display */}
-        <div className="secret-word-row">
-          {targetWord.split('').map((letter, idx) => {
-            if (letter === ' ') {
-              return <div key={idx} className="word-space-separator" />;
-            }
-            const revealed = isGameOver || guessedLetters.has(letter);
-            const isMissing = isDead && !guessedLetters.has(letter);
-            return (
-              <div 
-                key={idx} 
-                className={`compact-slot ${revealed ? 'revealed' : ''} ${isMissing ? 'missing' : ''}`}
-              >
-                <span>{revealed ? letter : ''}</span>
-                <div className="compact-slot-bar" />
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Outcome Overlays (Win / Lose) */}
-      {isWon && (
-        <div className="compact-banner win">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-            <ShieldCheck size={20} color="#34D399" />
-            <h3 style={{ margin: 0, fontSize: '1.15rem', color: '#34D399', fontWeight: '800' }}>YOU SURVIVED!</h3>
-          </div>
-          <p style={{ margin: '4px 0 10px', fontSize: '0.85rem', color: '#E5E7EB' }}>
-            You solved <strong>{targetWord}</strong> and escaped before the T-Rex caught you!
+          <p style={{ margin: 0, fontSize: '0.78rem', color: '#9CA3AF', lineHeight: '1.45' }}>
+            Solve the hidden prehistoric term before the T-Rex closes the 60m gap! Use keyboard keys or tap buttons.
           </p>
-          <button className="btn-primary" onClick={handleNextWord} style={{ padding: '0.45rem 1.25rem', fontSize: '0.88rem' }}>
-            <span>Next Word</span>
-            <ChevronRight size={15} />
-          </button>
         </div>
-      )}
-
-      {isDead && (
-        <div className="compact-banner lose">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-            <Skull size={20} color="#F87171" />
-            <h3 style={{ margin: 0, fontSize: '1.15rem', color: '#F87171', fontWeight: '900' }}>
-              CHOMPED! YOU WERE EATEN!
-            </h3>
-          </div>
-          <p style={{ margin: '4px 0 10px', fontSize: '0.85rem', color: '#E5E7EB' }}>
-            The dinosaur was <strong style={{ color: '#FBBF24' }}>{targetWord}</strong>!
-          </p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem' }}>
-            <button className="btn-primary" onClick={handleNextWord} style={{ padding: '0.45rem 1.15rem', fontSize: '0.88rem' }}>
-              <RotateCcw size={14} />
-              <span>Try Again</span>
-            </button>
-            <button className="btn-secondary" onClick={handleRestartGame} style={{ padding: '0.45rem 1.15rem', fontSize: '0.88rem' }}>
-              <span>Reset Score</span>
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Compact Keyboard */}
-      <div className="compact-keyboard">
-        {"QWERTYUIOPASDFGHJKLZXCVBNM".split('').map((char) => {
-          const isGuessed = guessedLetters.has(char);
-          const isCorrect = isGuessed && targetWord.includes(char);
-          const isWrong = isGuessed && !targetWord.includes(char);
-
-          return (
-            <button
-              key={char}
-              className={`compact-key ${isCorrect ? 'correct' : ''} ${isWrong ? 'wrong' : ''}`}
-              onClick={() => handleGuess(char)}
-              disabled={isGuessed || isGameOver}
-            >
-              {char}
-            </button>
-          );
-        })}
-      </div>
+      </aside>
     </div>
   );
 }

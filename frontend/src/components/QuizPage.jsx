@@ -63,7 +63,7 @@ export default function QuizPage() {
   };
 
   return (
-    <div className="home-container" style={{ padding: '1.25rem 1rem 2.5rem', maxWidth: '860px' }}>
+    <div className="home-container" style={{ padding: '1.25rem 1rem 2.5rem', maxWidth: activeMode === 'hangman' ? '1280px' : '860px', transition: 'max-width 0.3s ease' }}>
       {/* Sleek Compact Header & Mode Switcher */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.75rem' }}>
         <div>
