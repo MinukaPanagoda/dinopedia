@@ -11,100 +11,217 @@ import {
   VolumeX, 
   Compass, 
   ChevronRight,
-  ShieldCheck
+  ShieldCheck,
+  Film,
+  Hourglass,
+  Layers,
+  SkipForward
 } from 'lucide-react';
 
-// Word Pool with categories and paleontological clues
+// Word Pool categorized into Dinosaurs, Movies, and Eras
 const WORD_LIST = [
+  // ================= DINOSAURS =================
   {
     word: "TYRANNOSAURUS",
+    group: "dinosaurs",
     category: "Theropod Apex Predator",
     hint: "The 12-meter apex predator with a bone-crushing 57,000 N bite force."
   },
   {
     word: "TRICERATOPS",
+    group: "dinosaurs",
     category: "Horned Ceratopsian",
     hint: "Three-horned armored herbivore with a solid neck frill capable of withstanding T-Rex charges."
   },
   {
     word: "VELOCIRAPTOR",
+    group: "dinosaurs",
     category: "Feathered Dromaeosaur",
     hint: "Agile, bird-like Cretaceous hunter armed with lethal sickle claws on its second toes."
   },
   {
     word: "BRACHIOSAURUS",
+    group: "dinosaurs",
     category: "Colossal Sauropod",
     hint: "High-browsing giant whose front limbs were longer than its back limbs to reach treetops."
   },
   {
     word: "SPINOSAURUS",
+    group: "dinosaurs",
     category: "Semiaquatic Titan",
     hint: "Giant river predator with a 1.8-meter dorsal sail and crocodile-like fish-catching snout."
   },
   {
     word: "ANKYLOSAURUS",
+    group: "dinosaurs",
     category: "Armored Living Tank",
     hint: "Covered in thick osteoderm plates and equipped with a heavy bone club tail."
   },
   {
     word: "STEGOSAURUS",
+    group: "dinosaurs",
     category: "Plated Herbivore",
     hint: "Defended itself with four sharp thagomizer tail spikes and thermal back plates."
   },
   {
     word: "PTERODACTYL",
+    group: "dinosaurs",
     category: "Mesozoic Winged Reptile",
     hint: "Soared through prehistoric skies; technically a flying pterosaur, not a true dinosaur."
   },
   {
     word: "DILOPHOSAURUS",
+    group: "dinosaurs",
     category: "Early Jurassic Predator",
     hint: "Famous for dual symmetrical plate-like crests running along the top of its skull."
   },
   {
     word: "ARCHAEOPTERYX",
+    group: "dinosaurs",
     category: "Avian Transitional Fossil",
     hint: "The famous fossil bridging feathered non-avian theropods directly to modern birds."
   },
   {
-    word: "PALEONTOLOGY",
-    category: "Scientific Field",
-    hint: "The study of ancient life, fossils, prehistoric footprints, and geological deep time."
-  },
-  {
-    word: "FOSSILIZATION",
-    category: "Geological Process",
-    hint: "The gradual process where minerals replace organic bone tissue, turning bones to stone."
-  },
-  {
     word: "ALLOSAURUS",
+    group: "dinosaurs",
     category: "Jurassic Apex Predator",
     hint: "Known as the 'lion of the Jurassic', it used its upper jaw like an axe against prey."
   },
   {
     word: "CARNOTAURUS",
+    group: "dinosaurs",
     category: "Horned Abelisaurid",
     hint: "Named the 'meat-eating bull', it possessed two prominent horns above its eyes."
   },
   {
     word: "IGUANODON",
+    group: "dinosaurs",
     category: "Thumb-Spiked Herbivore",
     hint: "One of the first dinosaurs ever discovered, armed with rigid, conical thumb spikes."
   },
   {
-    word: "PANGAEA",
-    category: "Ancient Supercontinent",
-    hint: "The single colossal landmass surrounded by Panthalassa ocean where early dinosaurs evolved."
+    word: "PARASAUROLOPHUS",
+    group: "dinosaurs",
+    category: "Crested Hadrosaur",
+    hint: "Duck-billed dinosaur with an acoustic 1.8-meter hollow curved skull crest."
+  },
+
+  // ================= MOVIES & CINEMA =================
+  {
+    word: "JURASSIC PARK",
+    group: "movies",
+    category: "1993 Sci-Fi Classic",
+    hint: "Steven Spielberg's masterpiece that revolutionized cinema using CGI and animatronic dinosaurs."
   },
   {
-    word: "CRETACEOUS",
+    word: "THE LOST WORLD",
+    group: "movies",
+    category: "1997 Dino Sequel",
+    hint: "Sequel featuring an urban rampage where an enraged T-Rex storms the streets of San Diego."
+  },
+  {
+    word: "JURASSIC WORLD",
+    group: "movies",
+    category: "2015 Blockbuster",
+    hint: "A luxury theme park on Isla Nublar shaken by the genetically modified Indominus Rex."
+  },
+  {
+    word: "KING KONG",
+    group: "movies",
+    category: "Creature Feature",
+    hint: "Legendary giant beast battling ferocious dinosaurs on perilous Skull Island."
+  },
+  {
+    word: "LAND BEFORE TIME",
+    group: "movies",
+    category: "1988 Animated Feature",
+    hint: "Beloved animated classic following Littlefoot the Apatosaurus seeking the Great Valley."
+  },
+  {
+    word: "PREHISTORIC PLANET",
+    group: "movies",
+    category: "BBC Natural History",
+    hint: "Photorealistic documentary series narrated by Sir David Attenborough with music by Hans Zimmer."
+  },
+  {
+    word: "DINOSAUR",
+    group: "movies",
+    category: "Disney Animation",
+    hint: "2000 Disney adventure following Aladar the Iguanodon leading a herd away from meteor devastation."
+  },
+  {
+    word: "ICE AGE",
+    group: "movies",
+    category: "Animated Comedy",
+    hint: "Popular film franchise where Manny and Sid discover an underground tropical dinosaur paradise."
+  },
+  {
+    word: "THE GOOD DINOSAUR",
+    group: "movies",
+    category: "Pixar Studios",
+    hint: "Pixar animation exploring an alternate timeline where the dinosaur asteroid missed Earth."
+  },
+
+  // ================= ERAS & PREHISTORY =================
+  {
+    word: "TRIASSIC",
+    group: "eras",
     category: "Geological Period",
-    hint: "The final, most biodiverse chapter of the Mesozoic that ended with the asteroid impact."
+    hint: "The earliest Mesozoic period (252–201 Ma) that marked the dawn of the first true dinosaurs."
   },
   {
     word: "JURASSIC",
+    group: "eras",
     category: "Geological Period",
-    hint: "The warm, tropical greenhouse era when giant sauropods ruled the Earth."
+    hint: "The warm, tropical greenhouse era (201–145 Ma) when colossal sauropods ruled the Earth."
+  },
+  {
+    word: "CRETACEOUS",
+    group: "eras",
+    category: "Geological Period",
+    hint: "The final Mesozoic chapter (145–66 Ma) of peak diversity ended by the Chicxulub asteroid impact."
+  },
+  {
+    word: "MESOZOIC",
+    group: "eras",
+    category: "Geological Era",
+    hint: "The 186-million-year 'Age of Reptiles' encompassing the Triassic, Jurassic, and Cretaceous."
+  },
+  {
+    word: "PALEOZOIC",
+    group: "eras",
+    category: "Ancient Era",
+    hint: "The era preceding dinosaurs that ended with 'The Great Dying' Permian extinction."
+  },
+  {
+    word: "PERMIAN",
+    group: "eras",
+    category: "Pre-Dino Period",
+    hint: "Final Paleozoic period dominated by sail-backed mammal ancestors like Dimetrodon."
+  },
+  {
+    word: "CARBONIFEROUS",
+    group: "eras",
+    category: "Paleozoic Period",
+    hint: "The lush swamp forest period with giant insects that produced Earth's vast coal deposits."
+  },
+  {
+    word: "PANGAEA",
+    group: "eras",
+    category: "Ancient Supercontinent",
+    hint: "The colossal single landmass surrounded by Panthalassa where early dinosaurs first evolved."
+  },
+  {
+    word: "PALEONTOLOGY",
+    group: "eras",
+    category: "Scientific Field",
+    hint: "The scientific study of ancient life, fossils, footprints, and geological deep time."
+  },
+  {
+    word: "FOSSILIZATION",
+    group: "eras",
+    category: "Geological Process",
+    hint: "The gradual process where minerals replace decaying bone and tissue, turning organic matter to stone."
   }
 ];
 
@@ -198,21 +315,56 @@ function RealisticTRex({ stage = 0, isDead = false }) {
 }
 
 export default function TRexHangman() {
-  const [currentWordIdx, setCurrentWordIdx] = useState(() => Math.floor(Math.random() * WORD_LIST.length));
+  const [selectedCategory, setSelectedCategory] = useState('mix'); // 'mix' | 'dinosaurs' | 'movies' | 'eras'
+  const [currentItem, setCurrentItem] = useState(() => {
+    return WORD_LIST[Math.floor(Math.random() * WORD_LIST.length)];
+  });
   const [guessedLetters, setGuessedLetters] = useState(new Set());
-  const [showHint, setShowHint] = useState(false);
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [screenShaking, setScreenShaking] = useState(false);
 
-  const currentItem = WORD_LIST[currentWordIdx];
   const targetWord = currentItem.word;
 
   const mistakes = Array.from(guessedLetters).filter(letter => !targetWord.includes(letter)).length;
   const isDead = mistakes >= MAX_MISTAKES;
-  const isWon = targetWord.split('').every(letter => guessedLetters.has(letter));
+  const isWon = targetWord.split('').every(letter => letter === ' ' || guessedLetters.has(letter));
   const isGameOver = isDead || isWon;
+
+  const getFilteredPool = (cat) => {
+    if (cat === 'mix') return WORD_LIST;
+    return WORD_LIST.filter(item => item.group === cat);
+  };
+
+  const handleSelectCategory = (cat) => {
+    setSelectedCategory(cat);
+    const pool = getFilteredPool(cat);
+    let nextItem = pool[Math.floor(Math.random() * pool.length)];
+    if (pool.length > 1 && nextItem.word === currentItem.word) {
+      const others = pool.filter(i => i.word !== currentItem.word);
+      nextItem = others[Math.floor(Math.random() * others.length)];
+    }
+    setCurrentItem(nextItem);
+    setGuessedLetters(new Set());
+  };
+
+  const handleNextWord = () => {
+    const pool = getFilteredPool(selectedCategory);
+    let nextItem = pool[Math.floor(Math.random() * pool.length)];
+    if (pool.length > 1 && nextItem.word === currentItem.word) {
+      const others = pool.filter(i => i.word !== currentItem.word);
+      nextItem = others[Math.floor(Math.random() * others.length)];
+    }
+    setCurrentItem(nextItem);
+    setGuessedLetters(new Set());
+  };
+
+  const handleRestartGame = () => {
+    setScore(0);
+    setStreak(0);
+    handleNextWord();
+  };
 
   const handleGuess = useCallback((letter) => {
     if (isGameOver || guessedLetters.has(letter)) return;
@@ -225,7 +377,7 @@ export default function TRexHangman() {
 
     if (targetWord.includes(letter)) {
       playSound('correct', soundEnabled);
-      const wordComplete = targetWord.split('').every(l => l === letter || guessedLetters.has(l));
+      const wordComplete = targetWord.split('').every(l => l === ' ' || l === letter || guessedLetters.has(l));
       if (wordComplete) {
         setScore(s => s + 100 + (MAX_MISTAKES - mistakes) * 20);
         setStreak(st => st + 1);
@@ -256,22 +408,6 @@ export default function TRexHangman() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleGuess]);
 
-  const handleNextWord = () => {
-    let nextIdx = Math.floor(Math.random() * WORD_LIST.length);
-    if (nextIdx === currentWordIdx && WORD_LIST.length > 1) {
-      nextIdx = (nextIdx + 1) % WORD_LIST.length;
-    }
-    setCurrentWordIdx(nextIdx);
-    setGuessedLetters(new Set());
-    setShowHint(false);
-  };
-
-  const handleRestartGame = () => {
-    setScore(0);
-    setStreak(0);
-    handleNextWord();
-  };
-
   const distanceSteps = [60, 45, 30, 18, 8, 2, 0];
   const currentDistance = distanceSteps[Math.min(mistakes, MAX_MISTAKES)];
 
@@ -300,13 +436,14 @@ export default function TRexHangman() {
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
           <button 
-            className={`btn-hint ${showHint ? 'active' : ''}`}
-            onClick={() => setShowHint(!showHint)}
+            className="btn-skip-word"
+            onClick={handleNextWord}
+            title="Skip to next word"
           >
-            <Lightbulb size={13} />
-            <span>{showHint ? "Hide Clue" : "Clue"}</span>
+            <SkipForward size={13} />
+            <span>Skip</span>
           </button>
 
           <button 
@@ -375,24 +512,69 @@ export default function TRexHangman() {
         <div className="arena-ground-line" />
       </div>
 
-      {/* Clue Banner if Active */}
-      {showHint && (
-        <div className="compact-hint-card">
-          <Sparkles size={14} color="#F59E0B" />
-          <span><strong>Clue:</strong> {currentItem.hint}</span>
+      {/* Interactive Strip: Category on Left, Clue on Right */}
+      <div className="game-interactive-strip">
+        {/* Left: Category Selector */}
+        <div className="category-selector-card">
+          <div className="card-micro-label">
+            <Compass size={12} color="#F59E0B" />
+            <span>Select Category</span>
+          </div>
+          <div className="category-pill-group">
+            <button 
+              type="button"
+              className={`cat-pill ${selectedCategory === 'mix' ? 'active' : ''}`}
+              onClick={() => handleSelectCategory('mix')}
+            >
+              <span>🎲 Mix</span>
+            </button>
+            <button 
+              type="button"
+              className={`cat-pill ${selectedCategory === 'dinosaurs' ? 'active' : ''}`}
+              onClick={() => handleSelectCategory('dinosaurs')}
+            >
+              <span>🦖 Dinosaurs</span>
+            </button>
+            <button 
+              type="button"
+              className={`cat-pill ${selectedCategory === 'movies' ? 'active' : ''}`}
+              onClick={() => handleSelectCategory('movies')}
+            >
+              <span>🎬 Movies</span>
+            </button>
+            <button 
+              type="button"
+              className={`cat-pill ${selectedCategory === 'eras' ? 'active' : ''}`}
+              onClick={() => handleSelectCategory('eras')}
+            >
+              <span>⏳ Eras</span>
+            </button>
+          </div>
         </div>
-      )}
+
+        {/* Right: Expedition Clue */}
+        <div className="clue-display-card">
+          <div className="clue-card-header">
+            <div className="card-micro-label" style={{ marginBottom: 0 }}>
+              <Sparkles size={12} color="#F59E0B" />
+              <span>Expedition Clue</span>
+            </div>
+            <span className="clue-type-badge">{currentItem.category}</span>
+          </div>
+          <div className="clue-text-body">
+            <span>{currentItem.hint}</span>
+          </div>
+        </div>
+      </div>
 
       {/* Word Category & Word Slots (Combined) */}
       <div className="word-section-compact">
-        <div className="compact-category-tag">
-          <Compass size={13} />
-          <span>Category: <strong>{currentItem.category}</strong></span>
-        </div>
-
         {/* Secret Word Display */}
         <div className="secret-word-row">
           {targetWord.split('').map((letter, idx) => {
+            if (letter === ' ') {
+              return <div key={idx} className="word-space-separator" />;
+            }
             const revealed = isGameOver || guessedLetters.has(letter);
             const isMissing = isDead && !guessedLetters.has(letter);
             return (
