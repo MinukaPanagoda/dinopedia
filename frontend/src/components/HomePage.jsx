@@ -57,12 +57,12 @@ export default function HomePage({ setActiveTab }) {
             className="hero-fixed-title"
             style={{
               fontFamily: 'var(--font-heading)',
-              fontSize: 'clamp(2.4rem, 5.5vw, 4.5rem)',
+              fontSize: 'clamp(2.4rem, 5.5vw, 4.4rem)',
               fontWeight: '900',
-              lineHeight: '1.15',
+              lineHeight: '1.18',
               letterSpacing: '-0.02em',
               color: '#FFFFFF',
-              textShadow: '0 4px 20px rgba(0, 0, 0, 0.95), 0 0 40px rgba(245, 158, 11, 0.3)',
+              textShadow: '0 4px 24px rgba(0, 0, 0, 0.95), 0 0 35px rgba(245, 158, 11, 0.35)',
               marginBottom: '1.25rem'
             }}
           >
@@ -216,6 +216,28 @@ export default function HomePage({ setActiveTab }) {
             </div>
           </div>
 
+          {/* Era Visual Banner */}
+          {PRE_DINOSAUR_ERA.image && (
+            <div className="era-visual-banner">
+              <div className="era-image-wrapper">
+                <img 
+                  src={PRE_DINOSAUR_ERA.image} 
+                  alt={PRE_DINOSAUR_ERA.imageAlt} 
+                  className="era-image-photo" 
+                  loading="lazy"
+                />
+                <div className="era-image-overlay" />
+                <div className="era-image-badge">
+                  <Sparkles size={14} /> Paleozoic Primeval Panorama • 541–252 MYA
+                </div>
+              </div>
+              <div className="era-image-caption">
+                <Info size={16} className="era-caption-icon" />
+                <span>{PRE_DINOSAUR_ERA.imageCaption}</span>
+              </div>
+            </div>
+          )}
+
           {/* 4 Landmark Pre-Dinosaur Epochs */}
           <div style={{ marginBottom: '1.5rem', textAlign: 'center' }}>
             <h3 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#fff', marginBottom: '0.4rem' }}>
@@ -363,6 +385,31 @@ export default function HomePage({ setActiveTab }) {
                   <span className="period-meta-value">{period.keyEvent}</span>
                 </div>
               </div>
+
+              {/* Period Visual Panorama */}
+              {period.image && (
+                <div className="period-visual-card">
+                  <div className="period-image-container">
+                    <img 
+                      src={period.image} 
+                      alt={period.imageAlt || period.title} 
+                      className="period-image-img"
+                      loading="lazy"
+                    />
+                    <div className="period-image-overlay" />
+                    <div className="period-image-badge" style={{ borderColor: period.highlightColor }}>
+                      <span className="period-image-badge-dot" style={{ backgroundColor: period.highlightColor }} />
+                      <span>{period.title} Landscape</span>
+                      <span style={{ opacity: 0.5 }}>•</span>
+                      <span style={{ color: period.highlightColor }}>{period.spanMYA}</span>
+                    </div>
+                  </div>
+                  <div className="period-image-caption">
+                    <Info size={16} style={{ color: period.highlightColor, flexShrink: 0, marginTop: '2px' }} />
+                    <p>{period.imageCaption}</p>
+                  </div>
+                </div>
+              )}
 
               {/* Main Period Description */}
               <p className="period-description">

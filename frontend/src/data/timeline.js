@@ -18,6 +18,9 @@ export const PRE_DINOSAUR_ERA = {
   climate: "Vast icecaps evolving into humid mega-swamps, ending in blistering global desertification.",
   supercontinent: "Pangaea formation from Gondwana & Euramerica",
   overview: "Hundreds of millions of years before the first dinosaur took its first breath, Earth was already teeming with exotic, bizarre lifeforms. The Paleozoic Era saw life crawl out of primordial seas, conquer dry land, construct the planet's first giant rainforests, and evolve terrifying apex predators that were the ancient cousins of modern mammals—not dinosaurs.",
+  image: "/eras/paleozoic.jpg",
+  imageAlt: "Paleozoic Primeval Swamp Forest with Dimetrodon and Prehistoric Life",
+  imageCaption: "The Primeval Swamps of Pangaea (Carboniferous & Permian): Giant club mosses, colossal dragonflies, and sail-backed synapsids like Dimetrodon ruled over 100 million years before dinosaurs ever existed.",
   
   keyMilestones: [
     {
@@ -108,6 +111,9 @@ export const TIMELINE_PERIODS = [
     climate: "Arid, scorching super-continental interior with monsoonal margins; sparse polar ice.",
     geography: "Supercontinent Pangaea intact, surrounded by the Panthalassa global ocean.",
     highlightColor: "#F59E0B",
+    image: "/eras/triassic.jpg",
+    imageAlt: "Triassic Period Red Canyons and Oasis with Early Theropods",
+    imageCaption: "Dawn of the Ruling Reptiles: Arid supercontinental red canyon oasis where early agile bipedal archosaurs and primitive theropods began their evolutionary conquest.",
     keyEvent: "Carnian Pluvial Episode & Triassic-Jurassic Extinction Event",
     description: "Rising from the ashes of the Great Dying, early archosaurs split into pseudosuchians (crocodilian line) and avemetatarsalians (bird/dinosaur line). Around 233 million years ago, the first true dinosaurs emerged in southern Pangaea—agile, bipedal sprinters like Herrerasaurus and Eoraptor. By the late Triassic, primitive high-browsing prosauropods (Plateosaurus) appeared.",
     dinosaurs: [
@@ -125,6 +131,9 @@ export const TIMELINE_PERIODS = [
     climate: "Warm, tropical, greenhouse climate with high humidity; lush cycad and fern rainforests.",
     geography: "Pangaea breaks apart into Laurasia (North) and Gondwana (South), forming the early Atlantic Ocean.",
     highlightColor: "#10B981",
+    image: "/eras/jurassic.jpg",
+    imageAlt: "Jurassic Period Conifer Rainforest with Colossal Sauropods",
+    imageCaption: "The Golden Age of Giants: Warm tropical greenhouse Earth, vast conifer jungles, and colossal sauropods reaching towering heights bathed in misty morning sunlight.",
     keyEvent: "Continental breakup and explosion of colossal Sauropod diversity",
     description: "Following the extinction of pseudosuchian rivals, dinosaurs underwent explosive diversification. High humidity and carbon dioxide fueled boundless conifer and fern jungles. Long-necked Sauropods reached titanic proportions (Brachiosaurus, Diplodocus), plated Stegosaurs guarded the lowlands, and formidable Theropods like Allosaurus ruled as apex predators. The first feathered birds (Archaeopteryx) took flight.",
     dinosaurs: [
@@ -143,6 +152,9 @@ export const TIMELINE_PERIODS = [
     climate: "Super-greenhouse Earth; shallow inland seaways submerged continents; pole-to-pole vegetation.",
     geography: "Modern continents drifted toward modern positions; South Atlantic Ocean opened fully.",
     highlightColor: "#EF4444",
+    image: "/eras/cretaceous.jpg",
+    imageAlt: "Cretaceous Floodplain with Triceratops and Early Flowering Plants",
+    imageCaption: "Apex Diversity & Modern Ecology: The emergence of flowering plants, dramatic continental drift, and the fiercest land ecosystems in Earth's history featuring horned Triceratops and T-Rex.",
     keyEvent: "Radiation of Flowering Plants (Angiosperms) & Chicxulub Asteroid Impact",
     description: "The longest, most biodiverse chapter in dinosaur history. Flowering plants appeared, transforming planetary food chains. Dinosaurs reached their evolutionary zenith: horned Ceratopsians (Triceratops), club-tailed Ankylosaurs, hadrosaur duck-billed herds, aquatic predators (Spinosaurus), and the bone-crushing supreme apex predator Tyrannosaurus Rex.",
     dinosaurs: [
@@ -161,6 +173,9 @@ export const TIMELINE_PERIODS = [
     climate: "Decades of global impact winter followed by slow Cenozoic cooling.",
     geography: "Chicxulub Crater in Yucatán Peninsula, Mexico; modern continental layout.",
     highlightColor: "#38BDF8",
+    image: "/eras/extinction.jpg",
+    imageAlt: "Post-Extinction Avian Dinosaurs taking flight at Sunrise",
+    imageCaption: "Dawn of the Living Avian Dynasty: Dinosaurs never truly died out. Small feathered avian theropods survived the cataclysm, flourishing into the 11,000+ species of birds in our skies today.",
     keyEvent: "Chicxulub Asteroid Impact & Rise of Modern Avian Dinosaurs",
     description: "66 million years ago, a 10-kilometer asteroid slammed into Earth at 70,000 km/h, releasing energy equal to 10 billion atomic bombs. Massive tsunamis, worldwide wildfires, and atmospheric sulfur dust plunged the planet into a multi-year global winter. While non-avian dinosaurs perished, small beaked avian dinosaurs survived—evolving into the 11,000+ species of birds flying above us today!",
     dinosaurs: [
