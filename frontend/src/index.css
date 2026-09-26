@@ -2704,15 +2704,202 @@ button {
   line-height: 1.5;
 }
 
-@media (max-width: 768px) {
-  .pre-dino-section {
-    padding: 2rem 1.25rem;
+/* Responsive Enhancements for Timeline Stage & Eras */
+@media (max-width: 992px) {
+  .timeline-stepper-track {
+    top: 68px;
+    gap: 0.5rem;
+    padding: 0.5rem 0.65rem;
   }
+  .timeline-step-btn {
+    min-width: 155px;
+    padding: 0.55rem 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .timeline-stage-wrapper {
+    padding: 2rem 1rem 4rem;
+  }
+  .timeline-stage-header {
+    margin-bottom: 1.75rem;
+  }
+  .timeline-stage-title {
+    font-size: 1.85rem;
+  }
+  .timeline-stage-subtitle {
+    font-size: 0.92rem;
+  }
+  
+  /* Smooth horizontal scroll snap on mobile */
+  .timeline-stepper-track {
+    top: 60px;
+    margin-bottom: 1.75rem;
+    padding: 0.45rem 0.6rem;
+    border-radius: 16px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .timeline-step-btn {
+    min-width: 140px;
+    padding: 0.5rem 0.75rem;
+    gap: 8px;
+    scroll-snap-align: start;
+    border-radius: 12px;
+  }
+  .timeline-step-num {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.4rem;
+  }
+  .timeline-step-title {
+    font-size: 0.82rem;
+  }
+  .timeline-step-span {
+    font-size: 0.68rem;
+  }
+
+  /* Pre-Dino Section Mobile */
+  .pre-dino-section {
+    padding: 1.75rem 1rem;
+    border-radius: 18px;
+    margin-bottom: 2rem;
+  }
+  .pre-dino-header {
+    margin-bottom: 1.75rem;
+  }
+  .pre-dino-title {
+    font-size: 1.75rem;
+  }
+  .pre-dino-overview {
+    font-size: 0.92rem;
+  }
+  .paleo-stats-bar {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+    padding: 1rem 1.15rem;
+    margin-bottom: 2rem;
+  }
+  .paleo-epoch-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2.25rem;
+  }
+  .pre-creatures-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2.25rem;
+  }
+  .great-dying-box {
+    padding: 1.5rem 1.15rem;
+    border-radius: 16px;
+  }
+  .great-dying-title {
+    font-size: 1.35rem;
+  }
+  .great-dying-text, .great-dying-verdict {
+    font-size: 0.88rem;
+  }
+
+  /* Period Card Mobile */
   .timeline-card {
-    padding: 2rem 1.25rem;
+    padding: 1.75rem 1rem;
+    border-radius: 18px;
+    margin-bottom: 2rem;
   }
   .period-card-header {
     flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+  .period-title {
+    font-size: 1.75rem;
+  }
+  .period-span-badge {
+    font-size: 0.95rem;
+    padding: 0.4rem 0.95rem;
+  }
+  .period-meta-grid {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+    padding: 1rem 1.15rem;
+    margin-bottom: 1.25rem;
+  }
+  .period-description {
+    font-size: 0.94rem;
+    margin-bottom: 1.5rem;
+  }
+  .period-dinos-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .period-dino-card {
+    padding: 1.1rem;
+  }
+
+  /* Photo Showcases Mobile */
+  .era-visual-banner {
+    margin: 1.25rem 0 2rem;
+    border-radius: 16px;
+  }
+  .era-image-wrapper {
+    height: 220px;
+  }
+  .period-visual-card {
+    margin: 1.25rem 0 1.75rem;
+    border-radius: 16px;
+  }
+  .period-image-container {
+    height: 200px;
+  }
+  .era-image-badge, .period-image-badge {
+    top: 0.75rem;
+    left: 0.75rem;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.75rem;
+  }
+  .era-image-caption, .period-image-caption {
+    padding: 0.85rem 1rem;
+    font-size: 0.86rem;
+    gap: 8px;
+  }
+
+  /* Bottom Nav Mobile */
+  .timeline-stage-nav-bar {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.15rem 1rem;
+    margin-top: 2rem;
+    border-radius: 16px;
+  }
+  .timeline-stage-btn {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.92rem;
+    padding: 0.75rem 1rem;
+  }
+  .timeline-stage-indicator {
+    order: -1;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .timeline-step-btn {
+    min-width: 130px;
+    padding: 0.45rem 0.65rem;
+  }
+  .timeline-step-title {
+    font-size: 0.78rem;
+  }
+  .timeline-stage-title {
+    font-size: 1.6rem;
+  }
+  .pre-dino-title, .period-title {
+    font-size: 1.5rem;
+  }
+  .era-image-wrapper, .period-image-container {
+    height: 185px;
   }
 }
 

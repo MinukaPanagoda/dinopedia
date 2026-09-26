@@ -117,7 +117,7 @@ export default function HomePage({ setActiveTab }) {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: '4rem 1.5rem 5rem',
+          padding: 'clamp(3rem, 6vw, 4.5rem) clamp(1rem, 4vw, 1.5rem)',
           textAlign: 'center',
           position: 'relative'
         }}
@@ -131,7 +131,7 @@ export default function HomePage({ setActiveTab }) {
             className="hero-fixed-title"
             style={{
               fontFamily: 'var(--font-heading)',
-              fontSize: 'clamp(2.4rem, 5.5vw, 4.4rem)',
+              fontSize: 'clamp(1.85rem, 5.5vw, 4.4rem)',
               fontWeight: '900',
               lineHeight: '1.18',
               letterSpacing: '-0.02em',
@@ -144,7 +144,7 @@ export default function HomePage({ setActiveTab }) {
           </h1>
 
           <p style={{ 
-            fontSize: 'clamp(1rem, 2vw, 1.25rem)', 
+            fontSize: 'clamp(0.95rem, 2vw, 1.25rem)', 
             color: '#E5E7EB', 
             maxWidth: '720px', 
             margin: '0 auto 2.5rem',
