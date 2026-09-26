@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, Sparkles } from 'lucide-react';
+import { Menu, X, Sparkles, Home } from 'lucide-react';
 import DinoSkull from './DinoSkull';
 
 /**
@@ -77,6 +77,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
+    { id: 'home', label: 'Home', icon: Home },
     { id: 'age-of-dinosaurs', label: 'Age of Dinosaurs', icon: DinoSkull },
     { id: 'compare', label: 'Compare Dinosaurs', icon: DinoDuelIcon },
     { id: 'discoveries', label: 'New Discoveries', icon: FossilPickIcon },
@@ -99,7 +100,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
           className="nav-brand" 
           onClick={(e) => { 
             e.preventDefault(); 
-            handleNavClick('age-of-dinosaurs'); 
+            handleNavClick('home'); 
           }}
         >
           <div className="nav-logo-icon">

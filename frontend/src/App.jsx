@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import HomePage from './components/HomePage';
+import AgeOfDinosaursPage from './components/AgeOfDinosaursPage';
 import ComparePage from './components/ComparePage';
 import DiscoveriesPage from './components/DiscoveriesPage';
 import QuizPage from './components/QuizPage';
@@ -8,10 +9,14 @@ import EntertainmentPage from './components/EntertainmentPage';
 import DinoSkull from './components/DinoSkull';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('age-of-dinosaurs');
+  const [activeTab, setActiveTab] = useState('home');
 
   const renderContent = () => {
     switch (activeTab) {
+      case 'home':
+        return <HomePage setActiveTab={setActiveTab} />;
+      case 'age-of-dinosaurs':
+        return <AgeOfDinosaursPage setActiveTab={setActiveTab} />;
       case 'compare':
         return <ComparePage />;
       case 'discoveries':
@@ -20,7 +25,6 @@ export default function App() {
         return <QuizPage />;
       case 'entertainment':
         return <EntertainmentPage />;
-      case 'age-of-dinosaurs':
       default:
         return <HomePage setActiveTab={setActiveTab} />;
     }
