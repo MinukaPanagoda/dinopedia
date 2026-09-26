@@ -1830,66 +1830,256 @@ button {
   padding: 3rem 1.5rem 6rem;
 }
 
-/* Sticky Timeline Sub-Navigation */
-.timeline-sticky-nav {
-  position: sticky;
-  top: 72px;
-  z-index: 850;
-  display: flex;
-  justify-content: center;
-  padding: 0.75rem 0;
-  margin-bottom: 3.5rem;
-  pointer-events: none;
+/* =========================================================================
+   CHAPTER / PAGE TIMELINE SYSTEM
+   ========================================================================= */
+.timeline-stage-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 6rem;
 }
 
-.timeline-nav-pills {
-  display: inline-flex;
+.timeline-stage-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.timeline-stage-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4.2vw, 2.9rem);
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.6rem;
+}
+
+.timeline-stage-subtitle {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  max-width: 680px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Stepper Track & Tabs */
+.timeline-stepper-track {
+  position: sticky;
+  top: 75px;
+  z-index: 900;
+  display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.45rem;
-  background: rgba(9, 13, 19, 0.9);
+  justify-content: space-between;
+  gap: 0.6rem;
+  background: rgba(10, 15, 22, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: var(--radius-full);
-  box-shadow: 0 12px 36px -8px rgba(0, 0, 0, 0.85), 0 0 20px rgba(0, 0, 0, 0.5);
-  pointer-events: auto;
-  max-width: 95vw;
+  border-radius: 20px;
+  padding: 0.65rem 0.85rem;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 12px 35px -8px rgba(0, 0, 0, 0.8), 0 0 25px rgba(245, 158, 11, 0.12);
   overflow-x: auto;
   scrollbar-width: none;
 }
 
-.timeline-nav-pills::-webkit-scrollbar {
+.timeline-stepper-track::-webkit-scrollbar {
   display: none;
 }
 
-.timeline-pill-btn {
+.timeline-step-btn {
+  flex: 1;
+  min-width: 175px;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1.25rem;
-  border-radius: var(--radius-full);
+  gap: 10px;
+  padding: 0.65rem 0.95rem;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+}
+
+.timeline-step-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
+
+.timeline-step-btn.active {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--step-color, var(--amber-primary));
+  box-shadow: 0 0 20px -5px var(--step-glow, rgba(245, 158, 11, 0.35));
+  color: #fff;
+}
+
+.timeline-step-num {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-dim);
+  transition: all 0.25s ease;
+}
+
+.timeline-step-btn.active .timeline-step-num {
+  background: var(--step-color, var(--amber-primary));
+  color: #000;
+}
+
+.timeline-step-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-step-title {
+  font-weight: 700;
   font-size: 0.88rem;
+  color: #F8FAFC;
+  white-space: nowrap;
+}
+
+.timeline-step-span {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.timeline-step-btn.active .timeline-step-span {
+  color: var(--step-color, var(--amber-light));
+  font-weight: 600;
+}
+
+/* Chapter Stage Content with Fade-In Animation */
+.timeline-stage-content {
+  animation: stageFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes stageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Bottom Pagination & Navigation Controls */
+.timeline-stage-nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: rgba(14, 20, 29, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(18px);
+  border-radius: 20px;
+  padding: 1.15rem 1.75rem;
+  margin-top: 3.5rem;
+  box-shadow: 0 12px 35px -8px rgba(0, 0, 0, 0.75);
+  flex-wrap: wrap;
+}
+
+.timeline-stage-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.75rem 1.4rem;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.timeline-stage-btn-prev {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #F8FAFC;
+}
+
+.timeline-stage-btn-prev:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateX(-3px);
+}
+
+.timeline-stage-btn-prev:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.timeline-stage-btn-next {
+  background: linear-gradient(135deg, var(--btn-accent, #F59E0B) 0%, rgba(217, 119, 6, 0.9) 100%);
+  color: #000;
+  box-shadow: 0 4px 18px rgba(245, 158, 11, 0.35);
+}
+
+.timeline-stage-btn-next:hover {
+  transform: translateX(3px) scale(1.02);
+  box-shadow: 0 6px 24px rgba(245, 158, 11, 0.5);
+}
+
+.timeline-stage-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.timeline-stage-counter {
+  font-size: 0.85rem;
   font-weight: 700;
   color: var(--text-muted);
-  background: transparent;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.timeline-stage-dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.timeline-stage-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
   border: 1px solid transparent;
   cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.25s ease;
 }
 
-.timeline-pill-btn:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.06);
-  transform: translateY(-1px);
+.timeline-stage-dot:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(1.2);
 }
 
-.timeline-pill-btn.active {
-  color: #fff;
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.28), rgba(180, 83, 9, 0.22));
-  border-color: rgba(245, 158, 11, 0.55);
-  box-shadow: 0 0 18px rgba(245, 158, 11, 0.35);
+.timeline-stage-dot.active {
+  width: 24px;
+  border-radius: 9999px;
+  background: var(--active-color, #F59E0B);
+  box-shadow: 0 0 10px var(--active-color, #F59E0B);
+}
+
+@media (max-width: 768px) {
+  .timeline-stage-nav-bar {
+    flex-direction: column;
+    text-align: center;
+  }
+  .timeline-stage-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .timeline-stage-indicator {
+    order: -1;
+  }
 }
 
 /* Pre-Dinosaur Grand Section */
