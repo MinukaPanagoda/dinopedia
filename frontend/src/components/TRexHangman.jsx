@@ -513,7 +513,7 @@ export default function TRexHangman() {
       <main className="battlefield-center">
         {/* Top Header & Stats Bar */}
         <div className="game-top-bar">
-          <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
             <div className="game-stat-pill">
               <Trophy size={14} color="#F59E0B" />
               <span>Score: <strong>{score}</strong></span>
@@ -521,6 +521,10 @@ export default function TRexHangman() {
             <div className="game-stat-pill">
               <Flame size={14} color="#EF4444" />
               <span>Streak: <strong>{streak}</strong></span>
+            </div>
+            <div className="game-stat-pill">
+              <Skull size={14} color={mistakes >= 4 ? '#EF4444' : '#F59E0B'} />
+              <span>Lives: <strong style={{ color: mistakes >= 4 ? '#EF4444' : '#10B981' }}>{MAX_MISTAKES - mistakes}</strong> / {MAX_MISTAKES}</span>
             </div>
           </div>
 
@@ -677,6 +681,10 @@ export default function TRexHangman() {
               </button>
             );
           })}
+        </div>
+
+        <div style={{ textAlign: 'center', marginTop: '0.5rem', fontSize: '0.74rem', color: 'var(--text-dim)', letterSpacing: '0.02em', opacity: 0.8 }}>
+          ⌨️ Type letters directly on your keyboard or tap buttons above
         </div>
       </main>
 
