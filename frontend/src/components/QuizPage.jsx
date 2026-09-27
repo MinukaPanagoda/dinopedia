@@ -26,6 +26,30 @@ const QUESTIONS = [
     options: ["No, they are merely warm-blooded reptiles", "Yes, they are living avian theropod dinosaurs", "Only raptors evolved into mammals", "No, they share no skeletal traits"],
     correct: 1,
     explanation: "Birds belong cladistically to Avian Theropoda — birds didn't just evolve from dinosaurs, they are living dinosaurs today!"
+  },
+  {
+    q: "Which titanosaur is widely estimated as one of the heaviest land animals to ever walk Earth?",
+    options: ["Argentinosaurus", "Diplodocus", "Iguanodon", "Parasaurolophus"],
+    correct: 0,
+    explanation: "Argentinosaurus weighed between 70 to 90 metric tons and reached lengths exceeding 35 meters in prehistoric South America."
+  },
+  {
+    q: "What unique aerodynamic feature made the small dromaeosaur Microraptor famous?",
+    options: ["Bat-like leathery skin wings", "Flight feathers on both arms and hind legs (four wings)", "A gas-filled sail crest", "Jet-propelled gliding membranes"],
+    correct: 1,
+    explanation: "Microraptor was a 'four-winged' glider/flyer possessing long asymmetrical flight feathers on its front forearms and hind legs."
+  },
+  {
+    q: "Scientifically speaking, was the gigantic marine reptile Mosasaurus a true dinosaur?",
+    options: ["Yes, a marine branch of sauropods", "No, it was an aquatic squamate reptile related to monitor lizards and snakes", "Yes, it evolved directly from Plesiosaurs", "No, it was a mammal ancestor"],
+    correct: 1,
+    explanation: "Mosasaurus was not a dinosaur! It was an apex marine lizard belonging to squamata, closely related to modern monitor lizards and snakes."
+  },
+  {
+    q: "What fossilized tree resin famously preserves delicate Mesozoic insects and dinosaur feathers?",
+    options: ["Obsidian", "Amber", "Coprolite", "Silica"],
+    correct: 1,
+    explanation: "Fossilized tree resin known as Amber acts as a natural time capsule, preserving 3D insect exoskeletons and microscopic feather structures."
   }
 ];
 
@@ -106,9 +130,22 @@ export default function QuizPage() {
       {activeMode === 'trivia' && (
         !finished ? (
           <div className="glass-panel" style={{ padding: '2.5rem' }}>
+            {/* Visual Progress Bar */}
+            <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '999px', overflow: 'hidden', marginBottom: '1.25rem' }}>
+              <div 
+                style={{ 
+                  height: '100%', 
+                  width: `${((currentIdx + 1) / QUESTIONS.length) * 100}%`, 
+                  background: 'linear-gradient(90deg, #F59E0B, #EAB308)', 
+                  borderRadius: '999px',
+                  transition: 'width 0.4s ease'
+                }} 
+              />
+            </div>
+
             <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-dim)', fontSize: '0.85rem', marginBottom: '1.5rem' }}>
               <span>Question {currentIdx + 1} of {QUESTIONS.length}</span>
-              <span>Score: {score}</span>
+              <span>Score: <strong style={{ color: 'var(--amber-primary)' }}>{score}</strong></span>
             </div>
 
             <h2 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#fff', marginBottom: '1.75rem', lineHeight: '1.4' }}>
