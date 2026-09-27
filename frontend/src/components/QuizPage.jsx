@@ -221,23 +221,61 @@ export default function QuizPage() {
             )}
           </div>
         ) : (
-          <div className="glass-panel" style={{ padding: '3.5rem 2rem', textAlign: 'center' }}>
-            <div style={{ width: '70px', height: '70px', borderRadius: '50%', background: 'rgba(245, 158, 11, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', color: 'var(--amber-primary)' }}>
-              <Award size={36} />
-            </div>
-            <h2 style={{ fontSize: '2rem', fontWeight: '800', color: '#fff', marginBottom: '0.5rem' }}>
-              Quiz Completed!
-            </h2>
-            <p style={{ fontSize: '1.25rem', color: 'var(--text-muted)', marginBottom: '2rem' }}>
-              You scored <strong style={{ color: 'var(--amber-primary)' }}>{score}</strong> out of <strong>{QUESTIONS.length}</strong>!
-            </p>
-            <button
-              onClick={handleRestart}
-              className="btn-primary"
-              style={{ margin: '0 auto' }}
-            >
-              <RotateCcw size={16} /> Try Again
-            </button>
+          <div className="glass-panel" style={{ padding: '3rem 2rem', textAlign: 'center' }}>
+            {(() => {
+              const pct = Math.round((score / QUESTIONS.length) * 100);
+              let rank = { title: "Paleontology Novice", color: "#9CA3AF", icon: "🦕", msg: "Keep exploring the Mesozoic era to hone your knowledge!" };
+              if (pct === 100) {
+                rank = { title: "Master Paleontologist", color: "#F59E0B", icon: "👑", msg: "Exceptional! You have paleontologist-level mastery of prehistory!" };
+              } else if (pct >= 75) {
+                rank = { title: "Senior Fossil Hunter", color: "#10B981", icon: "🦖", msg: "Great job! Your dinosaur knowledge is sharp and accurate." };
+              } else if (pct >= 50) {
+                rank = { title: "Mesozoic Explorer", color: "#3B82F6", icon: "🧭", msg: "Solid effort! A few more digs and you'll be an expert." };
+              }
+
+              return (
+                <div>
+                  <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(245, 158, 11, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem', fontSize: '2.5rem' }}>
+                    {rank.icon}
+                  </div>
+
+                  <div style={{ display: 'inline-block', padding: '0.25rem 0.85rem', borderRadius: '999px', background: `${rank.color}22`, border: `1px solid ${rank.color}66`, color: rank.color, fontSize: '0.85rem', fontWeight: '700', marginBottom: '0.75rem' }}>
+                    {rank.title}
+                  </div>
+
+                  <h2 style={{ fontSize: '2rem', fontWeight: '800', color: '#fff', marginBottom: '0.5rem' }}>
+                    Quiz Completed!
+                  </h2>
+
+                  <p style={{ fontSize: '1.15rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
+                    You scored <strong style={{ color: 'var(--amber-primary)', fontSize: '1.4rem' }}>{score}</strong> / <strong>{QUESTIONS.length}</strong> ({pct}%)
+                  </p>
+
+                  <p style={{ fontSize: '0.92rem', color: 'var(--text-dim)', maxWidth: '460px', margin: '0 auto 2rem', lineHeight: '1.5' }}>
+                    {rank.msg}
+                  </p>
+
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: '0.85rem', flexWrap: 'wrap' }}>
+                    <button
+                      onClick={handleRestart}
+                      className="btn-primary"
+                    >
+                      <RotateCcw size={16} /> Retake Quiz
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleRestart();
+                        setActiveMode('hangman');
+                      }}
+                      className="category-tab-btn"
+                      style={{ padding: '0.65rem 1.25rem' }}
+                    >
+                      <Gamepad2 size={16} /> Play T-Rex Game
+                    </button>
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         )
       )}
