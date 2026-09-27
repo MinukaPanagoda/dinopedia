@@ -1,19 +1,26 @@
 import React, { useState } from 'react';
 import { MOVIES } from '../data/entertainment';
-import { Film, Gamepad2, BookOpen, Star, ExternalLink, ChevronLeft, ChevronRight, Sparkles, Clock } from 'lucide-react';
+import { Film, Gamepad2, BookOpen, Star, ExternalLink, ChevronLeft, ChevronRight, Sparkles, Clock, Search, X } from 'lucide-react';
 
 const ITEMS_PER_PAGE = 8;
 
 export default function EntertainmentPage() {
   const [activeCategory, setActiveCategory] = useState('movies');
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Filter movies by search term (title or release year)
+  const filteredMovies = MOVIES.filter(m => 
+    m.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    m.year.toString().includes(searchQuery)
+  );
 
   // Pagination for movies
-  const totalItems = MOVIES.length;
-  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+  const totalItems = filteredMovies.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / ITEMS_PER_PAGE));
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
-  const currentMovies = MOVIES.slice(startIndex, endIndex);
+  const currentMovies = filteredMovies.slice(startIndex, endIndex);
 
   const handleCategoryChange = (category) => {
     setActiveCategory(category);
@@ -77,16 +84,68 @@ export default function EntertainmentPage() {
       {/* Content Area */}
       {activeCategory === 'movies' && (
         <div>
-          {/* Pagination Counter Info */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', color: 'var(--text-dim)', fontSize: '0.88rem' }}>
-            <span>
-              Showing <strong style={{ color: '#fff' }}>{startIndex + 1}–{endIndex}</strong> of <strong style={{ color: '#fff' }}>{totalItems}</strong> IMDb dinosaur movies
-            </span>
-            <span>Page {currentPage} of {totalPages}</span>
+          {/* Search & Pagination Counter Info */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+            <div style={{ color: 'var(--text-dim)', fontSize: '0.88rem' }}>
+              Showing <strong style={{ color: '#fff' }}>{totalItems > 0 ? startIndex + 1 : 0}–{endIndex}</strong> of <strong style={{ color: '#fff' }}>{totalItems}</strong> IMDb dinosaur movies
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+              {/* Search Box */}
+              <div style={{ position: 'relative', width: '230px' }}>
+                <Search size={14} style={{ position: 'absolute', left: '11px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)', pointerEvents: 'none' }} />
+                <input
+                  type="text"
+                  placeholder="Search title or year..."
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  style={{
+                    width: '100%',
+                    padding: '0.45rem 1.8rem 0.45rem 2rem',
+                    borderRadius: '8px',
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid var(--border-subtle)',
+                    color: '#fff',
+                    fontSize: '0.85rem',
+                    outline: 'none'
+                  }}
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => { setSearchQuery(''); setCurrentPage(1); }}
+                    style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center' }}
+                    title="Clear search"
+                  >
+                    <X size={14} />
+                  </button>
+                )}
+              </div>
+
+              <span>Page {currentPage} of {totalPages}</span>
+            </div>
           </div>
 
-          {/* Movies Grid */}
-          <div className="movie-grid">
+          {/* Empty search state or Movies Grid */}
+          {filteredMovies.length === 0 ? (
+            <div className="glass-panel" style={{ padding: '3.5rem 2rem', textAlign: 'center', margin: '1.5rem 0' }}>
+              <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>🎬</div>
+              <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem' }}>No Movies Found</h3>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.25rem' }}>
+                No titles or release years matched "<strong style={{ color: 'var(--amber-primary)' }}>{searchQuery}</strong>".
+              </p>
+              <button
+                className="btn-primary"
+                onClick={() => { setSearchQuery(''); setCurrentPage(1); }}
+                style={{ margin: '0 auto' }}
+              >
+                Clear Search Filter
+              </button>
+            </div>
+          ) : (
+            <div className="movie-grid">
             {currentMovies.map((movie) => (
               <div 
                 key={movie.id} 
@@ -150,6 +209,7 @@ export default function EntertainmentPage() {
               </div>
             ))}
           </div>
+          )}
 
           {/* Pagination Controls */}
           {totalPages > 1 && (
