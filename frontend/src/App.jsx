@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import HomePage from './components/HomePage';
 import AgeOfDinosaursPage from './components/AgeOfDinosaursPage';
@@ -10,6 +10,19 @@ import DinoSkull from './components/DinoSkull';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('home');
+
+  useEffect(() => {
+    const titles = {
+      'home': 'DinoPedia • Mesozoic Dinosaur Archive',
+      'age-of-dinosaurs': 'Age of Dinosaurs • Triassic, Jurassic & Cretaceous | DinoPedia',
+      'compare': 'Dinosaur Scale & Anatomy Comparison | DinoPedia',
+      'discoveries': 'Fossil Discoveries & Paleontology Digs | DinoPedia',
+      'quizzes': 'T-Rex Survival Game & Trivia Quiz | DinoPedia',
+      'entertainment': 'Prehistoric Entertainment & Dino Media | DinoPedia'
+    };
+    document.title = titles[activeTab] || 'DinoPedia';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [activeTab]);
 
   const renderContent = () => {
     switch (activeTab) {
