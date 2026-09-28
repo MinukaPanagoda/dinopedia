@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, Sparkles } from 'lucide-react';
+import { Menu, X, Sparkles, LogIn, LogOut, User, ChevronDown } from 'lucide-react';
 import DinoSkull from './DinoSkull';
 
 /**
@@ -73,8 +73,9 @@ function JurassicCinemaIcon({ size = 16 }) {
   );
 }
 
-export default function Navbar({ activeTab, setActiveTab }) {
+export default function Navbar({ activeTab, setActiveTab, user, onOpenLogin, onLogout }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   const navItems = [
     { id: 'age-of-dinosaurs', label: 'Age of Dinosaurs', icon: DinoSkull },
@@ -87,6 +88,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
   const handleNavClick = (tabId) => {
     setActiveTab(tabId);
     setMobileMenuOpen(false);
+    setUserDropdownOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -134,8 +136,115 @@ export default function Navbar({ activeTab, setActiveTab }) {
           })}
         </div>
 
-        {/* Right Action Area - Mobile Menu Toggle */}
-        <div className="nav-actions">
+        {/* Right Action Area - User Login / Profile & Mobile Menu Toggle */}
+        <div className="nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          {/* User Status / Login Button (Desktop) */}
+          {user ? (
+            <div style={{ position: 'relative' }}>
+              <button
+                onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  background: 'rgba(245, 158, 11, 0.15)',
+                  border: '1px solid rgba(245, 158, 11, 0.35)',
+                  color: 'var(--amber-light)',
+                  padding: '0.4rem 0.85rem',
+                  borderRadius: '999px',
+                  fontSize: '0.85rem',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: 'linear-gradient(135deg, #F59E0B, #D97706)', color: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem' }}>
+                  🦖
+                </div>
+                <span>{user.name.split(' ')[0]}</span>
+                <ChevronDown size={14} style={{ transform: userDropdownOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s ease' }} />
+              </button>
+
+              {userDropdownOpen && (
+                <div style={{
+                  position: 'absolute',
+                  right: 0,
+                  top: 'calc(100% + 8px)',
+                  background: '#0E141B',
+                  border: '1px solid rgba(245, 158, 11, 0.3)',
+                  borderRadius: '14px',
+                  padding: '1rem',
+                  minWidth: '220px',
+                  boxShadow: '0 10px 25px rgba(0,0,0,0.6)',
+                  zIndex: 1000
+                }}>
+                  <div style={{ fontWeight: '800', color: '#fff', fontSize: '0.92rem', marginBottom: '2px' }}>
+                    {user.name}
+                  </div>
+                  <div style={{ color: 'var(--amber-primary)', fontSize: '0.78rem', fontWeight: '600', marginBottom: '4px' }}>
+                    {user.role}
+                  </div>
+                  <div style={{ color: 'var(--text-dim)', fontSize: '0.75rem', marginBottom: '1rem', wordBreak: 'break-all' }}>
+                    {user.email}
+                  </div>
+                  <button
+                    onClick={() => {
+                      setUserDropdownOpen(false);
+                      onLogout();
+                    }}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px',
+                      background: 'rgba(239, 68, 68, 0.15)',
+                      border: '1px solid rgba(239, 68, 68, 0.3)',
+                      color: '#F87171',
+                      padding: '0.45rem',
+                      borderRadius: '8px',
+                      fontSize: '0.82rem',
+                      fontWeight: '700',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <LogOut size={13} />
+                    <span>Log Out</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button
+              onClick={onOpenLogin}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.1))',
+                border: '1px solid rgba(245, 158, 11, 0.4)',
+                color: 'var(--amber-light)',
+                padding: '0.45rem 1rem',
+                borderRadius: '999px',
+                fontSize: '0.85rem',
+                fontWeight: '700',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'linear-gradient(135deg, #F59E0B, #D97706)';
+                e.currentTarget.style.color = '#000';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.1))';
+                e.currentTarget.style.color = 'var(--amber-light)';
+              }}
+            >
+              <LogIn size={15} />
+              <span>Sign In</span>
+            </button>
+          )}
+
           <button 
             className="mobile-menu-btn" 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -174,6 +283,47 @@ export default function Navbar({ activeTab, setActiveTab }) {
               </button>
             );
           })}
+
+          <div style={{ padding: '0.5rem 1rem', borderTop: '1px solid rgba(255,255,255,0.08)', marginTop: '0.5rem' }}>
+            {user ? (
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <div style={{ color: '#fff', fontWeight: '700', fontSize: '0.9rem' }}>🦖 {user.name}</div>
+                  <div style={{ color: 'var(--amber-primary)', fontSize: '0.75rem' }}>{user.role}</div>
+                </div>
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onLogout();
+                  }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#F87171',
+                    fontSize: '0.82rem',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px'
+                  }}
+                >
+                  <LogOut size={14} /> Log Out
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenLogin();
+                }}
+                className="btn-primary"
+                style={{ width: '100%', padding: '0.65rem', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '8px' }}
+              >
+                <LogIn size={16} />
+                <span>Sign In / Explorer Register</span>
+              </button>
+            )}
+          </div>
         </div>
       )}
     </nav>

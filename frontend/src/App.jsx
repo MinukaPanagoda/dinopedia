@@ -7,11 +7,28 @@ import DiscoveriesPage from './components/DiscoveriesPage';
 import QuizPage from './components/QuizPage';
 import EntertainmentPage from './components/EntertainmentPage';
 import DinoSkull from './components/DinoSkull';
+import LoginModal from './components/LoginModal';
 import { ArrowUp } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('home');
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [user, setUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('dinopedia_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+
+  const handleLogout = () => {
+    try {
+      localStorage.removeItem('dinopedia_user');
+    } catch {}
+    setUser(null);
+  };
 
   useEffect(() => {
     const titles = {
@@ -85,6 +102,9 @@ export default function App() {
       <Navbar 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
+        user={user}
+        onOpenLogin={() => setLoginModalOpen(true)}
+        onLogout={handleLogout}
       />
 
       {/* Main Content */}
@@ -179,6 +199,13 @@ export default function App() {
           <ArrowUp size={20} strokeWidth={2.5} />
         </button>
       )}
+
+      {/* Explorer Login / Register Modal */}
+      <LoginModal 
+        isOpen={loginModalOpen} 
+        onClose={() => setLoginModalOpen(false)} 
+        onLoginSuccess={(userData) => setUser(userData)} 
+      />
     </div>
   );
 }
