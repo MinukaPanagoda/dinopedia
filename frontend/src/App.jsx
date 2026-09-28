@@ -34,6 +34,28 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Global keyboard navigation: Press [1-6] to switch tabs
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName) || e.target.isContentEditable) {
+        return;
+      }
+      const tabMap = {
+        '1': 'home',
+        '2': 'age-of-dinosaurs',
+        '3': 'compare',
+        '4': 'discoveries',
+        '5': 'quizzes',
+        '6': 'entertainment'
+      };
+      if (tabMap[e.key]) {
+        setActiveTab(tabMap[e.key]);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -115,6 +137,9 @@ export default function App() {
           <p className="footer-copy">
             © {new Date().getFullYear()} DinoPedia • Built with React & Vite
           </p>
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', marginTop: '0.5rem', opacity: 0.85 }}>
+            ⌨️ Keyboard Navigation: Press keys <span style={{ color: 'var(--amber-light)', fontWeight: '700' }}>[1–6]</span> to jump between tabs
+          </div>
         </div>
       </footer>
 
