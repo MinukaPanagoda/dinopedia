@@ -209,8 +209,153 @@ export const MOVIES = [
   }
 ];
 
+export const GAMES = [
+  {
+    id: "jurassic-world-evolution-2",
+    title: "Jurassic World Evolution 2",
+    year: 2021,
+    developer: "Frontier Developments",
+    genre: "Park Management Sim",
+    platform: "PC, PS5, Xbox Series X/S",
+    rating: "8.5/10",
+    desc: "Build and manage your own prehistoric parks with over 75 bioengineered dinosaur species, advanced genetics, deep enclosure biome customization, and Chaos Theory scenarios.",
+    highlight: "Bioengineering & Aviary/Lagoon Habitats",
+    url: "https://www.jurassicworldevolution2.com/"
+  },
+  {
+    id: "ark-survival-ascended",
+    title: "ARK: Survival Ascended",
+    year: 2023,
+    developer: "Studio Wildcard",
+    genre: "Open World Survival",
+    platform: "PC, PS5, Xbox Series X/S",
+    rating: "8.0/10",
+    desc: "Rebuilt from the ground up in Unreal Engine 5. Tame, train, breed, and ride colossal Mesozoic dinosaurs across untamed primeval wilderness with realistic physics.",
+    highlight: "UE5 Next-Gen Dinosaur Ecosystems",
+    url: "https://survivetheark.com/"
+  },
+  {
+    id: "prehistoric-kingdom",
+    title: "Prehistoric Kingdom",
+    year: 2022,
+    developer: "Blue Meridian",
+    genre: "Paleo Zoo Simulation",
+    platform: "PC (Steam)",
+    rating: "8.4/10",
+    desc: "An ultimate modern paleo-zoo builder dedicated to scientific accuracy, modular building systems, and breathtakingly realistic prehistoric animals from Mammoth to T-Rex.",
+    highlight: "Gold Standard Paleoaccuracy & Modular Building",
+    url: "https://www.prehistorickingdom.com/"
+  },
+  {
+    id: "dino-crisis-1999",
+    title: "Dino Crisis",
+    year: 1999,
+    developer: "Capcom",
+    genre: "Survival Horror",
+    platform: "PlayStation, PC",
+    rating: "9.0/10",
+    desc: "Directed by Shinji Mikami. Special ops operative Regina investigates an isolated research facility overrun by vicious velociraptors and a relentless Tyrannosaurus.",
+    highlight: "Legendary Panic Horror Classic",
+    url: "https://en.wikipedia.org/wiki/Dino_Crisis"
+  },
+  {
+    id: "the-isle",
+    title: "The Isle",
+    year: 2015,
+    developer: "Afterthought LLC",
+    genre: "Hardcore Dino Survival",
+    platform: "PC (Steam)",
+    rating: "7.8/10",
+    desc: "Experience life directly from the eyes of a dinosaur. Hatch as a juvenile, forage for food, evade apex carnivores, form packs, and survive to adulthood in harsh ecosystems.",
+    highlight: "Play Directly as the Dinosaur",
+    url: "https://store.steampowered.com/app/376210/The_Isle/"
+  },
+  {
+    id: "lego-jurassic-world",
+    title: "LEGO Jurassic World",
+    year: 2015,
+    developer: "TT Games",
+    genre: "Action-Adventure",
+    platform: "All Major Platforms",
+    rating: "8.2/10",
+    desc: "Relive epic storylines from the first four Jurassic films with charming LEGO humor, custom dinosaur creation, and co-op exploration across Isla Nublar and Isla Sorna.",
+    highlight: "Family-Friendly Dinosaurs & Custom Hybrids",
+    url: "https://www.lego.com/en-us/themes/jurassic-world"
+  }
+];
+
+export const BOOKS = [
+  {
+    id: "jurassic-park-crichton",
+    title: "Jurassic Park",
+    author: "Michael Crichton",
+    year: 1990,
+    genre: "Techno-Thriller / Sci-Fi",
+    scope: "448 Pages",
+    desc: "The groundbreaking masterpiece exploring chaos theory, genetic manipulation, and bioethical arrogance when extinct animals are cloned for corporate amusement.",
+    keyTheme: "Chaos Theory & Genetic Hubris",
+    url: "https://en.wikipedia.org/wiki/Jurassic_Park_(novel)"
+  },
+  {
+    id: "rise-and-fall-of-the-dinosaurs",
+    title: "The Rise and Fall of the Dinosaurs",
+    author: "Steve Brusatte",
+    year: 2018,
+    genre: "Paleontology / Natural History",
+    scope: "404 Pages",
+    desc: "Acclaimed Edinburgh paleontologist Steve Brusatte chronicles the definitive 200-million-year epic saga of how dinosaurs originated, conquered the world, and met their dramatic end.",
+    keyTheme: "Modern Science of Deep-Time Evolution",
+    url: "https://en.wikipedia.org/wiki/The_Rise_and_Fall_of_the_Dinosaurs"
+  },
+  {
+    id: "raptor-red-bakker",
+    title: "Raptor Red",
+    author: "Robert T. Bakker",
+    year: 1995,
+    genre: "Paleo-Fiction",
+    scope: "272 Pages",
+    desc: "Written by iconic paleontologist Dr. Robert Bakker, this novel narrates a vivid year in the life of a female Utahraptor navigating survival, loss, and instinct in Cretaceous Utah.",
+    keyTheme: "Dinosaur Psychology & Mesozoic Ethology",
+    url: "https://en.wikipedia.org/wiki/Raptor_Red"
+  },
+  {
+    id: "the-lost-world-doyle",
+    title: "The Lost World",
+    author: "Sir Arthur Conan Doyle",
+    year: 1912,
+    genre: "Classic Adventure",
+    scope: "300 Pages",
+    desc: "Professor Challenger leads an expedition to an uncharted South American plateau where dinosaurs, prehistoric beasts, and ape-men survived into the modern era.",
+    keyTheme: "The Original Prehistoric Plateau Adventure",
+    url: "https://en.wikipedia.org/wiki/The_Lost_World_(Conan_Doyle_novel)"
+  },
+  {
+    id: "otherlands-halliday",
+    title: "Otherlands: A Journey Through Earth's Extinct Worlds",
+    author: "Thomas Halliday",
+    year: 2022,
+    genre: "Paleobiology & Geology",
+    scope: "416 Pages",
+    desc: "A breathtaking poetic travelogue backwards in time across 16 ancient fossil sites, recreating the sights, sounds, and vibrant ecologies of primeval Earth.",
+    keyTheme: "Deep-Time Paleoecological Immersion",
+    url: "https://en.wikipedia.org/wiki/Otherlands"
+  },
+  {
+    id: "dinosaur-art-white",
+    title: "Dinosaur Art: The World's Greatest Paleoart",
+    author: "Steve White",
+    year: 2012,
+    genre: "Paleoart & Visual Anatomy",
+    scope: "188 Pages",
+    desc: "A breathtaking coffee-table collection of contemporary paleoart illustrating cutting-edge scientific reconstructions of musculature, integument, and fossil environments.",
+    keyTheme: "Visual Reimagining of Prehistoric Life",
+    url: "https://titanbooks.com/dinosaur-art/"
+  }
+];
+
 export const ENTERTAINMENT_CATEGORIES = [
   { id: 'movies', label: 'Movies', count: MOVIES.length, icon: 'Film' },
-  { id: 'games', label: 'Games', count: 0, icon: 'Gamepad2' },
-  { id: 'books', label: 'Books', count: 0, icon: 'BookOpen' }
+  { id: 'games', label: 'Games', count: GAMES.length, icon: 'Gamepad2' },
+  { id: 'books', label: 'Books', count: BOOKS.length, icon: 'BookOpen' }
 ];
+
