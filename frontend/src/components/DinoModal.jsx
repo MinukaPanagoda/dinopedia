@@ -1,7 +1,7 @@
 import React from 'react';
-import { X, MapPin, Ruler, Weight, Gauge, Sparkles, Clock, Layers } from 'lucide-react';
+import { X, MapPin, Ruler, Weight, Gauge, Sparkles, Clock, Layers, Shield, Volume2, ArrowRight } from 'lucide-react';
 
-export default function DinoModal({ dino, onClose }) {
+export default function DinoModal({ dino, onClose, onCompare }) {
   if (!dino) return null;
 
   const eraColors = {
@@ -11,6 +11,30 @@ export default function DinoModal({ dino, onClose }) {
   };
 
   const periodColor = eraColors[dino.periodEra] || '#F59E0B';
+
+  const playDinoVocalization = () => {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      const ctx = new AudioContext();
+      const now = ctx.currentTime;
+
+      // Low rumble procedural dinosaur bellow
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(80, now);
+      osc.frequency.exponentialRampToValueAtTime(35, now + 0.9);
+
+      gain.gain.setValueAtTime(0.4, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 1.1);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 1.2);
+    } catch {}
+  };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -35,6 +59,20 @@ export default function DinoModal({ dino, onClose }) {
               <span className="dino-type-pill" style={{ fontSize: '0.72rem', padding: '0.2rem 0.65rem' }}>
                 {dino.type}
               </span>
+              {dino.diet && (
+                <span 
+                  style={{ 
+                    fontSize: '0.72rem', 
+                    padding: '0.2rem 0.65rem', 
+                    borderRadius: '999px',
+                    background: dino.diet === 'Carnivore' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)',
+                    color: dino.diet === 'Carnivore' ? '#FCA5A5' : '#6EE7B7',
+                    fontWeight: '700'
+                  }}
+                >
+                  {dino.diet}
+                </span>
+              )}
             </div>
 
             <h2 className="modal-dino-name">{dino.name}</h2>
@@ -53,6 +91,51 @@ export default function DinoModal({ dino, onClose }) {
                 <MapPin size={14} color="#10B981" />
                 <span><strong>Fossil Locality:</strong> {dino.discovered}</span>
               </div>
+            </div>
+
+            {/* Quick Actions in Header */}
+            <div style={{ display: 'flex', gap: '0.6rem', marginTop: '1rem', flexWrap: 'wrap' }}>
+              <button
+                onClick={playDinoVocalization}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  color: '#fff',
+                  borderRadius: '999px',
+                  padding: '0.35rem 0.85rem',
+                  fontSize: '0.78rem',
+                  fontWeight: '600',
+                  cursor: 'pointer'
+                }}
+              >
+                <Volume2 size={13} color="var(--amber-primary)" />
+                <span>Play Roar Synth</span>
+              </button>
+
+              {onCompare && (
+                <button
+                  onClick={() => onCompare(dino)}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(217, 119, 6, 0.25))',
+                    border: '1px solid var(--amber-primary)',
+                    color: 'var(--amber-light)',
+                    borderRadius: '999px',
+                    padding: '0.35rem 0.85rem',
+                    fontSize: '0.78rem',
+                    fontWeight: '700',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <span>Compare in Lab</span>
+                  <ArrowRight size={13} />
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -77,19 +160,31 @@ export default function DinoModal({ dino, onClose }) {
             </span>
             <span className="dino-stat-lbl">Top Speed</span>
           </div>
+          {dino.biteForceN && (
+            <div className="dino-stat-item">
+              <span className="dino-stat-val" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
+                <Shield size={16} color="#F97316" /> {dino.biteForceN}
+              </span>
+              <span className="dino-stat-lbl">Bite Force</span>
+            </div>
+          )}
         </div>
 
         {/* Anatomical Traits */}
-        <h4 style={{ fontSize: '0.85rem', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
-          Key Anatomical Traits
-        </h4>
-        <div className="traits-list">
-          {dino.traits.map((trait, i) => (
-            <span key={i} className="trait-tag">
-              ⚡ {trait}
-            </span>
-          ))}
-        </div>
+        {dino.traits && (
+          <>
+            <h4 style={{ fontSize: '0.85rem', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
+              Key Anatomical Traits
+            </h4>
+            <div className="traits-list" style={{ marginBottom: '1.5rem' }}>
+              {dino.traits.map((trait, i) => (
+                <span key={i} className="trait-tag">
+                  ⚡ {trait}
+                </span>
+              ))}
+            </div>
+          </>
+        )}
 
         {/* Description */}
         <h4 style={{ fontSize: '0.85rem', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
@@ -100,12 +195,14 @@ export default function DinoModal({ dino, onClose }) {
         </p>
 
         {/* Fun Fact */}
-        <div className="modal-funfact">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: '700', color: '#F59E0B', marginBottom: '4px' }}>
-            <Sparkles size={16} /> Prehistoric Fact
+        {dino.funFact && (
+          <div className="modal-funfact">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: '700', color: '#F59E0B', marginBottom: '4px' }}>
+              <Sparkles size={16} /> Prehistoric Fact
+            </div>
+            <p>{dino.funFact}</p>
           </div>
-          <p>{dino.funFact}</p>
-        </div>
+        )}
       </div>
     </div>
   );

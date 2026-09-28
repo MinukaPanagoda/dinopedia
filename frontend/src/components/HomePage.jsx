@@ -18,9 +18,12 @@ import {
   BookOpen
 } from 'lucide-react';
 import DinoSkull from './DinoSkull';
+import DinoModal from './DinoModal';
+import { DINOSAURS } from '../data/dinosaurs';
 
 export default function HomePage({ setActiveTab }) {
   const [activeChapterIndex, setActiveChapterIndex] = useState(0);
+  const [selectedDinoModal, setSelectedDinoModal] = useState(null);
 
   // 5 Chronological Prehistoric Chapters
   const CHAPTERS = [
@@ -483,14 +486,49 @@ export default function HomePage({ setActiveTab }) {
                 </h4>
 
                 <div className="period-dinos-grid">
-                  {currentChapter.period.dinosaurs.map((dino, dIdx) => (
-                    <div key={dIdx} className="period-dino-card">
-                      <div className="period-dino-name">{dino.name}</div>
-                      <div className="period-dino-role">{dino.role}</div>
-                      <div className="period-dino-size">{dino.size}</div>
-                      <p className="period-dino-fact">{dino.fact}</p>
-                    </div>
-                  ))}
+                  {currentChapter.period.dinosaurs.map((dino, dIdx) => {
+                    // Match with DINOSAURS dataset if available
+                    const matchedDino = DINOSAURS.find(d => 
+                      d.name.toLowerCase().includes(dino.name.toLowerCase()) || 
+                      dino.name.toLowerCase().includes(d.name.toLowerCase())
+                    ) || {
+                      id: dino.name.toLowerCase().replace(/\s+/g, '-'),
+                      name: dino.name,
+                      meaning: dino.role,
+                      period: currentChapter.period.title,
+                      periodEra: currentChapter.shortTitle.split(' ')[0],
+                      periodMYA: currentChapter.span,
+                      epoch: currentChapter.period.badge,
+                      type: dino.role.includes('Carnivore') || dino.role.includes('Predator') ? 'Theropod' : 'Sauropod / Herbivore',
+                      subType: dino.role,
+                      diet: dino.role.includes('Carnivore') || dino.role.includes('Predator') ? 'Carnivore' : 'Herbivore',
+                      lengthM: parseFloat(dino.size) || 9.0,
+                      weightTons: 4.5,
+                      speedKmh: 35,
+                      image: currentChapter.period.image || 'https://images.unsplash.com/photo-1570481662006-a3a1374699e8?auto=format&fit=crop&w=1000&q=80',
+                      description: `${dino.name} was a prominent prehistoric organism of the ${currentChapter.period.title}. ${dino.fact}`,
+                      traits: [dino.role, dino.size, currentChapter.period.badge],
+                      funFact: dino.fact
+                    };
+
+                    return (
+                      <div 
+                        key={dIdx} 
+                        className="period-dino-card"
+                        onClick={() => setSelectedDinoModal(matchedDino)}
+                        style={{ cursor: 'pointer', transition: 'all 0.25s ease' }}
+                        title={`Click to open full fossil sheet for ${dino.name}`}
+                      >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <div className="period-dino-name">{dino.name}</div>
+                          <span style={{ fontSize: '0.7rem', color: 'var(--amber-primary)', fontWeight: '700' }}>⚡ View Bio</span>
+                        </div>
+                        <div className="period-dino-role">{dino.role}</div>
+                        <div className="period-dino-size">{dino.size}</div>
+                        <p className="period-dino-fact">{dino.fact}</p>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </article>
@@ -557,6 +595,18 @@ export default function HomePage({ setActiveTab }) {
           </div>
         </div>
       </main>
+
+      {/* Dino Modal Bio Sheet */}
+      {selectedDinoModal && (
+        <DinoModal 
+          dino={selectedDinoModal} 
+          onClose={() => setSelectedDinoModal(null)} 
+          onCompare={(d) => {
+            setSelectedDinoModal(null);
+            if (setActiveTab) setActiveTab('compare');
+          }}
+        />
+      )}
     </div>
   );
 }
