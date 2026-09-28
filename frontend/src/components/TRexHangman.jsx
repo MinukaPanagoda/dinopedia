@@ -322,6 +322,14 @@ export default function TRexHangman() {
   const [guessedLetters, setGuessedLetters] = useState(new Set());
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
+  const [bestStreak, setBestStreak] = useState(() => {
+    try {
+      return Number(localStorage.getItem('dinopedia_hangman_best_streak') || 0);
+    } catch {
+      return 0;
+    }
+  });
+  const [usedHintThisRound, setUsedHintThisRound] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [screenShaking, setScreenShaking] = useState(false);
 
@@ -347,6 +355,7 @@ export default function TRexHangman() {
     }
     setCurrentItem(nextItem);
     setGuessedLetters(new Set());
+    setUsedHintThisRound(false);
   };
 
   const handleNextWord = () => {
@@ -358,6 +367,7 @@ export default function TRexHangman() {
     }
     setCurrentItem(nextItem);
     setGuessedLetters(new Set());
+    setUsedHintThisRound(false);
   };
 
   const handleRestartGame = () => {
@@ -380,7 +390,19 @@ export default function TRexHangman() {
       const wordComplete = targetWord.split('').every(l => l === ' ' || l === letter || guessedLetters.has(l));
       if (wordComplete) {
         setScore(s => s + 100 + (MAX_MISTAKES - mistakes) * 20);
-        setStreak(st => st + 1);
+        setStreak(st => {
+          const nextStreak = st + 1;
+          setBestStreak(b => {
+            if (nextStreak > b) {
+              try {
+                localStorage.setItem('dinopedia_hangman_best_streak', nextStreak);
+              } catch {}
+              return nextStreak;
+            }
+            return b;
+          });
+          return nextStreak;
+        });
         playSound('win', soundEnabled);
       }
     } else {
@@ -396,6 +418,15 @@ export default function TRexHangman() {
       }
     }
   }, [guessedLetters, isGameOver, mistakes, soundEnabled, targetWord]);
+
+  const handleUseHint = () => {
+    if (usedHintThisRound || isGameOver) return;
+    const unguessed = targetWord.split('').filter(ch => ch !== ' ' && !guessedLetters.has(ch));
+    if (unguessed.length === 0) return;
+    const revealChar = unguessed[Math.floor(Math.random() * unguessed.length)];
+    setUsedHintThisRound(true);
+    handleGuess(revealChar);
+  };
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -522,6 +553,12 @@ export default function TRexHangman() {
               <Flame size={14} color="#EF4444" />
               <span>Streak: <strong>{streak}</strong></span>
             </div>
+            {bestStreak > 0 && (
+              <div className="game-stat-pill" style={{ borderColor: 'rgba(245, 158, 11, 0.4)' }}>
+                <Sparkles size={14} color="#F59E0B" />
+                <span>Best: <strong style={{ color: 'var(--amber-light)' }}>{bestStreak}</strong></span>
+              </div>
+            )}
             <div className="game-stat-pill">
               <Skull size={14} color={mistakes >= 4 ? '#EF4444' : '#F59E0B'} />
               <span>Lives: <strong style={{ color: mistakes >= 4 ? '#EF4444' : '#10B981' }}>{MAX_MISTAKES - mistakes}</strong> / {MAX_MISTAKES}</span>
@@ -529,13 +566,24 @@ export default function TRexHangman() {
           </div>
 
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <button
+              className="btn-skip-word"
+              onClick={handleUseHint}
+              disabled={usedHintThisRound || isGameOver}
+              title={usedHintThisRound ? "Hint already used this round" : "Reveal a random letter hint"}
+              style={{ opacity: usedHintThisRound ? 0.4 : 1, cursor: usedHintThisRound ? 'not-allowed' : 'pointer' }}
+            >
+              <Lightbulb size={13} color="var(--amber-primary)" />
+              <span>Hint</span>
+            </button>
+
             <button 
               className="btn-skip-word"
               onClick={handleNextWord}
               title="Skip to next word"
             >
               <SkipForward size={13} />
-              <span>Skip Word</span>
+              <span>Skip</span>
             </button>
 
             <button 
