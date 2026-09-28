@@ -138,8 +138,8 @@ export default function HomePage({ setActiveTab }) {
               fontWeight: '900',
               lineHeight: '1.18',
               letterSpacing: '-0.02em',
-              color: '#FFFFFF',
-              textShadow: '0 4px 24px rgba(0, 0, 0, 0.95), 0 0 35px rgba(245, 158, 11, 0.35)',
+              color: '#FEF3C7',
+              textShadow: '0 4px 24px rgba(0, 0, 0, 0.95), 0 0 35px rgba(245, 158, 11, 0.45)',
               marginBottom: '1.25rem'
             }}
           >
