@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Layers, Shield, Clock, Compass, Sparkles, ArrowRight, Globe, CheckCircle2, ChevronRight, BookOpen } from 'lucide-react';
+import { Layers, Shield, Clock, Compass, Sparkles, ArrowRight, Globe, CheckCircle2, ChevronRight, BookOpen, ExternalLink } from 'lucide-react';
 import DinoSkull from './DinoSkull';
+import DinoModal from './DinoModal';
+import { DINOSAURS } from '../data/dinosaurs';
 
 const CLADES_DATA = [
   {
@@ -130,8 +132,11 @@ const FORMATIONS_DATA = [
 ];
 
 export default function AgeOfDinosaursPage({ setActiveTab }) {
-  const [activeView, setActiveView] = useState('clades'); // 'clades' or 'formations'
+  const [activeView, setActiveView] = useState('a-dinos'); // 'a-dinos', 'clades' or 'formations'
   const [selectedClade, setSelectedClade] = useState(CLADES_DATA[0]);
+  const [selectedDinoModal, setSelectedDinoModal] = useState(null);
+
+  const aDinos = DINOSAURS.filter(d => d.name.toUpperCase().startsWith('A'));
 
   return (
     <div className="home-container" style={{ padding: '3rem 1.5rem 6rem', minHeight: '80vh' }}>
@@ -152,9 +157,30 @@ export default function AgeOfDinosaursPage({ setActiveTab }) {
           </div>
         </div>
 
-        {/* View Switcher (Clades vs Geological Formations) */}
+        {/* View Switcher (A-Z Genera vs Clades vs Formations) */}
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2.5rem' }}>
-          <div style={{ display: 'inline-flex', background: 'rgba(255,255,255,0.06)', padding: '4px', borderRadius: '999px', border: '1px solid var(--border-subtle)' }}>
+          <div style={{ display: 'inline-flex', flexWrap: 'wrap', gap: '4px', background: 'rgba(255,255,255,0.06)', padding: '4px', borderRadius: '999px', border: '1px solid var(--border-subtle)' }}>
+            <button
+              onClick={() => setActiveView('a-dinos')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '0.6rem 1.4rem',
+                borderRadius: '999px',
+                border: 'none',
+                background: activeView === 'a-dinos' ? 'linear-gradient(135deg, #EC4899, #BE185D)' : 'transparent',
+                color: activeView === 'a-dinos' ? '#fff' : 'var(--text-muted)',
+                fontWeight: activeView === 'a-dinos' ? '800' : '600',
+                fontSize: '0.9rem',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              <Sparkles size={16} />
+              <span>A-Z Archive: Genera "A" ({aDinos.length})</span>
+            </button>
+
             <button
               onClick={() => setActiveView('clades')}
               style={{
@@ -387,6 +413,148 @@ export default function AgeOfDinosaursPage({ setActiveTab }) {
               </div>
             ))}
           </div>
+        )}
+
+        {/* VIEW 3: A-Z GENERA (LETTER A) */}
+        {activeView === 'a-dinos' && (
+          <div>
+            <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '0.4rem 1rem', background: 'rgba(236, 72, 153, 0.12)', border: '1px solid rgba(236, 72, 153, 0.3)', borderRadius: '999px', color: '#F472B6', fontSize: '0.82rem', fontWeight: '700', marginBottom: '0.75rem' }}>
+                <Sparkles size={14} /> Wikipedia Paleontological Archive • Alphabetical Index: [A]
+              </div>
+              <h2 style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.2rem)', fontWeight: '800', color: '#fff', marginBottom: '0.5rem' }}>
+                Prehistoric Genera Starting with <span style={{ color: '#F472B6' }}>"A"</span>
+              </h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', maxWidth: '650px', margin: '0 auto' }}>
+                Curated catalog of iconic dinosaurs starting with the letter A. Sourced with high-resolution anatomical fossil casts and specimen data directly from Wikipedia.
+              </p>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
+              {aDinos.map((dino) => (
+                <div
+                  key={dino.id}
+                  className="glass-panel"
+                  style={{
+                    borderRadius: '16px',
+                    overflow: 'hidden',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    transition: 'transform 0.25s ease, border-color 0.25s ease',
+                    cursor: 'pointer'
+                  }}
+                  onClick={() => setSelectedDinoModal(dino)}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.borderColor = 'rgba(236, 72, 153, 0.4)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
+                  }}
+                >
+                  {/* Wikipedia Image Thumbnail */}
+                  <div style={{ height: '200px', width: '100%', position: 'relative', overflow: 'hidden', background: '#0a0d14' }}>
+                    <img
+                      src={dino.image}
+                      alt={dino.name}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s ease' }}
+                      onError={(e) => {
+                        // Fallback to local image in public/dinosaurs if external network fails
+                        const filename = dino.name.toLowerCase() + (dino.name === 'Argentinosaurus' ? '.png' : '.jpg');
+                        e.currentTarget.src = `/dinosaurs/${filename}`;
+                      }}
+                    />
+                    <div style={{ position: 'absolute', top: '12px', left: '12px', display: 'flex', gap: '6px' }}>
+                      <span style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)', color: '#F472B6', border: '1px solid rgba(244, 114, 182, 0.3)', padding: '0.2rem 0.6rem', borderRadius: '999px', fontSize: '0.72rem', fontWeight: '800' }}>
+                        {dino.periodEra}
+                      </span>
+                      <span style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)', color: dino.diet === 'Carnivore' ? '#EF4444' : '#10B981', border: '1px solid rgba(255,255,255,0.1)', padding: '0.2rem 0.6rem', borderRadius: '999px', fontSize: '0.72rem', fontWeight: '700' }}>
+                        {dino.diet}
+                      </span>
+                    </div>
+
+                    <div style={{ position: 'absolute', bottom: '8px', right: '8px', background: 'rgba(0,0,0,0.75)', padding: '0.15rem 0.5rem', borderRadius: '6px', fontSize: '0.68rem', color: '#94A3B8' }}>
+                      Wikipedia Specimen
+                    </div>
+                  </div>
+
+                  {/* Card Content */}
+                  <div style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.25rem' }}>
+                      <h3 style={{ fontSize: '1.35rem', fontWeight: '800', color: '#fff', margin: 0 }}>
+                        {dino.name}
+                      </h3>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--amber-primary)', fontWeight: '700', textTransform: 'uppercase' }}>
+                        {dino.type}
+                      </span>
+                    </div>
+
+                    <div style={{ fontSize: '0.82rem', color: 'var(--text-dim)', fontStyle: 'italic', marginBottom: '0.85rem' }}>
+                      "{dino.meaning}" • {dino.periodMYA}
+                    </div>
+
+                    <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55', marginBottom: '1.25rem', flex: 1 }}>
+                      {dino.description.length > 150 ? `${dino.description.slice(0, 150)}...` : dino.description}
+                    </p>
+
+                    {/* Quick Specs Pill Row */}
+                    <div style={{ display: 'flex', gap: '8px', marginBottom: '1.2rem', flexWrap: 'wrap' }}>
+                      <div style={{ background: 'rgba(255,255,255,0.04)', padding: '0.3rem 0.6rem', borderRadius: '6px', fontSize: '0.75rem', color: '#CBD5E1' }}>
+                        📏 <strong>{dino.lengthM}m</strong> length
+                      </div>
+                      <div style={{ background: 'rgba(255,255,255,0.04)', padding: '0.3rem 0.6rem', borderRadius: '6px', fontSize: '0.75rem', color: '#CBD5E1' }}>
+                        ⚖️ <strong>{dino.weightTons} tons</strong>
+                      </div>
+                      <div style={{ background: 'rgba(255,255,255,0.04)', padding: '0.3rem 0.6rem', borderRadius: '6px', fontSize: '0.75rem', color: '#CBD5E1' }}>
+                        ⚡ <strong>{dino.speedKmh} km/h</strong>
+                      </div>
+                    </div>
+
+                    {/* Action Button */}
+                    <button
+                      className="btn-primary"
+                      style={{
+                        width: '100%',
+                        padding: '0.6rem',
+                        fontSize: '0.85rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px',
+                        background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.25), rgba(219, 39, 119, 0.25))',
+                        border: '1px solid rgba(236, 72, 153, 0.4)',
+                        color: '#F472B6',
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        fontWeight: '700'
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedDinoModal(dino);
+                      }}
+                    >
+                      <span>Examine Fossil Bio & Roar</span>
+                      <ArrowRight size={14} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Specimen Bio Sheet Modal */}
+        {selectedDinoModal && (
+          <DinoModal
+            dino={selectedDinoModal}
+            onClose={() => setSelectedDinoModal(null)}
+            onCompare={() => {
+              setSelectedDinoModal(null);
+              if (setActiveTab) setActiveTab('compare');
+            }}
+          />
         )}
 
       </div>
