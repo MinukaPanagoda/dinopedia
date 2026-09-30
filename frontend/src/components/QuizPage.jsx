@@ -50,6 +50,18 @@ const QUESTIONS = [
     options: ["Obsidian", "Amber", "Coprolite", "Silica"],
     correct: 1,
     explanation: "Fossilized tree resin known as Amber acts as a natural time capsule, preserving 3D insect exoskeletons and microscopic feather structures."
+  },
+  {
+    q: "Which dinosaur had a massive dome-shaped skull reinforced with dense bone up to 9 inches thick?",
+    options: ["Pachycephalosaurus", "Triceratops", "Brachiosaurus", "Carnotaurus"],
+    correct: 0,
+    explanation: "Pachycephalosaurus had an extremely thickened skull roof, likely used for flank-butting, species recognition, or combat display."
+  },
+  {
+    q: "What does the scientific name 'Velociraptor' literally translate to in Latin?",
+    options: ["Terrible Lizard", "Swift Seizer / Swift Thief", "Armored Giant", "Three-Horned Face"],
+    correct: 1,
+    explanation: "Velociraptor translates to 'swift seizer' or 'swift thief', describing its agility, speed, and lethal sickle-clawed feet."
   }
 ];
 
