@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, User, Lock, Mail, LogIn, Sparkles, CheckCircle2, Shield } from 'lucide-react';
 import DinoSkull from './DinoSkull';
 
@@ -9,6 +9,16 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   if (!isOpen) return null;
 
