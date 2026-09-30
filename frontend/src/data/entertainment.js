@@ -218,6 +218,7 @@ export const GAMES = [
     genre: "Park Management Sim",
     platform: "PC, PS5, Xbox Series X/S",
     rating: "8.5/10",
+    image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1244460/header.jpg",
     desc: "Build and manage your own prehistoric parks with over 75 bioengineered dinosaur species, advanced genetics, deep enclosure biome customization, and Chaos Theory scenarios.",
     highlight: "Bioengineering & Aviary/Lagoon Habitats",
     url: "https://www.jurassicworldevolution2.com/"
@@ -230,6 +231,7 @@ export const GAMES = [
     genre: "Open World Survival",
     platform: "PC, PS5, Xbox Series X/S",
     rating: "8.0/10",
+    image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2399830/header.jpg",
     desc: "Rebuilt from the ground up in Unreal Engine 5. Tame, train, breed, and ride colossal Mesozoic dinosaurs across untamed primeval wilderness with realistic physics.",
     highlight: "UE5 Next-Gen Dinosaur Ecosystems",
     url: "https://survivetheark.com/"
@@ -242,6 +244,7 @@ export const GAMES = [
     genre: "Paleo Zoo Simulation",
     platform: "PC (Steam)",
     rating: "8.4/10",
+    image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/666150/header.jpg",
     desc: "An ultimate modern paleo-zoo builder dedicated to scientific accuracy, modular building systems, and breathtakingly realistic prehistoric animals from Mammoth to T-Rex.",
     highlight: "Gold Standard Paleoaccuracy & Modular Building",
     url: "https://www.prehistorickingdom.com/"
@@ -254,6 +257,7 @@ export const GAMES = [
     genre: "Survival Horror",
     platform: "PlayStation, PC",
     rating: "9.0/10",
+    image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=600&q=80",
     desc: "Directed by Shinji Mikami. Special ops operative Regina investigates an isolated research facility overrun by vicious velociraptors and a relentless Tyrannosaurus.",
     highlight: "Legendary Panic Horror Classic",
     url: "https://en.wikipedia.org/wiki/Dino_Crisis"
@@ -266,6 +270,7 @@ export const GAMES = [
     genre: "Hardcore Dino Survival",
     platform: "PC (Steam)",
     rating: "7.8/10",
+    image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/376210/header.jpg",
     desc: "Experience life directly from the eyes of a dinosaur. Hatch as a juvenile, forage for food, evade apex carnivores, form packs, and survive to adulthood in harsh ecosystems.",
     highlight: "Play Directly as the Dinosaur",
     url: "https://store.steampowered.com/app/376210/The_Isle/"
@@ -278,6 +283,7 @@ export const GAMES = [
     genre: "Action-Adventure",
     platform: "All Major Platforms",
     rating: "8.2/10",
+    image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/352400/header.jpg",
     desc: "Relive epic storylines from the first four Jurassic films with charming LEGO humor, custom dinosaur creation, and co-op exploration across Isla Nublar and Isla Sorna.",
     highlight: "Family-Friendly Dinosaurs & Custom Hybrids",
     url: "https://www.lego.com/en-us/themes/jurassic-world"

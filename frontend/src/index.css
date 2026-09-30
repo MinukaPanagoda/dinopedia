@@ -3692,6 +3692,17 @@ button {
   }
 }
 
+/* Game Card Photo & Hover Effects */
+.game-card-item:hover {
+  transform: translateY(-5px);
+  border-color: rgba(56, 189, 248, 0.5) !important;
+  box-shadow: 0 15px 35px -10px rgba(56, 189, 248, 0.25);
+}
+
+.game-card-item:hover .game-cover-img {
+  transform: scale(1.06);
+}
+
 
 
 

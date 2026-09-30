@@ -302,70 +302,103 @@ export default function EntertainmentPage() {
               {filteredGames.map((game) => (
                 <div 
                   key={game.id} 
-                  className="glass-panel"
+                  className="glass-panel game-card-item"
                   style={{
-                    padding: '1.75rem',
                     borderRadius: '18px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
                     border: '1px solid rgba(56, 189, 248, 0.25)',
                     position: 'relative',
-                    overflow: 'hidden'
+                    overflow: 'hidden',
+                    transition: 'transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease'
                   }}
                 >
-                  <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                      <span style={{ background: 'rgba(56, 189, 248, 0.15)', color: '#38BDF8', padding: '0.25rem 0.65rem', borderRadius: '999px', fontSize: '0.75rem', fontWeight: '700' }}>
-                        {game.genre}
-                      </span>
-                      <span style={{ color: 'var(--text-dim)', fontSize: '0.8rem', fontWeight: '600' }}>
+                  {/* Game Photo / Banner Header */}
+                  {game.image && (
+                    <div style={{ position: 'relative', width: '100%', height: '175px', overflow: 'hidden' }}>
+                      <img 
+                        src={game.image} 
+                        alt={game.title} 
+                        loading="lazy"
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          display: 'block',
+                          transition: 'transform 0.4s ease'
+                        }}
+                        className="game-cover-img"
+                      />
+                      <div 
+                        style={{
+                          position: 'absolute',
+                          inset: 0,
+                          background: 'linear-gradient(to bottom, rgba(14, 20, 27, 0.1) 0%, rgba(14, 20, 27, 0.85) 85%, var(--bg-surface) 100%)'
+                        }}
+                      />
+                      <div style={{ position: 'absolute', top: '12px', left: '12px', display: 'flex', gap: '6px' }}>
+                        <span style={{ background: 'rgba(14, 20, 27, 0.75)', backdropFilter: 'blur(8px)', color: '#38BDF8', padding: '0.25rem 0.65rem', borderRadius: '999px', fontSize: '0.72rem', fontWeight: '700', border: '1px solid rgba(56, 189, 248, 0.3)' }}>
+                          {game.genre}
+                        </span>
+                      </div>
+                      <div style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(14, 20, 27, 0.75)', backdropFilter: 'blur(8px)', padding: '0.2rem 0.55rem', borderRadius: '8px', border: '1px solid rgba(245, 158, 11, 0.3)', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', fontWeight: '700', color: 'var(--amber-light)' }}>
+                        <Star size={11} fill="#F59E0B" color="#F59E0B" />
+                        <span>{game.rating}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  <div style={{ padding: '1.25rem 1.5rem 1.25rem 1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.35rem' }}>
+                      <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#fff' }}>
+                        {game.title}
+                      </h3>
+                      <span style={{ color: 'var(--text-dim)', fontSize: '0.8rem', fontWeight: '700' }}>
                         {game.year}
                       </span>
                     </div>
 
-                    <h3 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#fff', marginBottom: '0.25rem' }}>
-                      {game.title}
-                    </h3>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '0.85rem' }}>
                       Dev: <strong style={{ color: '#E2E8F0' }}>{game.developer}</strong>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: '#BAE6FD', marginBottom: '1rem', background: 'rgba(56, 189, 248, 0.08)', padding: '0.4rem 0.75rem', borderRadius: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: '#BAE6FD', marginBottom: '0.85rem', background: 'rgba(56, 189, 248, 0.08)', padding: '0.35rem 0.7rem', borderRadius: '8px' }}>
                       <Monitor size={14} />
                       <span>{game.platform}</span>
                     </div>
 
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: '1.6', marginBottom: '1.25rem' }}>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', lineHeight: '1.55', marginBottom: '1.25rem', flex: 1 }}>
                       {game.desc}
                     </p>
-                  </div>
 
-                  <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--amber-light)', fontWeight: '600' }}>
-                      ⚡ {game.highlight}
-                    </span>
-                    <a
-                      href={game.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                        background: 'rgba(56, 189, 248, 0.15)',
-                        color: '#38BDF8',
-                        padding: '0.4rem 0.85rem',
-                        borderRadius: '999px',
-                        fontSize: '0.78rem',
-                        fontWeight: '700',
-                        textDecoration: 'none',
-                        transition: 'all 0.2s ease'
-                      }}
-                    >
-                      <span>Explore</span>
-                      <ExternalLink size={12} />
-                    </a>
+                    <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '0.9rem', marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontSize: '0.78rem', color: 'var(--amber-light)', fontWeight: '600' }}>
+                        ⚡ {game.highlight}
+                      </span>
+                      <a
+                        href={game.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          background: 'rgba(56, 189, 248, 0.15)',
+                          color: '#38BDF8',
+                          padding: '0.35rem 0.85rem',
+                          borderRadius: '999px',
+                          fontSize: '0.78rem',
+                          fontWeight: '700',
+                          textDecoration: 'none',
+                          border: '1px solid rgba(56, 189, 248, 0.35)',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        <span>Play / Explore</span>
+                        <ExternalLink size={12} />
+                      </a>
+                    </div>
                   </div>
                 </div>
               ))}
