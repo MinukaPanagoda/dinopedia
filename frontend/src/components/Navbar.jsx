@@ -119,7 +119,7 @@ export default function Navbar({ activeTab, setActiveTab, user, onOpenLogin, onL
 
         {/* Desktop Navigation */}
         <div className="nav-links">
-          {navItems.map((item) => {
+          {navItems.map((item, idx) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
             return (
@@ -127,6 +127,8 @@ export default function Navbar({ activeTab, setActiveTab, user, onOpenLogin, onL
                 key={item.id}
                 className={`nav-link-btn ${isActive ? 'active' : ''}`}
                 onClick={() => handleNavClick(item.id)}
+                title={`${item.label} (Shortcut: ${idx + 1})`}
+                aria-label={item.label}
               >
                 <Icon size={16} />
                 <span>{item.label}</span>
