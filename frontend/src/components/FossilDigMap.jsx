@@ -12,17 +12,21 @@ import {
   Zap, 
   Filter,
   Flame,
-  Clock
+  Clock,
+  Radio,
+  Satellite
 } from 'lucide-react';
 import { FOSSIL_DIG_SITES } from '../data/digSites';
 import { DINOSAURS } from '../data/dinosaurs';
 import DinoSkull from './DinoSkull';
+import worldSatelliteMap from '../assets/world_satellite_map.jpg';
 
 export default function FossilDigMap({ onSelectDino, onOpenDinoModal }) {
   const [selectedSiteId, setSelectedSiteId] = useState(FOSSIL_DIG_SITES[0].id);
   const [activeEraFilter, setActiveEraFilter] = useState('All');
   const [activeContinentFilter, setActiveContinentFilter] = useState('All');
   const [hoveredSiteId, setHoveredSiteId] = useState(null);
+  const [mapMode, setMapMode] = useState('satellite'); // 'satellite' | 'radar'
 
   const selectedSite = FOSSIL_DIG_SITES.find(s => s.id === selectedSiteId) || FOSSIL_DIG_SITES[0];
 
@@ -129,14 +133,47 @@ export default function FossilDigMap({ onSelectDino, onOpenDinoModal }) {
       <div className="dig-map-grid-container">
         {/* Left: Vector Prehistoric World Projection Stage */}
         <div className="dig-map-stage-card">
+          {/* Stage Header with Live Orbital Recon Badge and Mode Switcher */}
+          <div className="dig-map-stage-header">
+            <div className="dig-map-orbital-badge">
+              <span className="dig-orbital-live-dot" />
+              <span>{mapMode === 'satellite' ? 'ORBITAL SATELLITE RECON • WGS-84 GLOBAL PROJECTION' : 'PREHISTORIC VECTOR RADAR GRID'}</span>
+            </div>
+            <div className="dig-map-mode-pills">
+              <button 
+                type="button" 
+                className={`dig-map-mode-pill ${mapMode === 'satellite' ? 'active' : ''}`}
+                onClick={() => setMapMode('satellite')}
+                title="High-Resolution Satellite Earth View"
+              >
+                <Globe size={13} />
+                Satellite Map
+              </button>
+              <button 
+                type="button" 
+                className={`dig-map-mode-pill ${mapMode === 'radar' ? 'active' : ''}`}
+                onClick={() => setMapMode('radar')}
+                title="Tactical Prehistoric Vector Radar"
+              >
+                <Radio size={13} />
+                Vector Radar
+              </button>
+            </div>
+          </div>
+
           <div className="dig-map-canvas-wrap">
-            {/* World Vector Map SVG */}
+            {/* World Map SVG: Satellite or Vector Radar */}
             <svg 
-              viewBox="0 0 1000 550" 
+              viewBox="0 0 1024 594" 
               className="dig-map-svg"
               aria-label="Interactive Paleontological World Map"
             >
               <defs>
+                {/* Clip to hide outer window borders cleanly */}
+                <clipPath id="satelliteMapClip">
+                  <rect x="0" y="0" width="1024" height="594" rx="14" />
+                </clipPath>
+
                 {/* Ambient ocean gradient */}
                 <radialGradient id="oceanGlow" cx="50%" cy="50%" r="70%">
                   <stop offset="0%" stopColor="#0B131C" />
@@ -151,89 +188,85 @@ export default function FossilDigMap({ onSelectDino, onOpenDinoModal }) {
 
                 {/* Radar Grid Pattern */}
                 <pattern id="radarGrid" width="40" height="40" patternUnits="userSpaceOnUse">
-                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(245, 158, 11, 0.05)" strokeWidth="0.8" />
+                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(245, 158, 11, 0.08)" strokeWidth="0.8" />
                 </pattern>
               </defs>
 
-              {/* Background Oceans */}
-              <rect width="1000" height="550" fill="url(#oceanGlow)" rx="16" />
-              <rect width="1000" height="550" fill="url(#radarGrid)" rx="16" />
+              {mapMode === 'satellite' ? (
+                <g clipPath="url(#satelliteMapClip)">
+                  {/* Real Satellite World Map provided by User */}
+                  <image 
+                    href={worldSatelliteMap} 
+                    x="0" 
+                    y="-18" 
+                    width="1024" 
+                    height="628" 
+                    preserveAspectRatio="none" 
+                  />
 
-              {/* Latitude and Longitude Graticule Lines */}
-              <g stroke="rgba(56, 189, 248, 0.08)" strokeWidth="1" strokeDasharray="4 4">
-                {/* Equator */}
-                <line x1="0" y1="275" x2="1000" y2="275" stroke="rgba(245, 158, 11, 0.2)" strokeWidth="1.2" />
-                {/* Tropic of Cancer & Capricorn */}
-                <line x1="0" y1="180" x2="1000" y2="180" />
-                <line x1="0" y1="370" x2="1000" y2="370" />
-                {/* Prime Meridian & Meridians */}
-                <line x1="500" y1="0" x2="500" y2="550" stroke="rgba(245, 158, 11, 0.2)" strokeWidth="1.2" />
-                <line x1="250" y1="0" x2="250" y2="550" />
-                <line x1="750" y1="0" x2="750" y2="550" />
-              </g>
+                  {/* Atmospheric contrast tint */}
+                  <rect width="1024" height="594" fill="rgba(5, 9, 15, 0.18)" />
 
-              {/* Stylized Continents Outlines */}
-              {/* North America */}
-              <path
-                d="M 120 70 Q 180 50 260 70 Q 300 120 280 180 Q 250 200 220 260 Q 180 270 140 230 Q 100 170 120 70 Z"
-                fill="url(#landGrad)"
-                stroke="rgba(245, 158, 11, 0.3)"
-                strokeWidth="1.2"
-                className="continent-shape"
-              />
-              {/* Greenland */}
-              <path
-                d="M 330 40 Q 380 45 370 85 Q 320 90 330 40 Z"
-                fill="url(#landGrad)"
-                stroke="rgba(245, 158, 11, 0.2)"
-                strokeWidth="1"
-              />
-              {/* South America */}
-              <path
-                d="M 270 280 Q 360 290 370 370 Q 340 450 300 500 Q 270 450 260 380 Q 250 320 270 280 Z"
-                fill="url(#landGrad)"
-                stroke="rgba(245, 158, 11, 0.3)"
-                strokeWidth="1.2"
-                className="continent-shape"
-              />
-              {/* Eurasia (Europe + Asia) */}
-              <path
-                d="M 450 90 Q 550 60 750 70 Q 920 110 880 220 Q 820 280 720 270 Q 650 300 570 240 Q 480 220 450 160 Q 430 110 450 90 Z"
-                fill="url(#landGrad)"
-                stroke="rgba(245, 158, 11, 0.3)"
-                strokeWidth="1.2"
-                className="continent-shape"
-              />
-              {/* Africa */}
-              <path
-                d="M 460 210 Q 560 210 590 280 Q 580 370 520 440 Q 480 430 460 350 Q 430 280 460 210 Z"
-                fill="url(#landGrad)"
-                stroke="rgba(245, 158, 11, 0.3)"
-                strokeWidth="1.2"
-                className="continent-shape"
-              />
-              {/* Australia */}
-              <path
-                d="M 800 370 Q 900 360 920 420 Q 890 470 820 460 Q 780 430 800 370 Z"
-                fill="url(#landGrad)"
-                stroke="rgba(245, 158, 11, 0.3)"
-                strokeWidth="1.2"
-                className="continent-shape"
-              />
-              {/* Antarctica */}
-              <path
-                d="M 250 535 Q 500 520 750 535 Q 500 555 250 535 Z"
-                fill="url(#landGrad)"
-                stroke="rgba(255, 255, 255, 0.15)"
-                strokeWidth="1"
-              />
+                  {/* Latitude and Longitude Graticule Lines */}
+                  <g stroke="rgba(56, 189, 248, 0.2)" strokeWidth="1" strokeDasharray="4 4">
+                    {/* Equator (0 deg) */}
+                    <line x1="0" y1="305" x2="1024" y2="305" stroke="rgba(245, 158, 11, 0.4)" strokeWidth="1.2" />
+                    {/* Tropic of Cancer (23.5 N) */}
+                    <line x1="0" y1="228" x2="1024" y2="228" stroke="rgba(56, 189, 248, 0.22)" />
+                    {/* Tropic of Capricorn (23.5 S) */}
+                    <line x1="0" y1="382" x2="1024" y2="382" stroke="rgba(56, 189, 248, 0.22)" />
+                    {/* Prime Meridian & Meridians */}
+                    <line x1="512" y1="0" x2="512" y2="594" stroke="rgba(245, 158, 11, 0.35)" strokeWidth="1.2" />
+                    <line x1="256" y1="0" x2="256" y2="594" />
+                    <line x1="768" y1="0" x2="768" y2="594" />
+                  </g>
 
-              {/* Geographic Labels */}
-              <text x="190" y="150" fill="rgba(255, 255, 255, 0.2)" fontSize="13" fontWeight="700" letterSpacing="3">NORTH AMERICA</text>
-              <text x="290" y="380" fill="rgba(255, 255, 255, 0.2)" fontSize="13" fontWeight="700" letterSpacing="3">SOUTH AMERICA</text>
-              <text x="490" y="320" fill="rgba(255, 255, 255, 0.2)" fontSize="13" fontWeight="700" letterSpacing="3">AFRICA</text>
-              <text x="680" y="160" fill="rgba(255, 255, 255, 0.2)" fontSize="13" fontWeight="700" letterSpacing="3">EURASIA</text>
-              <text x="830" y="420" fill="rgba(255, 255, 255, 0.2)" fontSize="13" fontWeight="700" letterSpacing="3">AUSTRALIA</text>
+                  {/* Subtle Radar Grid */}
+                  <rect width="1024" height="594" fill="url(#radarGrid)" opacity="0.4" />
+
+                  {/* Coordinates Hud Overlay */}
+                  <g fill="rgba(255, 255, 255, 0.45)" fontSize="9" fontWeight="700" letterSpacing="1">
+                    <text x="14" y="301">0° EQUATOR</text>
+                    <text x="14" y="224">23.5° N (TROPIC OF CANCER)</text>
+                    <text x="14" y="396">23.5° S (TROPIC OF CAPRICORN)</text>
+                    <text x="516" y="22">0° PRIME MERIDIAN</text>
+                    <text x="260" y="22">90° W</text>
+                    <text x="772" y="22">90° E</text>
+                  </g>
+                </g>
+              ) : (
+                <g>
+                  {/* Background Oceans */}
+                  <rect width="1024" height="594" fill="url(#oceanGlow)" rx="14" />
+                  <rect width="1024" height="594" fill="url(#radarGrid)" rx="14" />
+
+                  {/* Latitude and Longitude Graticule Lines */}
+                  <g stroke="rgba(56, 189, 248, 0.1)" strokeWidth="1" strokeDasharray="4 4">
+                    <line x1="0" y1="297" x2="1024" y2="297" stroke="rgba(245, 158, 11, 0.25)" strokeWidth="1.2" />
+                    <line x1="0" y1="195" x2="1024" y2="195" />
+                    <line x1="0" y1="400" x2="1024" y2="400" />
+                    <line x1="512" y1="0" x2="512" y2="594" stroke="rgba(245, 158, 11, 0.25)" strokeWidth="1.2" />
+                    <line x1="256" y1="0" x2="256" y2="594" />
+                    <line x1="768" y1="0" x2="768" y2="594" />
+                  </g>
+
+                  {/* Vector Continents Outlines */}
+                  <g transform="scale(1.024, 1.08)">
+                    <path d="M 120 70 Q 180 50 260 70 Q 300 120 280 180 Q 250 200 220 260 Q 180 270 140 230 Q 100 170 120 70 Z" fill="url(#landGrad)" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1.2" className="continent-shape" />
+                    <path d="M 330 40 Q 380 45 370 85 Q 320 90 330 40 Z" fill="url(#landGrad)" stroke="rgba(245, 158, 11, 0.2)" strokeWidth="1" />
+                    <path d="M 270 280 Q 360 290 370 370 Q 340 450 300 500 Q 270 450 260 380 Q 250 320 270 280 Z" fill="url(#landGrad)" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1.2" className="continent-shape" />
+                    <path d="M 450 90 Q 550 60 750 70 Q 920 110 880 220 Q 820 280 720 270 Q 650 300 570 240 Q 480 220 450 160 Q 430 110 450 90 Z" fill="url(#landGrad)" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1.2" className="continent-shape" />
+                    <path d="M 460 210 Q 560 210 590 280 Q 580 370 520 440 Q 480 430 460 350 Q 430 280 460 210 Z" fill="url(#landGrad)" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1.2" className="continent-shape" />
+                    <path d="M 800 370 Q 900 360 920 420 Q 890 470 820 460 Q 780 430 800 370 Z" fill="url(#landGrad)" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1.2" className="continent-shape" />
+                    <path d="M 250 535 Q 500 520 750 535 Q 500 555 250 535 Z" fill="url(#landGrad)" stroke="rgba(255, 255, 255, 0.15)" strokeWidth="1" />
+                    <text x="190" y="150" fill="rgba(255, 255, 255, 0.2)" fontSize="13" fontWeight="700" letterSpacing="3">NORTH AMERICA</text>
+                    <text x="290" y="380" fill="rgba(255, 255, 255, 0.2)" fontSize="13" fontWeight="700" letterSpacing="3">SOUTH AMERICA</text>
+                    <text x="490" y="320" fill="rgba(255, 255, 255, 0.2)" fontSize="13" fontWeight="700" letterSpacing="3">AFRICA</text>
+                    <text x="680" y="160" fill="rgba(255, 255, 255, 0.2)" fontSize="13" fontWeight="700" letterSpacing="3">EURASIA</text>
+                    <text x="830" y="420" fill="rgba(255, 255, 255, 0.2)" fontSize="13" fontWeight="700" letterSpacing="3">AUSTRALIA</text>
+                  </g>
+                </g>
+              )}
             </svg>
 
             {/* Interactive HTML Marker Pins Overlaid on Coordinates */}
