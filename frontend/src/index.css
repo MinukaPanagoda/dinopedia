@@ -4218,3 +4218,314 @@ button {
   align-items: center;
   gap: 4px;
 }
+
+/* ==========================================================================
+   ERA FILTERING SYSTEM STYLES
+   ========================================================================== */
+
+/* Era Selection Cards Deck */
+.era-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.era-card-button {
+  background: rgba(14, 20, 27, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.era-card-button:hover {
+  transform: translateY(-3px);
+  border-color: var(--era-theme, #F59E0B);
+  box-shadow: 0 8px 24px -6px var(--era-glow, rgba(245, 158, 11, 0.25));
+}
+
+.era-card-button.active {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, var(--era-glow, rgba(245, 158, 11, 0.12)) 100%), #0D131A;
+  border-color: var(--era-theme, #F59E0B);
+  box-shadow: 0 0 0 2px var(--era-theme, #F59E0B), 0 10px 30px var(--era-glow, rgba(245, 158, 11, 0.35));
+}
+
+.era-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 0.65rem;
+}
+
+.era-card-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.era-card-button.active .era-card-icon-wrap {
+  background: var(--era-glow, rgba(245, 158, 11, 0.2));
+  border-color: var(--era-theme, #F59E0B);
+}
+
+.era-card-count {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-dim);
+}
+
+.era-card-button.active .era-card-count {
+  background: var(--era-theme, #F59E0B);
+  color: #000;
+}
+
+.era-card-name {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #fff;
+  margin-bottom: 0.2rem;
+}
+
+.era-card-dates {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--era-theme, #F59E0B);
+  margin-bottom: 0.35rem;
+}
+
+.era-card-tagline {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Era Intelligence & Environmental Snapshot Banner */
+.era-intel-banner {
+  background: rgba(14, 20, 27, 0.85);
+  border: 1px solid var(--era-theme, rgba(245, 158, 11, 0.4));
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  box-shadow: 0 8px 30px var(--era-glow, rgba(245, 158, 11, 0.15));
+  animation: fadeIn 0.3s ease;
+}
+
+.era-intel-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.era-intel-badge-icon {
+  font-size: 2rem;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--era-glow, rgba(245, 158, 11, 0.15));
+  border: 1px solid var(--era-theme, rgba(245, 158, 11, 0.4));
+  border-radius: 14px;
+  flex-shrink: 0;
+}
+
+.era-intel-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.25rem;
+}
+
+.era-intel-name {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.era-intel-dates {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--era-theme, #F59E0B);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.era-intel-desc {
+  font-size: 0.86rem;
+  color: var(--text-dim);
+  line-height: 1.45;
+}
+
+.era-intel-stats {
+  display: flex;
+  gap: 1.25rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  padding-left: 1.5rem;
+  flex-shrink: 0;
+}
+
+.era-intel-stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.era-intel-stat-val {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+  max-width: 170px;
+}
+
+.era-intel-stat-lbl {
+  font-size: 0.68rem;
+  color: var(--era-theme, #F59E0B);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+
+.era-reset-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.era-reset-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #FCA5A5;
+}
+
+/* Secondary Sub-filters Bar */
+.era-subfilters-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.era-subfilter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.era-subfilter-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: 0.25rem;
+}
+
+.era-subfilter-pill {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-dim);
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.era-subfilter-pill:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.era-subfilter-pill.active {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: var(--amber-primary);
+  color: var(--amber-light);
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+}
+
+.era-sort-select {
+  background: rgba(7, 10, 14, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.era-sort-select:focus {
+  border-color: var(--amber-primary);
+}
+
+.era-sort-select option {
+  background: #0E141B;
+  color: #fff;
+}
+
+@media (max-width: 1024px) {
+  .era-selector-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .era-intel-stats {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .era-selector-grid {
+    grid-template-columns: 1fr;
+  }
+  .era-intel-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+

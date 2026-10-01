@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import DinoSkull from './DinoSkull';
 import DinoModal from './DinoModal';
-import { DINOSAURS } from '../data/dinosaurs';
+import { DINOSAURS, PERIODS } from '../data/dinosaurs';
 
 export default function HomePage({ 
   setActiveTab, 
@@ -35,8 +35,11 @@ export default function HomePage({
 }) {
   const [activeChapterIndex, setActiveChapterIndex] = useState(0);
   const [selectedDinoModal, setSelectedDinoModal] = useState(null);
+  const [selectedEra, setSelectedEra] = useState('all'); // 'all', 'Triassic', 'Jurassic', 'Cretaceous'
+  const [dietFilter, setDietFilter] = useState('all'); // 'all', 'Carnivore', 'Herbivore'
+  const [cladeFilter, setCladeFilter] = useState('all'); // 'all', 'Theropod', 'Sauropod', 'Armored'
+  const [sortBy, setSortBy] = useState('default');
   const [localQuery, setLocalQuery] = useState(searchQuery || '');
-  const [activeFilter, setActiveFilter] = useState('all');
   const searchInputRef = useRef(null);
 
   // Era color mapper
@@ -53,6 +56,16 @@ export default function HomePage({
     }
   }, [searchQuery]);
 
+  // When a dinosaur is highlighted, ensure its era is active
+  useEffect(() => {
+    if (highlightedDinoId) {
+      const target = DINOSAURS.find(d => d.id === highlightedDinoId);
+      if (target && target.periodEra && selectedEra !== 'all' && selectedEra !== target.periodEra) {
+        setSelectedEra(target.periodEra);
+      }
+    }
+  }, [highlightedDinoId]);
+
   const handleQueryChange = (val) => {
     setLocalQuery(val);
     if (setSearchQuery) setSearchQuery(val);
@@ -64,15 +77,57 @@ export default function HomePage({
   const handleResetSearch = () => {
     setLocalQuery('');
     if (setSearchQuery) setSearchQuery('');
-    setActiveFilter('all');
+    setSelectedEra('all');
+    setDietFilter('all');
+    setCladeFilter('all');
+    setSortBy('default');
     if (setHighlightedDinoId) setHighlightedDinoId(null);
     searchInputRef.current?.focus();
   };
 
-  // Dynamic filter matching dinosaur name, traits, diet, epoch, and types
+  // Era count helper
+  const eraCounts = {
+    all: DINOSAURS.length,
+    Triassic: DINOSAURS.filter(d => d.periodEra === 'Triassic').length,
+    Jurassic: DINOSAURS.filter(d => d.periodEra === 'Jurassic').length,
+    Cretaceous: DINOSAURS.filter(d => d.periodEra === 'Cretaceous').length,
+  };
+
+  // Active era info from PERIODS data
+  const currentPeriodInfo = PERIODS.find(p => p.id === selectedEra);
+
+  // Dynamic filter matching era, diet, clade, search query, and sorting
   const filteredDinosaurs = DINOSAURS.filter(dino => {
+    // 1. Era filter
+    if (selectedEra !== 'all' && dino.periodEra !== selectedEra) {
+      return false;
+    }
+
+    // 2. Diet filter
+    if (dietFilter !== 'all') {
+      if (dietFilter === 'Carnivore' && !(dino.diet && dino.diet.includes('Carnivore'))) {
+        return false;
+      }
+      if (dietFilter === 'Herbivore' && dino.diet !== 'Herbivore') {
+        return false;
+      }
+    }
+
+    // 3. Clade filter
+    if (cladeFilter !== 'all') {
+      if (cladeFilter === 'Theropod' && !(dino.type === 'Theropod' || (dino.subType && dino.subType.toLowerCase().includes('theropod')))) {
+        return false;
+      }
+      if (cladeFilter === 'Sauropod' && !(dino.type === 'Sauropod' || (dino.subType && dino.subType.toLowerCase().includes('sauropod')))) {
+        return false;
+      }
+      if (cladeFilter === 'Armored' && !(dino.type === 'Thyreophoran' || dino.type === 'Ceratopsian' || dino.type === 'Pachycephalosaur')) {
+        return false;
+      }
+    }
+
+    // 4. Search query
     const q = localQuery.toLowerCase().trim();
-    let matchesQuery = true;
     if (q) {
       const name = dino.name.toLowerCase();
       const meaning = (dino.meaning || '').toLowerCase();
@@ -83,7 +138,7 @@ export default function HomePage({
       const era = (dino.periodEra || '').toLowerCase();
       const traits = (dino.traits || []).join(' ').toLowerCase();
 
-      matchesQuery = (
+      const matches = (
         name.includes(q) ||
         meaning.includes(q) ||
         type.includes(q) ||
@@ -96,28 +151,16 @@ export default function HomePage({
         ((q === 'raptor' || q === 'raptors') && (name.includes('velociraptor') || subType.includes('raptor'))) ||
         ((q === 'bronto' || q === 'brontosaurus') && (name.includes('apatosaurus') || subType.includes('sauropod')))
       );
+      if (!matches) return false;
     }
 
-    let matchesFilter = true;
-    if (activeFilter === 'carnivore') {
-      matchesFilter = dino.diet === 'Carnivore' || (dino.diet && dino.diet.includes('Carnivore'));
-    } else if (activeFilter === 'herbivore') {
-      matchesFilter = dino.diet === 'Herbivore';
-    } else if (activeFilter === 'triassic') {
-      matchesFilter = dino.periodEra === 'Triassic';
-    } else if (activeFilter === 'jurassic') {
-      matchesFilter = dino.periodEra === 'Jurassic';
-    } else if (activeFilter === 'cretaceous') {
-      matchesFilter = dino.periodEra === 'Cretaceous';
-    } else if (activeFilter === 'theropod') {
-      matchesFilter = dino.type === 'Theropod' || (dino.subType && dino.subType.toLowerCase().includes('theropod'));
-    } else if (activeFilter === 'sauropod') {
-      matchesFilter = dino.type === 'Sauropod' || (dino.subType && dino.subType.toLowerCase().includes('sauropod'));
-    } else if (activeFilter === 'armored') {
-      matchesFilter = dino.type === 'Thyreophoran' || dino.type === 'Ceratopsian' || dino.type === 'Pachycephalosaur';
-    }
-
-    return matchesQuery && matchesFilter;
+    return true;
+  }).sort((a, b) => {
+    if (sortBy === 'length') return b.lengthM - a.lengthM;
+    if (sortBy === 'weight') return b.weightTons - a.weightTons;
+    if (sortBy === 'speed') return b.speedKmh - a.speedKmh;
+    if (sortBy === 'name') return a.name.localeCompare(b.name);
+    return 0;
   });
 
   // 5 Chronological Prehistoric Chapters
@@ -342,12 +385,116 @@ export default function HomePage({
             Mesozoic Dinosaur <span>Specimen Archive</span>
           </h2>
           <p className="home-archive-subtitle">
-            Search through our authenticated database of prehistoric dinosaurs by name, epoch, anatomical clade, or feeding behavior. Click any specimen to inspect its complete fossil bio or compare its anatomy.
+            Filter through 180 million years of dinosaur evolution. Select a geological epoch below, refine by feeding habits or anatomical clades, or search directly by specimen name.
           </p>
         </div>
 
-        {/* Search Hub & Interactive Filter Chips */}
+        {/* 1. Grand Era Selection Cards Deck */}
+        <div className="era-selector-grid">
+          {/* Card: All Eras */}
+          <button
+            type="button"
+            className={`era-card-button ${selectedEra === 'all' ? 'active' : ''}`}
+            style={{
+              '--era-theme': '#38BDF8',
+              '--era-glow': 'rgba(56, 189, 248, 0.35)'
+            }}
+            onClick={() => setSelectedEra('all')}
+          >
+            <div className="era-card-top">
+              <div className="era-card-icon-wrap" style={{ color: '#38BDF8' }}>
+                🌍
+              </div>
+              <span className="era-card-count">{eraCounts.all} Specimens</span>
+            </div>
+            <div className="era-card-name">All Mesozoic Eras</div>
+            <div className="era-card-dates">252 – 66 MYA</div>
+            <p className="era-card-tagline">
+              Complete Triassic, Jurassic & Cretaceous archives
+            </p>
+          </button>
+
+          {/* Period Cards: Triassic, Jurassic, Cretaceous */}
+          {PERIODS.map(period => {
+            const isSelected = selectedEra === period.id;
+            return (
+              <button
+                key={period.id}
+                type="button"
+                className={`era-card-button ${isSelected ? 'active' : ''}`}
+                style={{
+                  '--era-theme': period.color,
+                  '--era-glow': period.bgGlow
+                }}
+                onClick={() => setSelectedEra(period.id)}
+              >
+                <div className="era-card-top">
+                  <div className="era-card-icon-wrap">
+                    {period.icon}
+                  </div>
+                  <span className="era-card-count">
+                    {eraCounts[period.id] || 0} Specimens
+                  </span>
+                </div>
+                <div className="era-card-name">{period.name} Period</div>
+                <div className="era-card-dates">{period.dates}</div>
+                <p className="era-card-tagline">
+                  {period.highlight}
+                </p>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* 2. Era Intelligence & Planetary Environmental Banner */}
+        {currentPeriodInfo && (
+          <div 
+            className="era-intel-banner"
+            style={{
+              '--era-theme': currentPeriodInfo.color,
+              '--era-glow': currentPeriodInfo.bgGlow
+            }}
+          >
+            <div className="era-intel-left">
+              <div className="era-intel-badge-icon">
+                {currentPeriodInfo.icon}
+              </div>
+              <div>
+                <div className="era-intel-title-row">
+                  <span className="era-intel-name">{currentPeriodInfo.full}</span>
+                  <span className="era-intel-dates">{currentPeriodInfo.dates} ({currentPeriodInfo.spanMYA})</span>
+                </div>
+                <p className="era-intel-desc">
+                  {currentPeriodInfo.description}
+                </p>
+              </div>
+            </div>
+
+            <div className="era-intel-stats">
+              <div className="era-intel-stat-item">
+                <span className="era-intel-stat-lbl">Planetary Climate</span>
+                <span className="era-intel-stat-val">{currentPeriodInfo.climate}</span>
+              </div>
+              <div className="era-intel-stat-item">
+                <span className="era-intel-stat-lbl">Atmosphere & Air</span>
+                <span className="era-intel-stat-val">{currentPeriodInfo.atmosphere}</span>
+              </div>
+            </div>
+
+            <button 
+              type="button" 
+              className="era-reset-btn"
+              onClick={() => setSelectedEra('all')}
+              title="Show all Mesozoic dinosaurs"
+            >
+              ✕ All Eras
+            </button>
+          </div>
+        )}
+
+        {/* 3. Search Bar Hub & Granular Sub-Filters */}
         <div className="home-search-hub">
+          {/* Main Search Input */}
           <div className="home-search-input-wrap">
             <Search size={22} className="home-search-icon" />
             <input
@@ -355,7 +502,15 @@ export default function HomePage({
               type="text"
               value={localQuery}
               onChange={(e) => handleQueryChange(e.target.value)}
-              placeholder="Search any dinosaur by name, period, or diet... (e.g. T-Rex, Spinosaurus, Velociraptor, Stegosaurus)"
+              placeholder={
+                selectedEra === 'all'
+                  ? "Search all dinosaurs by name, period, or diet... (e.g. T-Rex, Spinosaurus, Velociraptor)"
+                  : `Search within the ${selectedEra} Period... (e.g. ${
+                      selectedEra === 'Triassic' ? 'Herrerasaurus, Coelophysis' : 
+                      selectedEra === 'Jurassic' ? 'Allosaurus, Brachiosaurus' : 
+                      'T-Rex, Velociraptor, Spinosaurus'
+                    })`
+              }
               className="home-search-input"
               aria-label="Search dinosaur by name"
             />
@@ -371,36 +526,68 @@ export default function HomePage({
             )}
           </div>
 
-          {/* Filter Chips & Result Counter */}
-          <div className="home-filter-chips-bar">
-            <div className="home-filter-chips">
+          {/* Sub-Filters: Diet, Clade & Sorting */}
+          <div className="era-subfilters-row">
+            {/* Feeding Habit / Diet Filter */}
+            <div className="era-subfilter-group">
+              <span className="era-subfilter-label">Diet:</span>
               {[
-                { id: 'all', label: 'All Specimens' },
-                { id: 'carnivore', label: 'Carnivores 🥩' },
-                { id: 'herbivore', label: 'Herbivores 🌿' },
-                { id: 'triassic', label: 'Triassic 🌋' },
-                { id: 'jurassic', label: 'Jurassic 🌲' },
-                { id: 'cretaceous', label: 'Cretaceous ☄️' },
-                { id: 'theropod', label: 'Theropods 🦖' },
-                { id: 'sauropod', label: 'Sauropods 🦕' },
-                { id: 'armored', label: 'Armored 🛡️' }
-              ].map(filter => (
+                { id: 'all', label: 'All' },
+                { id: 'Carnivore', label: 'Carnivore 🥩' },
+                { id: 'Herbivore', label: 'Herbivore 🌿' }
+              ].map(d => (
                 <button
-                  key={filter.id}
+                  key={d.id}
                   type="button"
-                  className={`home-filter-chip ${activeFilter === filter.id ? 'active' : ''}`}
-                  onClick={() => setActiveFilter(filter.id)}
+                  className={`era-subfilter-pill ${dietFilter === d.id ? 'active' : ''}`}
+                  onClick={() => setDietFilter(d.id)}
                 >
-                  {filter.label}
+                  {d.label}
                 </button>
               ))}
             </div>
 
-            <div className="home-filter-stats-badge">
-              <Sparkles size={14} />
-              <span>
-                Showing <strong>{filteredDinosaurs.length}</strong> of {DINOSAURS.length} Specimens
-              </span>
+            {/* Anatomical Clade Filter */}
+            <div className="era-subfilter-group">
+              <span className="era-subfilter-label">Clade:</span>
+              {[
+                { id: 'all', label: 'All' },
+                { id: 'Theropod', label: 'Theropods 🦖' },
+                { id: 'Sauropod', label: 'Sauropods 🦕' },
+                { id: 'Armored', label: 'Armored 🛡️' }
+              ].map(c => (
+                <button
+                  key={c.id}
+                  type="button"
+                  className={`era-subfilter-pill ${cladeFilter === c.id ? 'active' : ''}`}
+                  onClick={() => setCladeFilter(c.id)}
+                >
+                  {c.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Sort Dropdown & Count Badge */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="era-sort-select"
+                aria-label="Sort dinosaurs"
+              >
+                <option value="default">Sort: Default</option>
+                <option value="length">Length: Longest First</option>
+                <option value="weight">Weight: Heaviest First</option>
+                <option value="speed">Speed: Fastest First</option>
+                <option value="name">Name: A to Z</option>
+              </select>
+
+              <div className="home-filter-stats-badge">
+                <Sparkles size={14} />
+                <span>
+                  <strong>{filteredDinosaurs.length}</strong> {selectedEra === 'all' ? 'Mesozoic' : selectedEra} Specimens
+                </span>
+              </div>
             </div>
           </div>
         </div>

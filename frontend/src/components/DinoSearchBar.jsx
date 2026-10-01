@@ -209,6 +209,38 @@ export default function DinoSearchBar({ onSelectDino, placeholder = "Search dino
             </span>
           </div>
 
+          {/* Quick Era Filter Pills in Search Dropdown */}
+          <div style={{ display: 'flex', gap: '6px', padding: '0.45rem 0.85rem', background: 'rgba(255,255,255,0.02)', borderBottom: '1px solid rgba(255,255,255,0.05)', overflowX: 'auto' }}>
+            <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)', alignSelf: 'center', marginRight: '2px', whiteSpace: 'nowrap' }}>Filter Era:</span>
+            {[
+              { id: 'Triassic', label: '🌋 Triassic', color: '#F59E0B' },
+              { id: 'Jurassic', label: '🌿 Jurassic', color: '#10B981' },
+              { id: 'Cretaceous', label: '☄️ Cretaceous', color: '#EC4899' },
+            ].map(e => (
+              <button
+                key={e.id}
+                type="button"
+                onClick={() => {
+                  setQuery(e.id);
+                  inputRef.current?.focus();
+                }}
+                style={{
+                  background: 'rgba(255,255,255,0.05)',
+                  border: `1px solid ${e.color}40`,
+                  color: e.color,
+                  borderRadius: '999px',
+                  padding: '0.18rem 0.55rem',
+                  fontSize: '0.72rem',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                {e.label}
+              </button>
+            ))}
+          </div>
+
           {filteredDinos.length > 0 ? (
             <div className="nav-search-results-list">
               {filteredDinos.map((dino, idx) => {
