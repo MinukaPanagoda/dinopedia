@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import bgImage from '../assets/homepage_bg.jpg';
 import { PRE_DINOSAUR_ERA, TIMELINE_PERIODS } from '../data/timeline';
 import { 
@@ -15,15 +15,110 @@ import {
   Info, 
   Layers,
   ArrowRight,
-  BookOpen
+  BookOpen,
+  Search,
+  X,
+  Zap,
+  Swords
 } from 'lucide-react';
 import DinoSkull from './DinoSkull';
 import DinoModal from './DinoModal';
 import { DINOSAURS } from '../data/dinosaurs';
 
-export default function HomePage({ setActiveTab }) {
+export default function HomePage({ 
+  setActiveTab, 
+  searchQuery = '', 
+  setSearchQuery, 
+  highlightedDinoId, 
+  setHighlightedDinoId, 
+  onCompareDino 
+}) {
   const [activeChapterIndex, setActiveChapterIndex] = useState(0);
   const [selectedDinoModal, setSelectedDinoModal] = useState(null);
+  const [localQuery, setLocalQuery] = useState(searchQuery || '');
+  const [activeFilter, setActiveFilter] = useState('all');
+  const searchInputRef = useRef(null);
+
+  // Era color mapper
+  const eraColors = {
+    Triassic: '#F59E0B',
+    Jurassic: '#10B981',
+    Cretaceous: '#EC4899',
+  };
+
+  // Synchronize external searchQuery
+  useEffect(() => {
+    if (searchQuery !== undefined) {
+      setLocalQuery(searchQuery);
+    }
+  }, [searchQuery]);
+
+  const handleQueryChange = (val) => {
+    setLocalQuery(val);
+    if (setSearchQuery) setSearchQuery(val);
+    if (highlightedDinoId && setHighlightedDinoId) {
+      setHighlightedDinoId(null);
+    }
+  };
+
+  const handleResetSearch = () => {
+    setLocalQuery('');
+    if (setSearchQuery) setSearchQuery('');
+    setActiveFilter('all');
+    if (setHighlightedDinoId) setHighlightedDinoId(null);
+    searchInputRef.current?.focus();
+  };
+
+  // Dynamic filter matching dinosaur name, traits, diet, epoch, and types
+  const filteredDinosaurs = DINOSAURS.filter(dino => {
+    const q = localQuery.toLowerCase().trim();
+    let matchesQuery = true;
+    if (q) {
+      const name = dino.name.toLowerCase();
+      const meaning = (dino.meaning || '').toLowerCase();
+      const type = (dino.type || '').toLowerCase();
+      const subType = (dino.subType || '').toLowerCase();
+      const diet = (dino.diet || '').toLowerCase();
+      const period = (dino.period || '').toLowerCase();
+      const era = (dino.periodEra || '').toLowerCase();
+      const traits = (dino.traits || []).join(' ').toLowerCase();
+
+      matchesQuery = (
+        name.includes(q) ||
+        meaning.includes(q) ||
+        type.includes(q) ||
+        subType.includes(q) ||
+        diet.includes(q) ||
+        period.includes(q) ||
+        era.includes(q) ||
+        traits.includes(q) ||
+        ((q === 't-rex' || q === 'trex' || q === 't rex') && name.includes('tyrannosaurus')) ||
+        ((q === 'raptor' || q === 'raptors') && (name.includes('velociraptor') || subType.includes('raptor'))) ||
+        ((q === 'bronto' || q === 'brontosaurus') && (name.includes('apatosaurus') || subType.includes('sauropod')))
+      );
+    }
+
+    let matchesFilter = true;
+    if (activeFilter === 'carnivore') {
+      matchesFilter = dino.diet === 'Carnivore' || (dino.diet && dino.diet.includes('Carnivore'));
+    } else if (activeFilter === 'herbivore') {
+      matchesFilter = dino.diet === 'Herbivore';
+    } else if (activeFilter === 'triassic') {
+      matchesFilter = dino.periodEra === 'Triassic';
+    } else if (activeFilter === 'jurassic') {
+      matchesFilter = dino.periodEra === 'Jurassic';
+    } else if (activeFilter === 'cretaceous') {
+      matchesFilter = dino.periodEra === 'Cretaceous';
+    } else if (activeFilter === 'theropod') {
+      matchesFilter = dino.type === 'Theropod' || (dino.subType && dino.subType.toLowerCase().includes('theropod'));
+    } else if (activeFilter === 'sauropod') {
+      matchesFilter = dino.type === 'Sauropod' || (dino.subType && dino.subType.toLowerCase().includes('sauropod'));
+    } else if (activeFilter === 'armored') {
+      matchesFilter = dino.type === 'Thyreophoran' || dino.type === 'Ceratopsian' || dino.type === 'Pachycephalosaur';
+    }
+
+    return matchesQuery && matchesFilter;
+  });
 
   // 5 Chronological Prehistoric Chapters
   const CHAPTERS = [
@@ -203,8 +298,272 @@ export default function HomePage({ setActiveTab }) {
                 <ArrowRight size={16} />
               </button>
             )}
+
+            <button 
+              onClick={() => {
+                const archiveSection = document.getElementById('dino-archive-section');
+                if (archiveSection) {
+                  archiveSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  setTimeout(() => searchInputRef.current?.focus(), 300);
+                }
+              }}
+              className="btn-secondary"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '0.85rem 1.85rem',
+                fontSize: '1rem',
+                fontWeight: '700',
+                borderRadius: '9999px',
+                background: 'rgba(245, 158, 11, 0.15)',
+                color: '#FEF3C7',
+                border: '1px solid rgba(245, 158, 11, 0.35)',
+                backdropFilter: 'blur(10px)',
+                cursor: 'pointer'
+              }}
+            >
+              <Search size={16} />
+              <span>Search All Dinosaurs</span>
+            </button>
           </div>
         </div>
+      </section>
+
+      {/* =========================================================================
+          MESOZOIC DINOSAUR SPECIMEN ARCHIVE & SEARCH SECTION
+          ========================================================================= */}
+      <section id="dino-archive-section" className="home-archive-section">
+        <div className="home-archive-header">
+          <div className="section-tag" style={{ margin: '0 auto 0.75rem', justifyContent: 'center' }}>
+            <DinoSkull size={15} /> Authenticated Specimen Registry
+          </div>
+          <h2 className="home-archive-title">
+            Mesozoic Dinosaur <span>Specimen Archive</span>
+          </h2>
+          <p className="home-archive-subtitle">
+            Search through our authenticated database of prehistoric dinosaurs by name, epoch, anatomical clade, or feeding behavior. Click any specimen to inspect its complete fossil bio or compare its anatomy.
+          </p>
+        </div>
+
+        {/* Search Hub & Interactive Filter Chips */}
+        <div className="home-search-hub">
+          <div className="home-search-input-wrap">
+            <Search size={22} className="home-search-icon" />
+            <input
+              ref={searchInputRef}
+              type="text"
+              value={localQuery}
+              onChange={(e) => handleQueryChange(e.target.value)}
+              placeholder="Search any dinosaur by name, period, or diet... (e.g. T-Rex, Spinosaurus, Velociraptor, Stegosaurus)"
+              className="home-search-input"
+              aria-label="Search dinosaur by name"
+            />
+            {localQuery && (
+              <button 
+                type="button" 
+                onClick={handleResetSearch}
+                className="home-search-clear"
+                title="Clear search query"
+              >
+                <X size={15} />
+              </button>
+            )}
+          </div>
+
+          {/* Filter Chips & Result Counter */}
+          <div className="home-filter-chips-bar">
+            <div className="home-filter-chips">
+              {[
+                { id: 'all', label: 'All Specimens' },
+                { id: 'carnivore', label: 'Carnivores 🥩' },
+                { id: 'herbivore', label: 'Herbivores 🌿' },
+                { id: 'triassic', label: 'Triassic 🌋' },
+                { id: 'jurassic', label: 'Jurassic 🌲' },
+                { id: 'cretaceous', label: 'Cretaceous ☄️' },
+                { id: 'theropod', label: 'Theropods 🦖' },
+                { id: 'sauropod', label: 'Sauropods 🦕' },
+                { id: 'armored', label: 'Armored 🛡️' }
+              ].map(filter => (
+                <button
+                  key={filter.id}
+                  type="button"
+                  className={`home-filter-chip ${activeFilter === filter.id ? 'active' : ''}`}
+                  onClick={() => setActiveFilter(filter.id)}
+                >
+                  {filter.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="home-filter-stats-badge">
+              <Sparkles size={14} />
+              <span>
+                Showing <strong>{filteredDinosaurs.length}</strong> of {DINOSAURS.length} Specimens
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Dinosaurs Grid */}
+        {filteredDinosaurs.length > 0 ? (
+          <div className="dinosaurs-grid">
+            {filteredDinosaurs.map(dino => {
+              const isHighlighted = highlightedDinoId === dino.id;
+              const eraColor = eraColors[dino.periodEra] || '#F59E0B';
+
+              return (
+                <div 
+                  key={dino.id} 
+                  id={`dino-card-${dino.id}`}
+                  className={`dino-card ${isHighlighted ? 'highlighted-dino-card' : ''}`}
+                  style={{ position: 'relative' }}
+                >
+                  {isHighlighted && (
+                    <div className="highlight-badge-pill">
+                      <Sparkles size={12} />
+                      <span>MATCHED SPECIMEN</span>
+                    </div>
+                  )}
+
+                  <div className="dino-card-media">
+                    <img 
+                      src={dino.image} 
+                      alt={dino.name} 
+                      className="dino-card-img" 
+                      loading="lazy" 
+                      onError={(e) => {
+                        e.target.src = 'https://images.unsplash.com/photo-1570481662006-a3a1374699e8?auto=format&fit=crop&w=1000&q=80';
+                      }}
+                    />
+                    <div className="dino-media-overlay" />
+                    <div className={`dino-diet-badge ${dino.diet}`}>
+                      {dino.diet}
+                    </div>
+                  </div>
+
+                  <div className="dino-card-body">
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '4px' }}>
+                      <span className="dino-period-tag" style={{ color: eraColor }}>
+                        {dino.periodEra} Era • {dino.periodMYA}
+                      </span>
+                      <span className="dino-type-pill" style={{ fontSize: '0.7rem', padding: '0.15rem 0.5rem' }}>
+                        {dino.type}
+                      </span>
+                    </div>
+
+                    <h3 className="dino-card-title">{dino.name}</h3>
+                    <p className="dino-meaning">"{dino.meaning}"</p>
+                    
+                    <p className="dino-card-desc">
+                      {dino.description}
+                    </p>
+
+                    {/* Anatomy / Metric Stats Row */}
+                    <div className="dino-stats-row">
+                      <div className="dino-stat-item">
+                        <span className="dino-stat-val">{dino.lengthM} m</span>
+                        <span className="dino-stat-lbl">Length</span>
+                      </div>
+                      <div className="dino-stat-item">
+                        <span className="dino-stat-val">{dino.weightTons} t</span>
+                        <span className="dino-stat-lbl">Weight</span>
+                      </div>
+                      <div className="dino-stat-item">
+                        <span className="dino-stat-val">{dino.speedKmh} km/h</span>
+                        <span className="dino-stat-lbl">Speed</span>
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div style={{ display: 'flex', gap: '0.65rem' }}>
+                      <button
+                        type="button"
+                        className="dino-card-btn"
+                        onClick={() => setSelectedDinoModal(dino)}
+                        title={`Open detailed dossier for ${dino.name}`}
+                        style={{ flex: 1 }}
+                      >
+                        <Zap size={14} />
+                        <span>View Bio</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        className="dino-card-btn"
+                        onClick={() => {
+                          if (onCompareDino) {
+                            onCompareDino(dino.id);
+                          } else if (setActiveTab) {
+                            setActiveTab('compare');
+                          }
+                        }}
+                        title={`Compare ${dino.name} against other titans`}
+                        style={{
+                          flex: '0 0 auto',
+                          padding: '0.65rem 0.9rem',
+                          background: 'rgba(255, 255, 255, 0.05)',
+                          borderColor: 'rgba(255, 255, 255, 0.15)',
+                          color: '#fff'
+                        }}
+                      >
+                        <Swords size={14} />
+                        <span>Compare</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div style={{
+            textAlign: 'center',
+            padding: '4rem 2rem',
+            background: 'rgba(14, 20, 27, 0.5)',
+            borderRadius: '20px',
+            border: '1px dashed rgba(245, 158, 11, 0.3)',
+            maxWidth: '650px',
+            margin: '0 auto 4rem'
+          }}>
+            <div style={{
+              width: '64px',
+              height: '64px',
+              borderRadius: '50%',
+              background: 'rgba(245, 158, 11, 0.12)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1.25rem',
+              color: 'var(--amber-primary)'
+            }}>
+              <DinoSkull size={32} />
+            </div>
+            <h3 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#fff', marginBottom: '0.5rem' }}>
+              No Prehistoric Specimens Found
+            </h3>
+            <p style={{ color: 'var(--text-dim)', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '1.5rem' }}>
+              No dinosaur matches "{localQuery}". Try searching for <strong>Tyrannosaurus</strong>, <strong>T-Rex</strong>, <strong>Velociraptor</strong>, <strong>Spinosaurus</strong>, or <strong>Stegosaurus</strong>.
+            </p>
+            <button
+              type="button"
+              onClick={handleResetSearch}
+              className="btn-primary"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '0.65rem 1.5rem',
+                borderRadius: '999px',
+                fontSize: '0.9rem',
+                fontWeight: '700'
+              }}
+            >
+              <X size={15} />
+              <span>Reset Search & Filters</span>
+            </button>
+          </div>
+        )}
       </section>
 
       {/* Main Chapter System Exhibit */}

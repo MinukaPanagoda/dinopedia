@@ -22,12 +22,39 @@ export default function App() {
     }
   });
   const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [highlightedDinoId, setHighlightedDinoId] = useState(null);
+  const [selectedCompareDinoId, setSelectedCompareDinoId] = useState(null);
 
   const handleLogout = () => {
     try {
       localStorage.removeItem('dinopedia_user');
     } catch {}
     setUser(null);
+  };
+
+  const handleSelectDinoFromNavbar = (dino) => {
+    setActiveTab('home');
+    setSearchQuery(dino.name);
+    setHighlightedDinoId(dino.id);
+
+    // Smooth scroll to the highlighted dinosaur card on Home page
+    setTimeout(() => {
+      const el = document.getElementById(`dino-card-${dino.id}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        const archiveSection = document.getElementById('dino-archive-section');
+        if (archiveSection) {
+          archiveSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    }, 150);
+  };
+
+  const handleCompareDino = (dinoId) => {
+    setSelectedCompareDinoId(dinoId);
+    setActiveTab('compare');
   };
 
   useEffect(() => {
@@ -80,11 +107,20 @@ export default function App() {
   const renderContent = () => {
     switch (activeTab) {
       case 'home':
-        return <HomePage setActiveTab={setActiveTab} />;
+        return (
+          <HomePage 
+            setActiveTab={setActiveTab} 
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            highlightedDinoId={highlightedDinoId}
+            setHighlightedDinoId={setHighlightedDinoId}
+            onCompareDino={handleCompareDino}
+          />
+        );
       case 'age-of-dinosaurs':
         return <AgeOfDinosaursPage setActiveTab={setActiveTab} />;
       case 'compare':
-        return <ComparePage />;
+        return <ComparePage initialDino1Id={selectedCompareDinoId} />;
       case 'discoveries':
         return <DiscoveriesPage />;
       case 'quizzes':
@@ -92,7 +128,16 @@ export default function App() {
       case 'entertainment':
         return <EntertainmentPage />;
       default:
-        return <HomePage setActiveTab={setActiveTab} />;
+        return (
+          <HomePage 
+            setActiveTab={setActiveTab} 
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            highlightedDinoId={highlightedDinoId}
+            setHighlightedDinoId={setHighlightedDinoId}
+            onCompareDino={handleCompareDino}
+          />
+        );
     }
   };
 
@@ -105,6 +150,7 @@ export default function App() {
         user={user}
         onOpenLogin={() => setLoginModalOpen(true)}
         onLogout={handleLogout}
+        onSelectDino={handleSelectDinoFromNavbar}
       />
 
       {/* Main Content */}

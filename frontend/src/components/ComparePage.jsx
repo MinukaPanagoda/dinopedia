@@ -29,9 +29,17 @@ const QUICK_MATCHUPS = [
   }
 ];
 
-export default function ComparePage() {
-  const [dino1Id, setDino1Id] = useState(DINOSAURS.find(d => d.id === 'tyrannosaurus-rex')?.id || DINOSAURS[0]?.id || '');
+export default function ComparePage({ initialDino1Id }) {
+  const [dino1Id, setDino1Id] = useState(
+    initialDino1Id || DINOSAURS.find(d => d.id === 'tyrannosaurus-rex')?.id || DINOSAURS[0]?.id || ''
+  );
   const [dino2Id, setDino2Id] = useState(DINOSAURS.find(d => d.id === 'spinosaurus-aegyptiacus')?.id || DINOSAURS[1]?.id || '');
+
+  React.useEffect(() => {
+    if (initialDino1Id && DINOSAURS.some(d => d.id === initialDino1Id)) {
+      setDino1Id(initialDino1Id);
+    }
+  }, [initialDino1Id]);
 
   const dino1 = DINOSAURS.find(d => d.id === dino1Id) || DINOSAURS[0];
   const dino2 = DINOSAURS.find(d => d.id === dino2Id) || DINOSAURS[1];

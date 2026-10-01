@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Menu, X, Sparkles, LogIn, LogOut, User, ChevronDown } from 'lucide-react';
 import DinoSkull from './DinoSkull';
+import DinoSearchBar from './DinoSearchBar';
 
 /**
  * Theropod 3-Toed Dino Claw Footprint
@@ -73,7 +74,7 @@ function JurassicCinemaIcon({ size = 16 }) {
   );
 }
 
-export default function Navbar({ activeTab, setActiveTab, user, onOpenLogin, onLogout }) {
+export default function Navbar({ activeTab, setActiveTab, user, onOpenLogin, onLogout, onSelectDino }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
@@ -138,8 +139,11 @@ export default function Navbar({ activeTab, setActiveTab, user, onOpenLogin, onL
           })}
         </div>
 
-        {/* Right Action Area - User Login / Profile & Mobile Menu Toggle */}
+        {/* Right Action Area - Search Bar, User Profile & Mobile Toggle */}
         <div className="nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          {/* Global Dinosaur Search Bar */}
+          <DinoSearchBar onSelectDino={onSelectDino} />
+
           {/* User Status / Login Button (Desktop) */}
           {user ? (
             <div style={{ position: 'relative' }}>
@@ -267,6 +271,15 @@ export default function Navbar({ activeTab, setActiveTab, user, onOpenLogin, onL
           borderTop: '1px solid rgba(255,255,255,0.08)',
           marginTop: '0.75rem'
         }}>
+          {/* Mobile Drawer Search Bar */}
+          <div style={{ padding: '0 0.5rem 0.5rem' }}>
+            <DinoSearchBar 
+              onSelectDino={(dino) => {
+                setMobileMenuOpen(false);
+                if (onSelectDino) onSelectDino(dino);
+              }} 
+            />
+          </div>
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
