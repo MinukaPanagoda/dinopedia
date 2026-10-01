@@ -4529,3 +4529,616 @@ button {
   }
 }
 
+/* ==========================================================================
+   INTERACTIVE FOSSIL DIG MAP STYLES
+   ========================================================================== */
+
+.dig-map-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.dig-map-controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: rgba(14, 20, 27, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 16px;
+  padding: 0.85rem 1.25rem;
+}
+
+.dig-map-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.dig-map-filter-lbl {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: 0.25rem;
+}
+
+.dig-map-filter-pill {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-dim);
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dig-map-filter-pill:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.dig-map-filter-pill.active {
+  background: rgba(245, 158, 11, 0.18);
+  border-color: var(--pill-accent, var(--amber-primary));
+  color: var(--pill-accent, var(--amber-light));
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.25);
+}
+
+.dig-map-counter-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38BDF8;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.dig-map-compass-spin {
+  animation: compassSpin 10s linear infinite;
+}
+
+@keyframes compassSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Map Grid: Left Map Stage, Right Dossier */
+.dig-map-grid-container {
+  display: grid;
+  grid-template-columns: 1.45fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.dig-map-stage-card {
+  background: #080D13;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.dig-map-canvas-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1000 / 550;
+  overflow: hidden;
+}
+
+.dig-map-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.continent-shape {
+  transition: fill 0.3s ease, stroke 0.3s ease;
+}
+
+.continent-shape:hover {
+  fill: #192736 !important;
+  stroke: rgba(245, 158, 11, 0.6) !important;
+}
+
+/* Markers Overlay Layer */
+.dig-map-markers-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.dig-map-marker-anchor {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dig-map-marker-anchor:hover,
+.dig-map-marker-anchor.selected {
+  transform: translate(-50%, -50%) scale(1.15);
+  z-index: 25;
+}
+
+/* Sonar Radar Ring */
+.dig-map-sonar-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 32px;
+  height: 32px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 2px solid var(--site-color, #F59E0B);
+  pointer-events: none;
+  animation: sonarPing 2.2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+@keyframes sonarPing {
+  0% {
+    width: 12px;
+    height: 12px;
+    opacity: 0.9;
+  }
+  100% {
+    width: 48px;
+    height: 48px;
+    opacity: 0;
+  }
+}
+
+.dig-map-pin-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #0E141B;
+  border: 2px solid var(--site-color, #F59E0B);
+  color: var(--site-color, #F59E0B);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 14px var(--site-color, #F59E0B);
+  transition: all 0.2s ease;
+}
+
+.dig-map-marker-anchor.selected .dig-map-pin-badge {
+  background: var(--site-color, #F59E0B);
+  color: #000;
+  box-shadow: 0 0 22px var(--site-color, #F59E0B);
+}
+
+.dig-map-pin-tag {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.dig-map-pin-tag-name {
+  background: rgba(14, 20, 27, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Hover Quick Preview Card */
+.dig-map-hover-card {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  background: #0E141B;
+  border: 1px solid var(--site-color, #F59E0B);
+  border-radius: 12px;
+  padding: 0.65rem 0.85rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+  animation: dropdownFadeIn 0.2s ease;
+}
+
+.dig-map-hover-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.dig-map-hover-era {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.dig-map-hover-flag {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+}
+
+.dig-map-hover-title {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dig-map-hover-specimens {
+  font-size: 0.7rem;
+  color: var(--amber-light);
+}
+
+.dig-map-stage-footer {
+  padding: 0.75rem 1.25rem;
+  background: rgba(14, 20, 27, 0.8);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.dig-map-legend {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.dig-map-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.dig-map-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* Dossier Card on the Right */
+.dig-site-dossier-card {
+  background: rgba(14, 20, 27, 0.85);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+}
+
+.dossier-media-wrap {
+  position: relative;
+  height: 190px;
+  overflow: hidden;
+  background: #0B0E12;
+}
+
+.dossier-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dossier-media-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(14, 20, 27, 0.3) 0%, rgba(14, 20, 27, 0.95) 100%);
+}
+
+.dossier-badges-top {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  right: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dossier-era-pill {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid;
+  backdrop-filter: blur(8px);
+}
+
+.dossier-continent-pill {
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+}
+
+.dossier-title-group {
+  position: absolute;
+  bottom: 0.85rem;
+  left: 1.25rem;
+  right: 1.25rem;
+}
+
+.dossier-title {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 0.2rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.dossier-location-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.82rem;
+  color: #E5E7EB;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+.dossier-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.dossier-overview {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+.dossier-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 0.85rem;
+}
+
+.dossier-stat-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.dossier-stat-lbl {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.dossier-stat-val {
+  font-size: 0.82rem;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.dossier-alert-box {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+}
+
+.dossier-alert-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dossier-alert-text {
+  font-size: 0.82rem;
+  color: #FDE68A;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.dossier-dinosaurs-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.dossier-dinosaurs-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dossier-dino-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.dossier-dino-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dossier-dino-row:hover {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.35);
+  transform: translateX(3px);
+}
+
+.dossier-dino-img-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #111;
+  flex-shrink: 0;
+}
+
+.dossier-dino-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dossier-dino-info {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.dossier-dino-name-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dossier-dino-name {
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dossier-dino-diet {
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.dossier-dino-meta {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  display: flex;
+  gap: 4px;
+}
+
+.dossier-dino-bio-btn {
+  background: rgba(245, 158, 11, 0.2);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: var(--amber-light);
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+}
+
+.dossier-dino-bio-btn:hover {
+  background: var(--amber-primary);
+  color: #000;
+}
+
+.dossier-empty-dinos {
+  padding: 1rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+}
+
+/* Discoveries View Switcher Nav */
+.discoveries-view-nav {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.discoveries-view-nav-inner {
+  display: inline-flex;
+  background: rgba(14, 20, 27, 0.8);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 0.35rem;
+  border-radius: 999px;
+  gap: 0.35rem;
+}
+
+.discoveries-view-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.5rem 1.25rem;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.discoveries-view-tab:hover {
+  color: #fff;
+}
+
+.discoveries-view-tab.active {
+  background: linear-gradient(135deg, #F59E0B, #D97706);
+  color: #000;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.4);
+}
+
+@media (max-width: 1024px) {
+  .dig-map-grid-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+
