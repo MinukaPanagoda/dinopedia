@@ -6,10 +6,19 @@ export const MOVIES = [
     director: "Steven Spielberg",
     rating: 8.2,
     votes: "1.1M",
+    subCategory: "jurassic",
     genre: "Action, Adventure, Sci-Fi",
     runtime: "127 min",
+    tagline: "An adventure 65 million years in the making.",
     poster: "https://upload.wikimedia.org/wikipedia/en/e/e7/Jurassic_Park_poster.jpg",
     desc: "A pragmatic paleontologist touring an almost complete theme park on an island in Central America is tasked with protecting a couple of kids after a power failure causes the park's cloned dinosaurs to run loose.",
+    featuredSpecimenIds: [
+      "tyrannosaurus-rex",
+      "velociraptor-mongoliensis",
+      "dilophosaurus-wetherilli",
+      "brachiosaurus-altithorax",
+      "triceratops-horridus"
+    ],
     imdbUrl: "https://www.imdb.com/title/tt0107290/"
   },
   {
@@ -19,10 +28,19 @@ export const MOVIES = [
     director: "Steven Spielberg",
     rating: 6.6,
     votes: "450K",
+    subCategory: "jurassic",
     genre: "Action, Adventure, Sci-Fi",
     runtime: "129 min",
+    tagline: "Something has survived.",
     poster: "https://upload.wikimedia.org/wikipedia/en/c/cc/The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg",
     desc: "A research team is sent to the Jurassic Park Site B island to study the dinosaurs there, while an InGen team approaches with another agenda.",
+    featuredSpecimenIds: [
+      "tyrannosaurus-rex",
+      "velociraptor-mongoliensis",
+      "stegosaurus-stenops",
+      "parasaurolophus-walkeri",
+      "pachycephalosaurus-wyomingensis"
+    ],
     imdbUrl: "https://www.imdb.com/title/tt0119567/"
   },
   {
@@ -32,10 +50,19 @@ export const MOVIES = [
     director: "Joe Johnston",
     rating: 5.9,
     votes: "360K",
+    subCategory: "jurassic",
     genre: "Action, Adventure, Sci-Fi",
     runtime: "92 min",
+    tagline: "This time, it's not on an island. It's on a territory.",
     poster: "https://upload.wikimedia.org/wikipedia/en/6/6d/Jurassic_Park_III_poster.jpg",
     desc: "A decidedly odd couple with cryptic motives hire Dr. Alan Grant to guide them on a vacation tour of Isla Sorna, where an unforeseen crash leaves them stranded among vicious mutant predators.",
+    featuredSpecimenIds: [
+      "spinosaurus-aegyptiacus",
+      "tyrannosaurus-rex",
+      "velociraptor-mongoliensis",
+      "ankylosaurus-magniventris",
+      "pterodactylus-antiquus"
+    ],
     imdbUrl: "https://www.imdb.com/title/tt0251147/"
   },
   {
@@ -45,10 +72,18 @@ export const MOVIES = [
     director: "Colin Trevorrow",
     rating: 6.9,
     votes: "680K",
+    subCategory: "jurassic",
     genre: "Action, Adventure, Sci-Fi",
     runtime: "124 min",
+    tagline: "The park is open.",
     poster: "https://upload.wikimedia.org/wikipedia/en/6/6e/Jurassic_World_poster.jpg",
     desc: "A new theme park, built on the original site of Jurassic Park, creates a genetically modified hybrid dinosaur, the Indominus Rex, which escapes containment and goes on a killing spree.",
+    featuredSpecimenIds: [
+      "tyrannosaurus-rex",
+      "velociraptor-mongoliensis",
+      "ankylosaurus-magniventris",
+      "apatosaurus-ajax"
+    ],
     imdbUrl: "https://www.imdb.com/title/tt3694752/"
   },
   {
@@ -58,10 +93,19 @@ export const MOVIES = [
     director: "J.A. Bayona",
     rating: 6.2,
     votes: "350K",
+    subCategory: "jurassic",
     genre: "Action, Adventure, Sci-Fi",
     runtime: "128 min",
+    tagline: "The park is gone.",
     poster: "https://upload.wikimedia.org/wikipedia/en/c/c6/Jurassic_World_Fallen_Kingdom.png",
     desc: "When the island's dormant volcano begins roaring to life, Owen and Claire mount a campaign to rescue the remaining dinosaurs from this extinction-level event.",
+    featuredSpecimenIds: [
+      "tyrannosaurus-rex",
+      "velociraptor-mongoliensis",
+      "carnotaurus-sastrei",
+      "allosaurus-fragilis",
+      "baryonyx-walkeri"
+    ],
     imdbUrl: "https://www.imdb.com/title/tt4881806/"
   },
   {
@@ -71,10 +115,19 @@ export const MOVIES = [
     director: "Colin Trevorrow",
     rating: 5.6,
     votes: "210K",
+    subCategory: "jurassic",
     genre: "Action, Adventure, Sci-Fi",
     runtime: "147 min",
+    tagline: "The conclusion of the Jurassic era.",
     poster: "https://upload.wikimedia.org/wikipedia/en/c/ce/JurassicWorldDominion_Poster.jpeg",
     desc: "Four years after the destruction of Isla Nublar, dinosaurs now live and hunt alongside humans all over the world, threatening humanity's place as apex predators.",
+    featuredSpecimenIds: [
+      "tyrannosaurus-rex",
+      "velociraptor-mongoliensis",
+      "giganotosaurus-carolinii",
+      "therizinosaurus-cheloniformis",
+      "quetzalcoatlus-northropi"
+    ],
     imdbUrl: "https://www.imdb.com/title/tt8041270/"
   },
   {
@@ -84,10 +137,18 @@ export const MOVIES = [
     director: "Don Bluth",
     rating: 7.4,
     votes: "95K",
+    subCategory: "animated",
     genre: "Animation, Adventure, Drama",
     runtime: "69 min",
-    poster: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=600&q=80",
+    tagline: "An unforgettable adventure that captured the hearts of generations.",
+    poster: "https://upload.wikimedia.org/wikipedia/en/a/ad/The_Land_Before_Time_poster.jpg",
     desc: "An orphaned young brontosaurus named Littlefoot teams up with other young dinosaurs in order to reunite with their families in a valley of lush vegetation.",
+    featuredSpecimenIds: [
+      "apatosaurus-ajax",
+      "triceratops-horridus",
+      "pterodactylus-antiquus",
+      "tyrannosaurus-rex"
+    ],
     imdbUrl: "https://www.imdb.com/title/tt0095489/"
   },
   {
@@ -97,10 +158,17 @@ export const MOVIES = [
     director: "Peter Jackson",
     rating: 7.2,
     votes: "460K",
+    subCategory: "classic",
     genre: "Action, Adventure, Drama",
     runtime: "187 min",
+    tagline: "The eighth wonder of the world.",
     poster: "https://upload.wikimedia.org/wikipedia/en/6/6a/Kingkong_bigfinal1.jpg",
     desc: "A theatrical crew arrives at Skull Island, discovering giant prehistoric apex beasts including terrifying Vastatosaurus Rexes that battle Kong.",
+    featuredSpecimenIds: [
+      "tyrannosaurus-rex",
+      "brachiosaurus-altithorax",
+      "velociraptor-mongoliensis"
+    ],
     imdbUrl: "https://www.imdb.com/title/tt0360717/"
   },
   {
@@ -110,10 +178,17 @@ export const MOVIES = [
     director: "Peter Sohn",
     rating: 6.7,
     votes: "125K",
+    subCategory: "animated",
     genre: "Animation, Adventure, Comedy",
     runtime: "93 min",
+    tagline: "A single moment can change history.",
     poster: "https://upload.wikimedia.org/wikipedia/en/8/80/The_Good_Dinosaur_poster.jpg",
     desc: "In an alternate world where the asteroid never hit Earth, an introverted young Apatosaurus named Arlo makes an unlikely human friend.",
+    featuredSpecimenIds: [
+      "apatosaurus-ajax",
+      "tyrannosaurus-rex",
+      "velociraptor-mongoliensis"
+    ],
     imdbUrl: "https://www.imdb.com/title/tt1979388/"
   },
   {
@@ -123,10 +198,17 @@ export const MOVIES = [
     director: "Carlos Saldanha, Mike Thurmeier",
     rating: 6.9,
     votes: "260K",
+    subCategory: "animated",
     genre: "Animation, Adventure, Comedy",
     runtime: "94 min",
+    tagline: "Things are about to get really prehistoric.",
     poster: "https://upload.wikimedia.org/wikipedia/en/2/24/Ice_Age_Dawn_of_the_Dinosaurs_theatrical_poster.jpg",
     desc: "When Sid's attempt to adopt three dinosaur eggs gets him abducted into a mysterious underground prehistoric jungle, Manny and friends embark on a rescue mission.",
+    featuredSpecimenIds: [
+      "tyrannosaurus-rex",
+      "ankylosaurus-magniventris",
+      "pterodactylus-antiquus"
+    ],
     imdbUrl: "https://www.imdb.com/title/tt1080016/"
   },
   {
@@ -136,10 +218,19 @@ export const MOVIES = [
     director: "Jon Favreau (Exec Prod)",
     rating: 8.5,
     votes: "18K",
+    subCategory: "docu",
     genre: "Documentary, Animation",
     runtime: "5 eps / 40 min",
-    poster: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80",
+    tagline: "Travel back 66 million years to when dinosaurs ruled the Earth.",
+    poster: "https://upload.wikimedia.org/wikipedia/en/2/2f/Prehistoric_Planet_2022_cover.jpg",
     desc: "Experience the wonders of our world like never before in this docuseries narrated by Sir David Attenborough, traveling back 66 million years to when majestic dinosaurs roamed.",
+    featuredSpecimenIds: [
+      "tyrannosaurus-rex",
+      "velociraptor-mongoliensis",
+      "triceratops-horridus",
+      "carnotaurus-sastrei",
+      "deinocheirus-mirificus"
+    ],
     imdbUrl: "https://www.imdb.com/title/tt10324164/"
   },
   {
@@ -149,10 +240,18 @@ export const MOVIES = [
     director: "Ralph Zondag, Eric Leighton",
     rating: 6.4,
     votes: "62K",
+    subCategory: "animated",
     genre: "Animation, Adventure, Family",
     runtime: "82 min",
-    poster: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80",
+    tagline: "You have never seen anything like this on Earth.",
+    poster: "https://upload.wikimedia.org/wikipedia/en/b/bc/Dinosaurmovieposter.jpg",
     desc: "An orphaned Iguanodon raised by lemurs joins a perilous desert migration to the prehistoric Nesting Grounds after a cataclysmic meteor strike.",
+    featuredSpecimenIds: [
+      "iguanodon-bernissartensis",
+      "carnotaurus-sastrei",
+      "brachiosaurus-altithorax",
+      "ankylosaurus-magniventris"
+    ],
     imdbUrl: "https://www.imdb.com/title/tt0130623/"
   },
   {
@@ -162,10 +261,17 @@ export const MOVIES = [
     director: "Barry Cook, Neil Nightingale",
     rating: 5.2,
     votes: "14K",
+    subCategory: "animated",
     genre: "Animation, Adventure, Family",
     runtime: "87 min",
-    poster: "https://images.unsplash.com/photo-1569705460033-cfaa4bf9f822?auto=format&fit=crop&w=600&q=80",
+    tagline: "The greatest adventure 70 million years in the making.",
+    poster: "https://upload.wikimedia.org/wikipedia/en/9/9f/Walking_with_Dinosaurs_film_poster.jpg",
     desc: "See and feel what it was like when dinosaurs ruled the Earth, in a story following an underdog Pachyrhinosaurus who triumphs against the odds.",
+    featuredSpecimenIds: [
+      "pachyrhinosaurus-canadensis",
+      "albertosaurus-sarcophagus",
+      "edmontosaurus-annectens"
+    ],
     imdbUrl: "https://www.imdb.com/title/tt1762399/"
   },
   {
@@ -175,10 +281,16 @@ export const MOVIES = [
     director: "Eric Brevig",
     rating: 5.8,
     votes: "135K",
+    subCategory: "classic",
     genre: "Action, Adventure, Sci-Fi",
     runtime: "93 min",
-    poster: "https://images.unsplash.com/photo-1606856110002-d0991ce78250?auto=format&fit=crop&w=600&q=80",
+    tagline: "Same Planet. Different World.",
+    poster: "https://upload.wikimedia.org/wikipedia/en/7/7a/Center_of_the_earth_3d.jpg",
     desc: "A scientist, his nephew, and their guide stumble upon a fantastic, lost world deep underground populated by predatory prehistoric dinosaurs.",
+    featuredSpecimenIds: [
+      "tyrannosaurus-rex",
+      "giganotosaurus-carolinii"
+    ],
     imdbUrl: "https://www.imdb.com/title/tt0373051/"
   },
   {
@@ -188,10 +300,17 @@ export const MOVIES = [
     director: "Jim O'Connolly",
     rating: 6.3,
     votes: "7.5K",
+    subCategory: "classic",
     genre: "Action, Adventure, Sci-Fi",
     runtime: "96 min",
-    poster: "https://images.unsplash.com/photo-1559827291-72ee739d0d9a?auto=format&fit=crop&w=600&q=80",
+    tagline: "Cowboys roping an Allosaurus in a forbidden valley!",
+    poster: "https://upload.wikimedia.org/wikipedia/en/a/a2/Valgwanpos.jpg",
     desc: "Classic Ray Harryhausen stop-motion masterpiece. Cowboys in Mexico discover a hidden prehistoric valley populated by living dinosaurs, including an aggressive Allosaurus named Gwangi.",
+    featuredSpecimenIds: [
+      "allosaurus-fragilis",
+      "pterodactylus-antiquus",
+      "styracosaurus-albertensis"
+    ],
     imdbUrl: "https://www.imdb.com/title/tt0065163/"
   },
   {
@@ -201,12 +320,27 @@ export const MOVIES = [
     director: "Merian C. Cooper, Ernest B. Schoedsack",
     rating: 7.9,
     votes: "90K",
+    subCategory: "classic",
     genre: "Adventure, Horror, Sci-Fi",
     runtime: "100 min",
-    poster: "https://images.unsplash.com/photo-1570481662006-a3a1374699e8?auto=format&fit=crop&w=600&q=80",
+    tagline: "The eighth wonder of the world!",
+    poster: "https://upload.wikimedia.org/wikipedia/commons/f/f3/Kingkongposter.jpg",
     desc: "The groundbreaking cinema landmark where a film crew visits Skull Island, encountering prehistoric horrors, a Stegosaurus, and a battle between Kong and Tyrannosaurus.",
+    featuredSpecimenIds: [
+      "tyrannosaurus-rex",
+      "stegosaurus-stenops",
+      "brachiosaurus-altithorax"
+    ],
     imdbUrl: "https://www.imdb.com/title/tt0024216/"
   }
+];
+
+export const MOVIE_SUB_CATEGORIES = [
+  { id: 'all', label: 'All Movies', icon: 'Film' },
+  { id: 'jurassic', label: 'Jurassic Saga 🦖', icon: 'Flame' },
+  { id: 'animated', label: 'Animated & Family 🦕', icon: 'Sparkles' },
+  { id: 'docu', label: 'Documentaries & Series 🎥', icon: 'Layers' },
+  { id: 'classic', label: 'Monster Classics 🌋', icon: 'Compass' }
 ];
 
 export const GAMES = [

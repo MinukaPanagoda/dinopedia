@@ -24,8 +24,9 @@ import {
   CheckCircle2,
   BookMarked
 } from 'lucide-react';
-import { MOVIES, GAMES, BOOKS, BOOK_SUB_CATEGORIES } from '../data/entertainment';
+import { MOVIES, GAMES, BOOKS, BOOK_SUB_CATEGORIES, MOVIE_SUB_CATEGORIES } from '../data/entertainment';
 import BookModal from './BookModal';
+import MovieModal from './MovieModal';
 import DinoModal from './DinoModal';
 import DinoSkull from './DinoSkull';
 
@@ -36,6 +37,11 @@ export default function EntertainmentPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   
+  // Movies specialized state
+  const [movieSubCategory, setMovieSubCategory] = useState('all');
+  const [movieSortBy, setMovieSortBy] = useState('rating'); // 'rating', 'newest', 'oldest', 'votes'
+  const [selectedMovieModal, setSelectedMovieModal] = useState(null);
+
   // Books specialized state
   const [bookSubCategory, setBookSubCategory] = useState('all');
   const [bookSortBy, setBookSortBy] = useState('featured');
@@ -43,10 +49,27 @@ export default function EntertainmentPage() {
   const [selectedDinoModal, setSelectedDinoModal] = useState(null);
 
   // Filter items based on active category and search
-  const filteredMovies = MOVIES.filter(m => 
-    m.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    m.year.toString().includes(searchQuery)
-  );
+  const filteredMovies = MOVIES.filter(m => {
+    const matchesSearch = 
+      m.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      m.director.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      m.genre.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      m.year.toString().includes(searchQuery);
+
+    const matchesSub = movieSubCategory === 'all' || m.subCategory === movieSubCategory;
+    return matchesSearch && matchesSub;
+  }).sort((a, b) => {
+    if (movieSortBy === 'rating') return b.rating - a.rating;
+    if (movieSortBy === 'newest') return b.year - a.year;
+    if (movieSortBy === 'oldest') return a.year - b.year;
+    if (movieSortBy === 'votes') {
+      const parseVotes = (v) => v.includes('M') ? parseFloat(v) * 1000 : parseFloat(v);
+      return parseVotes(b.votes) - parseVotes(a.votes);
+    }
+    return 0;
+  });
+
+  const spotlightMovie = filteredMovies.find(m => m.id === 'jurassic-park-1993') || filteredMovies[0] || MOVIES[0];
 
   const filteredGames = GAMES.filter(g =>
     g.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -208,74 +231,266 @@ export default function EntertainmentPage() {
 
       {/* MOVIES CATEGORY */}
       {activeCategory === 'movies' && (
-        <div>
+        <div className="movies-hub-root">
+          {/* Sub-Category Filter Pills & Sort Selector */}
+          <div className="books-controls-row">
+            <div className="books-subcategories-bar">
+              {MOVIE_SUB_CATEGORIES.map((sub) => {
+                const subCount = sub.id === 'all' 
+                  ? MOVIES.length 
+                  : MOVIES.filter(m => m.subCategory === sub.id).length;
+
+                return (
+                  <button
+                    key={sub.id}
+                    type="button"
+                    className={`books-sub-pill ${movieSubCategory === sub.id ? 'active' : ''}`}
+                    onClick={() => {
+                      setMovieSubCategory(sub.id);
+                      setCurrentPage(1);
+                    }}
+                  >
+                    <span>{sub.label}</span>
+                    <span className="books-sub-pill-count">{subCount}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Sort Selector */}
+            <div className="books-sort-wrap">
+              <ArrowUpDown size={14} color="var(--text-dim)" />
+              <label htmlFor="movie-sort-select" className="sr-only">Sort Movies</label>
+              <select
+                id="movie-sort-select"
+                value={movieSortBy}
+                onChange={(e) => {
+                  setMovieSortBy(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="books-sort-dropdown"
+              >
+                <option value="rating">Highest Rated ⭐</option>
+                <option value="votes">Most IMDb Votes</option>
+                <option value="newest">Newest Release</option>
+                <option value="oldest">Classic Vintage</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Curator's Cinema Spotlight Hero */}
+          {!searchQuery && spotlightMovie && movieSubCategory === 'all' && currentPage === 1 && (
+            <div className="book-spotlight-hero" style={{ borderColor: 'rgba(245, 197, 24, 0.4)' }}>
+              <div className="book-spotlight-inner" style={{ gridTemplateColumns: '200px 1fr' }}>
+                {/* Left: Poster */}
+                <div 
+                  className="book-spotlight-cover-side"
+                  onClick={() => setSelectedMovieModal(spotlightMovie)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === 'Enter' && setSelectedMovieModal(spotlightMovie)}
+                  title="Click to view complete movie dossier"
+                >
+                  <div style={{ position: 'relative', width: '180px', height: '265px', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 16px 36px rgba(0,0,0,0.85), 0 0 25px rgba(245, 197, 24, 0.25)', border: '1px solid rgba(255,255,255,0.15)' }}>
+                    <img 
+                      src={spotlightMovie.poster} 
+                      alt={spotlightMovie.title}
+                      referrerPolicy="no-referrer"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      onError={(e) => {
+                        e.currentTarget.src = "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=600&q=80";
+                      }}
+                    />
+                    <div style={{ position: 'absolute', top: '10px', right: '10px', background: '#F5C518', color: '#000', fontWeight: '800', fontSize: '0.8rem', padding: '0.2rem 0.5rem', borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <Star size={11} fill="#000" color="#000" />
+                      <span>{spotlightMovie.rating}</span>
+                    </div>
+                  </div>
+                  <div className="book-spotlight-click-hint">
+                    <Eye size={13} /> Click to Inspect Cinema Dossier
+                  </div>
+                </div>
+
+                {/* Right: Info */}
+                <div className="book-spotlight-info">
+                  <div className="book-spotlight-badge-row">
+                    <span className="book-spotlight-curator-tag" style={{ color: '#FDE68A', borderColor: 'rgba(245, 197, 24, 0.4)' }}>
+                      <Sparkles size={12} /> Spotlight Masterpiece • IMDb Essential
+                    </span>
+                    <span className="book-rating-badge">
+                      <Star size={13} fill="#F5C518" color="#F5C518" />
+                      <strong>{spotlightMovie.rating}</strong> / 10 ({spotlightMovie.votes} votes)
+                    </span>
+                  </div>
+
+                  <h2 
+                    className="book-spotlight-title"
+                    onClick={() => setSelectedMovieModal(spotlightMovie)}
+                  >
+                    {spotlightMovie.title}
+                  </h2>
+
+                  <div className="book-spotlight-author-row">
+                    <Film size={15} color="var(--amber-primary)" />
+                    <span>
+                      Directed by <strong style={{ color: '#fff' }}>{spotlightMovie.director}</strong> • {spotlightMovie.runtime} ({spotlightMovie.year})
+                    </span>
+                  </div>
+
+                  {spotlightMovie.tagline && (
+                    <div className="book-spotlight-quote">
+                      <Quote size={20} className="book-quote-icon" />
+                      <p>"{spotlightMovie.tagline}"</p>
+                    </div>
+                  )}
+
+                  <p className="book-spotlight-synopsis">
+                    {spotlightMovie.desc}
+                  </p>
+
+                  <div className="book-spotlight-footer">
+                    <div className="book-spotlight-meta-items">
+                      <span>Genre: <strong style={{ color: '#fff' }}>{spotlightMovie.genre}</strong></span>
+                      <span>•</span>
+                      <span>Theatrical: <strong>{spotlightMovie.year}</strong></span>
+                    </div>
+
+                    <div className="book-spotlight-buttons">
+                      <button 
+                        type="button" 
+                        className="btn-primary"
+                        onClick={() => setSelectedMovieModal(spotlightMovie)}
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                      >
+                        <Film size={16} />
+                        <span>Inspect Cinema Dossier</span>
+                      </button>
+
+                      <a 
+                        href={spotlightMovie.imdbUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="btn-secondary"
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                      >
+                        <span>View on IMDb</span>
+                        <ExternalLink size={13} />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Movies Grid */}
           {filteredMovies.length === 0 ? (
-            <div className="glass-panel" style={{ padding: '3rem 2rem', textAlign: 'center', maxWidth: '500px', margin: '2rem auto' }}>
-              <p style={{ color: 'var(--text-muted)', marginBottom: '1rem' }}>
+            <div className="glass-panel" style={{ padding: '3.5rem 2rem', textAlign: 'center', maxWidth: '540px', margin: '2rem auto' }}>
+              <p style={{ color: 'var(--text-muted)', marginBottom: '1.25rem', fontSize: '1.05rem' }}>
                 No dinosaur movies found matching "<span style={{ color: 'var(--amber-primary)' }}>{searchQuery}</span>"
               </p>
               <button
-                onClick={() => setSearchQuery('')}
+                onClick={() => {
+                  setSearchQuery('');
+                  setMovieSubCategory('all');
+                  setCurrentPage(1);
+                }}
                 className="btn-secondary"
-                style={{ fontSize: '0.85rem', padding: '0.4rem 1rem', borderRadius: '999px' }}
+                style={{ fontSize: '0.85rem', padding: '0.5rem 1.25rem', borderRadius: '999px' }}
               >
-                Clear Search
+                Clear Filters
               </button>
             </div>
           ) : (
             <div className="movie-grid">
               {currentMovies.map((movie) => (
-                <div key={movie.id} className="movie-card">
-                  <div className="movie-poster-wrap">
-                    <img 
-                      src={movie.poster} 
-                      alt={movie.title} 
-                      className="movie-poster"
-                      loading="lazy"
-                    />
-                    <div className="movie-overlay-gradient" />
-                    
-                    <div className="movie-badge-top">
-                      <span className="movie-year-tag">{movie.year}</span>
-                      <span className="movie-rating-tag">
-                        <Star size={11} fill="#F59E0B" color="#F59E0B" />
-                        <span>{movie.rating}</span>
-                      </span>
-                    </div>
+                <div 
+                  key={movie.id} 
+                  className="movie-card"
+                  onClick={() => setSelectedMovieModal(movie)}
+                >
+                  {/* Poster Image */}
+                  <img 
+                    src={movie.poster} 
+                    alt={movie.title} 
+                    className="movie-card-img"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      e.currentTarget.src = "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=600&q=80";
+                    }}
+                  />
 
-                    <div className="movie-footer-info">
-                      <h3 className="movie-title">{movie.title}</h3>
-                      <div className="movie-director">{movie.director}</div>
+                  {/* Gold IMDb Rating Badge at top-right */}
+                  <div className="movie-card-rating">
+                    <Star size={11} fill="#000" color="#000" />
+                    <span>{movie.rating}</span>
+                  </div>
+
+                  {/* Normal Bottom Info Overlay */}
+                  <div className="movie-card-normal-info">
+                    <div className="movie-card-normal-title">{movie.title}</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--amber-light)', marginTop: '3px', fontWeight: '600' }}>
+                      {movie.year} • {movie.runtime}
                     </div>
                   </div>
 
-                  <div className="movie-hover-panel">
-                    <div className="movie-hover-content">
-                      <span className="movie-hover-genre">{movie.genre}</span>
-                      
-                      <div className="movie-hover-meta">
-                        <span className="movie-meta-item">
-                          <Star size={12} fill="#F59E0B" color="#F59E0B" /> {movie.rating}/10 ({movie.votes})
-                        </span>
-                        <span className="movie-meta-item">
-                          <Clock size={11} /> {movie.runtime}
-                        </span>
+                  {/* Hover Details Overlay */}
+                  <div className="movie-card-hover-overlay">
+                    <div>
+                      <div className="movie-hover-header">
+                        <span className="movie-hover-tag">{movie.year}</span>
+                        <span className="movie-hover-tag genre">{movie.genre.split(',')[0]}</span>
                       </div>
 
-                      <p className="movie-hover-desc">
-                        {movie.desc}
-                      </p>
+                      <div className="movie-hover-body">
+                        <h3 className="movie-hover-title">{movie.title}</h3>
+                        <div className="movie-hover-meta">
+                          <User size={12} color="var(--amber-primary)" />
+                          <span>Dir: {movie.director}</span>
+                        </div>
+                        <div className="movie-hover-meta">
+                          <Clock size={11} />
+                          <span>{movie.runtime} • {movie.votes} votes</span>
+                        </div>
+                        <p className="movie-hover-desc">
+                          {movie.desc}
+                        </p>
+                      </div>
                     </div>
 
-                    <a 
-                      href={movie.imdbUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="movie-hover-btn"
-                    >
-                      <span>View on IMDb</span>
-                      <ExternalLink size={13} />
-                    </a>
+                    <div style={{ display: 'flex', gap: '6px', marginTop: 'auto' }}>
+                      <button
+                        type="button"
+                        className="movie-hover-btn"
+                        style={{ flex: 1, cursor: 'pointer' }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedMovieModal(movie);
+                        }}
+                      >
+                        <Eye size={13} />
+                        <span>Quick Dossier</span>
+                      </button>
+
+                      <a 
+                        href={movie.imdbUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="movie-hover-btn"
+                        style={{ 
+                          width: 'auto', 
+                          padding: '0.55rem', 
+                          background: 'rgba(255, 255, 255, 0.1)', 
+                          borderColor: 'rgba(255, 255, 255, 0.2)',
+                          color: '#fff' 
+                        }}
+                        title="View on IMDb"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <ExternalLink size={13} />
+                      </a>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -284,7 +499,7 @@ export default function EntertainmentPage() {
 
           {/* Pagination Controls */}
           {totalMoviePages > 1 && (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', marginTop: '1.5rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', marginTop: '2rem' }}>
               <button
                 className="pagination-btn"
                 onClick={() => handlePageChange(currentPage - 1)}
@@ -729,6 +944,15 @@ export default function EntertainmentPage() {
         </div>
       )}
 
+      {/* Movie Dossier Modal */}
+      {selectedMovieModal && (
+        <MovieModal
+          movie={selectedMovieModal}
+          onClose={() => setSelectedMovieModal(null)}
+          onOpenDinoModal={(dino) => setSelectedDinoModal(dino)}
+        />
+      )}
+
       {/* Book Dossier Modal */}
       {selectedBookModal && (
         <BookModal
@@ -738,7 +962,7 @@ export default function EntertainmentPage() {
         />
       )}
 
-      {/* Dino Bio Sheet Modal (opened from Book Modal specimen links) */}
+      {/* Dino Bio Sheet Modal (opened from Book/Movie Modal specimen links) */}
       {selectedDinoModal && (
         <DinoModal
           dino={selectedDinoModal}
