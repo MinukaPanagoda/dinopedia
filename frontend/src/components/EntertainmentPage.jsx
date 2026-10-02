@@ -1,6 +1,33 @@
 import React, { useState } from 'react';
-import { MOVIES, GAMES, BOOKS } from '../data/entertainment';
-import { Film, Gamepad2, BookOpen, Star, ExternalLink, ChevronLeft, ChevronRight, Sparkles, Clock, Search, X, Monitor, User, Bookmark } from 'lucide-react';
+import { 
+  Film, 
+  Gamepad2, 
+  BookOpen, 
+  Star, 
+  ExternalLink, 
+  ChevronLeft, 
+  ChevronRight, 
+  Sparkles, 
+  Clock, 
+  Search, 
+  X, 
+  Monitor, 
+  User, 
+  Bookmark,
+  Layers,
+  Flame,
+  Compass,
+  Globe,
+  ArrowUpDown,
+  Quote,
+  Eye,
+  CheckCircle2,
+  BookMarked
+} from 'lucide-react';
+import { MOVIES, GAMES, BOOKS, BOOK_SUB_CATEGORIES } from '../data/entertainment';
+import BookModal from './BookModal';
+import DinoModal from './DinoModal';
+import DinoSkull from './DinoSkull';
 
 const ITEMS_PER_PAGE = 8;
 
@@ -8,6 +35,12 @@ export default function EntertainmentPage() {
   const [activeCategory, setActiveCategory] = useState('movies');
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
+  
+  // Books specialized state
+  const [bookSubCategory, setBookSubCategory] = useState('all');
+  const [bookSortBy, setBookSortBy] = useState('featured');
+  const [selectedBookModal, setSelectedBookModal] = useState(null);
+  const [selectedDinoModal, setSelectedDinoModal] = useState(null);
 
   // Filter items based on active category and search
   const filteredMovies = MOVIES.filter(m => 
@@ -22,12 +55,24 @@ export default function EntertainmentPage() {
     g.year.toString().includes(searchQuery)
   );
 
-  const filteredBooks = BOOKS.filter(b =>
-    b.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    b.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    b.genre.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    b.year.toString().includes(searchQuery)
-  );
+  const filteredBooks = BOOKS.filter(b => {
+    const matchesSearch = 
+      b.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      b.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      b.genre.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (b.keyTheme && b.keyTheme.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      b.year.toString().includes(searchQuery);
+
+    const matchesSub = bookSubCategory === 'all' || b.subCategory === bookSubCategory;
+    return matchesSearch && matchesSub;
+  }).sort((a, b) => {
+    if (bookSortBy === 'rating') return parseFloat(b.rating) - parseFloat(a.rating);
+    if (bookSortBy === 'year') return b.year - a.year;
+    if (bookSortBy === 'pages') return b.pages - a.pages;
+    return 0;
+  });
+
+  const spotlightBook = filteredBooks.find(b => b.id === 'rise-and-fall-of-the-dinosaurs') || filteredBooks[0] || BOOKS[0];
 
   // Pagination for movies
   const totalMovieItems = filteredMovies.length;
@@ -409,91 +454,296 @@ export default function EntertainmentPage() {
 
       {/* BOOKS CATEGORY */}
       {activeCategory === 'books' && (
-        <div>
+        <div className="books-hub-root">
+          {/* Sub-Category Filter Pills & Sort Selector */}
+          <div className="books-controls-row">
+            <div className="books-subcategories-bar">
+              {BOOK_SUB_CATEGORIES.map((sub) => {
+                const subCount = sub.id === 'all' 
+                  ? BOOKS.length 
+                  : BOOKS.filter(b => b.subCategory === sub.id).length;
+
+                return (
+                  <button
+                    key={sub.id}
+                    type="button"
+                    className={`books-sub-pill ${bookSubCategory === sub.id ? 'active' : ''}`}
+                    onClick={() => setBookSubCategory(sub.id)}
+                  >
+                    <span>{sub.label}</span>
+                    <span className="books-sub-pill-count">{subCount}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Sort Selector */}
+            <div className="books-sort-wrap">
+              <ArrowUpDown size={14} color="var(--text-dim)" />
+              <label htmlFor="book-sort-select" className="sr-only">Sort Books</label>
+              <select
+                id="book-sort-select"
+                value={bookSortBy}
+                onChange={(e) => setBookSortBy(e.target.value)}
+                className="books-sort-dropdown"
+              >
+                <option value="featured">Featured Curated</option>
+                <option value="rating">Highest Rated ⭐</option>
+                <option value="year">Publication Year</option>
+                <option value="pages">Book Length (Pages)</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Featured Spotlight Hero (Visible when no search or when searching matches spotlight) */}
+          {!searchQuery && spotlightBook && bookSubCategory === 'all' && (
+            <div className="book-spotlight-hero">
+              <div className="book-spotlight-inner">
+                {/* Left: 3D Tilting Book Presentation */}
+                <div 
+                  className="book-spotlight-cover-side"
+                  onClick={() => setSelectedBookModal(spotlightBook)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === 'Enter' && setSelectedBookModal(spotlightBook)}
+                  title="Click to view complete literature dossier"
+                >
+                  <div className="book-card-3d-wrap spotlight">
+                    <div className="book-card-3d-spine" />
+                    <div className="book-card-3d-cover">
+                      <img 
+                        src={spotlightBook.image} 
+                        alt={spotlightBook.title}
+                        className="book-cover-img"
+                        onError={(e) => {
+                          e.currentTarget.src = "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80";
+                        }}
+                      />
+                      <div className="book-cover-glare" />
+                    </div>
+                    <div className="book-card-3d-pages" />
+                  </div>
+                  <div className="book-spotlight-click-hint">
+                    <Eye size={13} /> Click to Inspect 3D Dossier
+                  </div>
+                </div>
+
+                {/* Right: Editorial Showcase Info */}
+                <div className="book-spotlight-info">
+                  <div className="book-spotlight-badge-row">
+                    <span className="book-spotlight-curator-tag">
+                      <Sparkles size={12} /> Curator's Masterpiece of the Month
+                    </span>
+                    <span className="book-rating-badge">
+                      <Star size={13} fill="#F59E0B" color="#F59E0B" />
+                      <strong>{spotlightBook.rating}</strong> / 5.0
+                    </span>
+                  </div>
+
+                  <h2 
+                    className="book-spotlight-title"
+                    onClick={() => setSelectedBookModal(spotlightBook)}
+                  >
+                    {spotlightBook.title}
+                  </h2>
+
+                  <div className="book-spotlight-author-row">
+                    <User size={15} color="var(--amber-primary)" />
+                    <span>
+                      By <strong style={{ color: '#fff' }}>{spotlightBook.author}</strong>
+                      {spotlightBook.authorTitle && ` — ${spotlightBook.authorTitle}`}
+                    </span>
+                  </div>
+
+                  {spotlightBook.quote && (
+                    <div className="book-spotlight-quote">
+                      <Quote size={20} className="book-quote-icon" />
+                      <p>"{spotlightBook.quote}"</p>
+                    </div>
+                  )}
+
+                  <p className="book-spotlight-synopsis">
+                    {spotlightBook.synopsis || spotlightBook.desc}
+                  </p>
+
+                  <div className="book-spotlight-footer">
+                    <div className="book-spotlight-meta-items">
+                      <span><strong>{spotlightBook.pages}</strong> Pages</span>
+                      <span>•</span>
+                      <span>Published <strong>{spotlightBook.year}</strong></span>
+                      <span>•</span>
+                      <span style={{ color: 'var(--amber-light)' }}>{spotlightBook.genre}</span>
+                    </div>
+
+                    <div className="book-spotlight-buttons">
+                      <button 
+                        type="button" 
+                        className="btn-primary"
+                        onClick={() => setSelectedBookModal(spotlightBook)}
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                      >
+                        <BookOpen size={16} />
+                        <span>Inspect Full Dossier</span>
+                      </button>
+
+                      <a 
+                        href={spotlightBook.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="btn-secondary"
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                      >
+                        <span>Goodreads / Publisher</span>
+                        <ExternalLink size={13} />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Filtered Books Grid */}
           {filteredBooks.length === 0 ? (
-            <div className="glass-panel" style={{ padding: '3rem 2rem', textAlign: 'center', maxWidth: '500px', margin: '2rem auto' }}>
-              <p style={{ color: 'var(--text-muted)', marginBottom: '1rem' }}>
+            <div className="glass-panel" style={{ padding: '3.5rem 2rem', textAlign: 'center', maxWidth: '540px', margin: '2rem auto' }}>
+              <p style={{ color: 'var(--text-muted)', marginBottom: '1.25rem', fontSize: '1.05rem' }}>
                 No dinosaur books found matching "<span style={{ color: 'var(--amber-primary)' }}>{searchQuery}</span>"
               </p>
               <button
-                onClick={() => setSearchQuery('')}
+                onClick={() => {
+                  setSearchQuery('');
+                  setBookSubCategory('all');
+                }}
                 className="btn-secondary"
-                style={{ fontSize: '0.85rem', padding: '0.4rem 1rem', borderRadius: '999px' }}
+                style={{ fontSize: '0.85rem', padding: '0.5rem 1.25rem', borderRadius: '999px' }}
               >
-                Clear Search
+                Clear Filters
               </button>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
-              {filteredBooks.map((book) => (
-                <div 
-                  key={book.id} 
-                  className="glass-panel"
-                  style={{
-                    padding: '1.75rem',
-                    borderRadius: '18px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    border: '1px solid rgba(16, 185, 129, 0.25)',
-                    position: 'relative',
-                    overflow: 'hidden'
-                  }}
-                >
-                  <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                      <span style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#10B981', padding: '0.25rem 0.65rem', borderRadius: '999px', fontSize: '0.75rem', fontWeight: '700' }}>
-                        {book.genre}
-                      </span>
-                      <span style={{ color: 'var(--text-dim)', fontSize: '0.8rem', fontWeight: '600' }}>
-                        {book.year}
-                      </span>
-                    </div>
-
-                    <h3 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#fff', marginBottom: '0.25rem' }}>
-                      {book.title}
-                    </h3>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <User size={14} color="#10B981" />
-                      <span>By <strong style={{ color: '#E2E8F0' }}>{book.author}</strong> • {book.scope}</span>
-                    </div>
-
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: '1.6', marginBottom: '1.25rem' }}>
-                      {book.desc}
-                    </p>
-                  </div>
-
-                  <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.8rem', color: '#A7F3D0', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <Bookmark size={13} /> {book.keyTheme}
-                    </span>
-                    <a
-                      href={book.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                        background: 'rgba(16, 185, 129, 0.15)',
-                        color: '#10B981',
-                        padding: '0.4rem 0.85rem',
-                        borderRadius: '999px',
-                        fontSize: '0.78rem',
-                        fontWeight: '700',
-                        textDecoration: 'none',
-                        transition: 'all 0.2s ease'
-                      }}
+            <div className="books-shelf-grid">
+              {filteredBooks.map((book) => {
+                return (
+                  <div 
+                    key={book.id} 
+                    className="book-shelf-card"
+                    style={{ '--book-accent': book.accentColor || '#F59E0B' }}
+                  >
+                    {/* Top: 3D Book Cover Viewport */}
+                    <div 
+                      className="book-card-stage"
+                      onClick={() => setSelectedBookModal(book)}
                     >
-                      <span>Read More</span>
-                      <ExternalLink size={12} />
-                    </a>
+                      <div className="book-card-3d-wrap">
+                        <div className="book-card-3d-spine" />
+                        <div className="book-card-3d-cover">
+                          <img 
+                            src={book.image} 
+                            alt={book.title} 
+                            className="book-cover-img"
+                            loading="lazy"
+                            onError={(e) => {
+                              e.currentTarget.src = "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80";
+                            }}
+                          />
+                          <div className="book-cover-glare" />
+                        </div>
+                        <div className="book-card-3d-pages" />
+                      </div>
+
+                      {/* Quick Hover Inspect Badge */}
+                      <div className="book-card-hover-overlay">
+                        <span className="book-card-hover-chip">
+                          <Eye size={14} /> Quick Dossier
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Book Metadata & Text Area */}
+                    <div className="book-card-body">
+                      {/* Rating & Scope Pill */}
+                      <div className="book-card-top-row">
+                        <span className="book-rating-pill">
+                          <Star size={12} fill="#F59E0B" color="#F59E0B" />
+                          <span>{book.rating}</span>
+                        </span>
+                        <span className="book-pages-pill">
+                          {book.pages}p • {book.year}
+                        </span>
+                      </div>
+
+                      {/* Title */}
+                      <h3 
+                        className="book-card-title"
+                        onClick={() => setSelectedBookModal(book)}
+                      >
+                        {book.title}
+                      </h3>
+
+                      {/* Author */}
+                      <div className="book-card-author">
+                        <User size={13} color="var(--book-accent)" />
+                        <span>By <strong>{book.author}</strong></span>
+                      </div>
+
+                      {/* Synopsis Snippet */}
+                      <p className="book-card-desc">
+                        {book.desc}
+                      </p>
+
+                      {/* Thematic Chip */}
+                      {book.keyTheme && (
+                        <div className="book-card-theme-tag">
+                          <Bookmark size={11} /> {book.keyTheme}
+                        </div>
+                      )}
+
+                      {/* Action Bar */}
+                      <div className="book-card-action-bar">
+                        <button
+                          type="button"
+                          className="book-card-dossier-btn"
+                          onClick={() => setSelectedBookModal(book)}
+                        >
+                          <BookOpen size={13} />
+                          <span>Dossier</span>
+                        </button>
+
+                        <a
+                          href={book.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="book-card-read-btn"
+                          title="View on Goodreads / Publisher"
+                        >
+                          <span>Explore</span>
+                          <ExternalLink size={12} />
+                        </a>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
+      )}
+
+      {/* Book Dossier Modal */}
+      {selectedBookModal && (
+        <BookModal
+          book={selectedBookModal}
+          onClose={() => setSelectedBookModal(null)}
+          onOpenDinoModal={(dino) => setSelectedDinoModal(dino)}
+        />
+      )}
+
+      {/* Dino Bio Sheet Modal (opened from Book Modal specimen links) */}
+      {selectedDinoModal && (
+        <DinoModal
+          dino={selectedDinoModal}
+          onClose={() => setSelectedDinoModal(null)}
+        />
       )}
     </div>
   );
