@@ -272,12 +272,12 @@ export default function HomePage({
             className="hero-fixed-title"
             style={{
               fontFamily: 'var(--font-heading)',
-              fontSize: 'clamp(1.85rem, 5.5vw, 4.4rem)',
+              fontSize: 'clamp(2rem, 5.5vw, 4.5rem)',
               fontWeight: '900',
-              lineHeight: '1.18',
-              letterSpacing: '-0.02em',
-              color: '#FEF3C7',
-              textShadow: '0 4px 24px rgba(0, 0, 0, 0.95), 0 0 35px rgba(245, 158, 11, 0.45)',
+              lineHeight: '1.15',
+              letterSpacing: '-0.025em',
+              color: '#FFFFFF',
+              textShadow: '0 4px 30px rgba(0, 0, 0, 0.95), 0 2px 10px rgba(0, 0, 0, 0.8)',
               marginBottom: '1.25rem'
             }}
           >
@@ -285,12 +285,14 @@ export default function HomePage({
           </h1>
 
           <p style={{ 
-            fontSize: 'clamp(0.95rem, 2vw, 1.25rem)', 
-            color: '#E5E7EB', 
-            maxWidth: '720px', 
+            fontSize: 'clamp(1rem, 2.2vw, 1.25rem)', 
+            color: '#F1F5F9', 
+            maxWidth: '740px', 
             margin: '0 auto 2.5rem',
-            lineHeight: '1.6',
-            textShadow: '0 2px 10px rgba(0,0,0,0.8)'
+            lineHeight: '1.75',
+            fontWeight: '400',
+            letterSpacing: '0.01em',
+            textShadow: '0 2px 14px rgba(0, 0, 0, 0.95)'
           }}>
             From the fiery ashes of the pre-dinosaur Paleozoic world to the golden age of Jurassic titans. Journey across 500 million years of evolutionary wonder.
           </p>
@@ -360,8 +362,8 @@ export default function HomePage({
                 fontWeight: '700',
                 borderRadius: '9999px',
                 background: 'rgba(245, 158, 11, 0.15)',
-                color: '#FEF3C7',
-                border: '1px solid rgba(245, 158, 11, 0.35)',
+                color: '#FDE68A',
+                border: '1px solid rgba(245, 158, 11, 0.45)',
                 backdropFilter: 'blur(10px)',
                 cursor: 'pointer'
               }}
@@ -729,7 +731,7 @@ export default function HomePage({
             <h3 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#fff', marginBottom: '0.5rem' }}>
               No Prehistoric Specimens Found
             </h3>
-            <p style={{ color: 'var(--text-dim)', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '1.5rem' }}>
+            <p style={{ color: '#CBD5E1', fontSize: '1rem', lineHeight: '1.65', marginBottom: '1.5rem' }}>
               No dinosaur matches "{localQuery}". Try searching for <strong>Tyrannosaurus</strong>, <strong>T-Rex</strong>, <strong>Velociraptor</strong>, <strong>Spinosaurus</strong>, or <strong>Stegosaurus</strong>.
             </p>
             <button
@@ -862,11 +864,11 @@ export default function HomePage({
               )}
 
               {/* 4 Landmark Pre-Dinosaur Epochs */}
-              <div style={{ marginBottom: '1.5rem', textAlign: 'center' }}>
-                <h3 style={{ fontSize: '1.45rem', fontWeight: '800', color: '#fff', marginBottom: '0.4rem' }}>
+              <div style={{ marginBottom: '1.75rem', textAlign: 'center' }}>
+                <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#FFFFFF', marginBottom: '0.4rem' }}>
                   The 4 Evolutionary Chapters Leading to Dinosaurs
                 </h3>
-                <p style={{ color: 'var(--text-dim)', fontSize: '0.92rem' }}>
+                <p style={{ color: '#CBD5E1', fontSize: '0.98rem', lineHeight: '1.6' }}>
                   How life evolved from simple sea organisms into towering terrestrial predators
                 </p>
               </div>
@@ -885,11 +887,11 @@ export default function HomePage({
               </div>
 
               {/* Prehistoric Creatures Spotlight (Not Dinosaurs!) */}
-              <div style={{ marginBottom: '1.5rem', textAlign: 'center' }}>
-                <h3 style={{ fontSize: '1.45rem', fontWeight: '800', color: '#fff', marginBottom: '0.4rem' }}>
+              <div style={{ marginBottom: '1.75rem', textAlign: 'center' }}>
+                <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#FFFFFF', marginBottom: '0.4rem' }}>
                   Titans of the Ancient Earth (The Non-Dinosaurs)
                 </h3>
-                <p style={{ color: 'var(--text-dim)', fontSize: '0.92rem' }}>
+                <p style={{ color: '#CBD5E1', fontSize: '0.98rem', lineHeight: '1.6' }}>
                   Famous prehistoric animals that ruled Earth millions of years before dinosaurs existed
                 </p>
               </div>

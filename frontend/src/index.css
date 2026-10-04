@@ -16,9 +16,9 @@
   --rose-primary: #F43F5E;
   --blue-primary: #38BDF8;
   
-  --text-main: #F8FAFC;
-  --text-muted: #94A3B8;
-  --text-dim: #64748B;
+  --text-main: #FFFFFF;
+  --text-muted: #CBD5E1;
+  --text-dim: #94A3B8;
   
   --border-subtle: rgba(255, 255, 255, 0.08);
   --border-glow: rgba(245, 158, 11, 0.25);
@@ -356,9 +356,10 @@ button {
 }
 
 .hero-title-gradient {
-  background: linear-gradient(135deg, #FEF08A 10%, #F59E0B 50%, #EA580C 100%);
+  background: linear-gradient(135deg, #FFFBEB 0%, #FDE68A 25%, #F59E0B 65%, #EA580C 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 12px rgba(245, 158, 11, 0.45));
 }
 
 .hero-subtitle {
@@ -461,13 +462,20 @@ button {
 .section-tag {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.45rem;
   font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--emerald-primary);
-  margin-bottom: 0.5rem;
+  color: #FCD34D;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  padding: 0.35rem 0.95rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 0.75rem;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .section-title {
@@ -701,21 +709,37 @@ button {
   font-family: var(--font-heading);
   font-size: 1.45rem;
   font-weight: 800;
-  color: #fff;
+  color: #FFFFFF;
   letter-spacing: -0.01em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 .dino-meaning {
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   font-style: italic;
-  color: var(--text-dim);
+  font-weight: 500;
+  color: #FCD34D;
   margin-bottom: 0.85rem;
+  letter-spacing: 0.01em;
+}
+
+.dino-type-pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #E2E8F0;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9999px;
+  padding: 0.2rem 0.65rem;
+  letter-spacing: 0.03em;
 }
 
 .dino-card-desc {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  line-height: 1.6;
+  font-size: 0.92rem;
+  color: #CBD5E1;
+  line-height: 1.65;
   margin-bottom: 1.25rem;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -727,8 +751,8 @@ button {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-sm);
   padding: 0.75rem 0.5rem;
   text-align: center;
@@ -743,17 +767,18 @@ button {
 
 .dino-stat-val {
   font-family: var(--font-heading);
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #FFFFFF;
 }
 
 .dino-stat-lbl {
-  font-size: 0.7rem;
-  color: var(--text-dim);
+  font-size: 0.72rem;
+  color: #94A3B8;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-top: 0.1rem;
+  letter-spacing: 0.06em;
+  margin-top: 0.15rem;
 }
 
 .dino-card-btn {
@@ -1601,19 +1626,20 @@ button {
 
 .timeline-stage-title {
   font-family: var(--font-heading);
-  font-size: clamp(2rem, 4.2vw, 2.9rem);
-  font-weight: 800;
-  color: #fff;
+  font-size: clamp(2rem, 4.2vw, 3rem);
+  font-weight: 900;
+  color: #FFFFFF;
   letter-spacing: -0.02em;
   margin-bottom: 0.6rem;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
 }
 
 .timeline-stage-subtitle {
-  color: var(--text-muted);
-  font-size: 1.05rem;
-  max-width: 680px;
+  color: #CBD5E1;
+  font-size: 1.08rem;
+  max-width: 720px;
   margin: 0 auto;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 /* Stepper Track & Tabs */
@@ -1692,15 +1718,16 @@ button {
 
 .timeline-step-title {
   font-weight: 700;
-  font-size: 0.88rem;
-  color: #F8FAFC;
+  font-size: 0.9rem;
+  color: #FFFFFF;
   white-space: nowrap;
 }
 
 .timeline-step-span {
-  font-size: 0.72rem;
-  color: var(--text-dim);
+  font-size: 0.74rem;
+  color: #94A3B8;
   white-space: nowrap;
+  font-weight: 500;
 }
 
 .timeline-step-btn.active .timeline-step-span {
@@ -1884,16 +1911,17 @@ button {
 .pre-dino-title {
   font-family: var(--font-heading);
   font-size: clamp(2rem, 3.8vw, 3rem);
-  font-weight: 800;
-  color: #fff;
+  font-weight: 900;
+  color: #FFFFFF;
   line-height: 1.2;
   margin-bottom: 0.75rem;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
 }
 
 .pre-dino-overview {
-  font-size: 1.05rem;
-  color: var(--text-muted);
-  line-height: 1.7;
+  font-size: 1.08rem;
+  color: #CBD5E1;
+  line-height: 1.75;
 }
 
 /* Atmospheric Conditions Bar */
@@ -2396,9 +2424,9 @@ button {
 }
 
 .period-description {
-  font-size: 1.02rem;
-  color: var(--text-muted);
-  line-height: 1.7;
+  font-size: 1.06rem;
+  color: #CBD5E1;
+  line-height: 1.75;
   margin-bottom: 2rem;
 }
 
@@ -2434,29 +2462,30 @@ button {
 }
 
 .period-dino-name {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 800;
-  color: #fff;
+  color: #FFFFFF;
   margin-bottom: 0.2rem;
 }
 
 .period-dino-role {
-  font-size: 0.78rem;
-  color: var(--amber-light);
+  font-size: 0.8rem;
+  color: #FCD34D;
   font-weight: 700;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.5rem;
 }
 
 .period-dino-size {
-  font-size: 0.8rem;
-  color: var(--text-dim);
+  font-size: 0.82rem;
+  color: #94A3B8;
   margin-bottom: 0.6rem;
+  font-weight: 600;
 }
 
 .period-dino-fact {
-  font-size: 0.84rem;
-  color: var(--text-muted);
-  line-height: 1.5;
+  font-size: 0.88rem;
+  color: #CBD5E1;
+  line-height: 1.55;
 }
 
 /* Responsive Enhancements for Timeline Stage & Eras */
@@ -3785,21 +3814,23 @@ button {
   font-family: var(--font-heading);
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 900;
-  color: #fff;
+  color: #FFFFFF;
   letter-spacing: -0.02em;
   margin-bottom: 0.75rem;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
 }
 
 .home-archive-title span {
-  background: linear-gradient(135deg, #F59E0B, #EF4444);
+  background: linear-gradient(135deg, #FFF7ED 0%, #FDE68A 30%, #F59E0B 70%, #EF4444 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 12px rgba(245, 158, 11, 0.4));
 }
 
 .home-archive-subtitle {
-  color: var(--text-dim);
-  font-size: 1.05rem;
-  line-height: 1.6;
+  color: #CBD5E1;
+  font-size: 1.08rem;
+  line-height: 1.7;
 }
 
 /* Home Search Bar Control Hub */
@@ -4030,12 +4061,13 @@ button {
 }
 
 .era-card-count {
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   font-weight: 800;
-  padding: 0.2rem 0.6rem;
+  padding: 0.22rem 0.65rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #E2E8F0;
 }
 
 .era-card-button.active .era-card-count {
@@ -4046,22 +4078,23 @@ button {
 .era-card-name {
   font-family: var(--font-heading);
   font-weight: 800;
-  font-size: 1.05rem;
-  color: #fff;
+  font-size: 1.08rem;
+  color: #FFFFFF;
   margin-bottom: 0.2rem;
 }
 
 .era-card-dates {
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 700;
   color: var(--era-theme, #F59E0B);
   margin-bottom: 0.35rem;
+  letter-spacing: 0.02em;
 }
 
 .era-card-tagline {
-  font-size: 0.75rem;
-  color: var(--text-dim);
-  line-height: 1.35;
+  font-size: 0.8rem;
+  color: #CBD5E1;
+  line-height: 1.45;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -4127,9 +4160,9 @@ button {
 }
 
 .era-intel-desc {
-  font-size: 0.86rem;
-  color: var(--text-dim);
-  line-height: 1.45;
+  font-size: 0.92rem;
+  color: #CBD5E1;
+  line-height: 1.6;
 }
 
 .era-intel-stats {
@@ -4146,18 +4179,18 @@ button {
 }
 
 .era-intel-stat-val {
-  font-size: 0.8rem;
+  font-size: 0.86rem;
   font-weight: 700;
-  color: #fff;
+  color: #FFFFFF;
   max-width: 170px;
 }
 
 .era-intel-stat-lbl {
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   color: var(--era-theme, #F59E0B);
   text-transform: uppercase;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   margin-bottom: 2px;
 }
 
@@ -4200,37 +4233,38 @@ button {
 }
 
 .era-subfilter-label {
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  color: var(--text-dim);
+  color: #CBD5E1;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   margin-right: 0.25rem;
 }
 
 .era-subfilter-pill {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #CBD5E1;
   padding: 0.35rem 0.85rem;
   border-radius: 999px;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .era-subfilter-pill:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .era-subfilter-pill.active {
-  background: rgba(245, 158, 11, 0.2);
-  border-color: var(--amber-primary);
-  color: var(--amber-light);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(217, 119, 6, 0.4));
+  border-color: #F59E0B;
+  color: #FFFFFF;
   font-weight: 700;
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.35);
 }
 
 .era-sort-select {
