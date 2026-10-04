@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   X, 
   ExternalLink, 
@@ -11,12 +11,15 @@ import {
   Layers, 
   Compass, 
   ArrowRight,
-  Sparkles
+  Sparkles,
+  Copy,
+  Check
 } from 'lucide-react';
 import { DINOSAURS } from '../data/dinosaurs';
 import DinoSkull from './DinoSkull';
 
 export default function BookModal({ book, onClose, onSelectDino, onOpenDinoModal }) {
+  const [copied, setCopied] = useState(false);
   if (!book) return null;
 
   // Close on Escape key
@@ -48,6 +51,14 @@ export default function BookModal({ book, onClose, onSelectDino, onOpenDinoModal
     } else if (onSelectDino) {
       onSelectDino(dino);
     }
+  };
+
+  const handleCopyCitation = () => {
+    const citation = `${book.author} (${book.year || 'n.d.'}). ${book.title}. ${book.publisher || 'Paleontology Reference Library'}.`;
+    navigator.clipboard?.writeText(citation).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }).catch(() => {});
   };
 
   return (
@@ -216,6 +227,16 @@ export default function BookModal({ book, onClose, onSelectDino, onOpenDinoModal
                 <span>Read & Explore on Goodreads / Publisher</span>
                 <ExternalLink size={15} />
               </a>
+              <button 
+                type="button" 
+                className="book-secondary-action-btn" 
+                onClick={handleCopyCitation}
+                title="Copy academic reference citation"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              >
+                {copied ? <Check size={14} style={{ color: '#10B981' }} /> : <Copy size={14} />}
+                <span>{copied ? 'Citation Copied!' : 'Copy Citation'}</span>
+              </button>
               <button 
                 type="button" 
                 className="book-secondary-action-btn" 
