@@ -558,102 +558,73 @@ export default function EntertainmentPage() {
               </button>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+            <div className="games-grid">
               {filteredGames.map((game) => (
                 <div 
                   key={game.id} 
-                  className="glass-panel game-card-item"
-                  style={{
-                    borderRadius: '18px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    border: '1px solid rgba(56, 189, 248, 0.25)',
-                    position: 'relative',
-                    overflow: 'hidden',
-                    transition: 'transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease'
-                  }}
+                  className="game-card"
                 >
-                  {/* Game Photo / Banner Header */}
-                  {game.image && (
-                    <div style={{ position: 'relative', width: '100%', height: '175px', overflow: 'hidden' }}>
-                      <img 
-                        src={game.image} 
-                        alt={game.title} 
-                        loading="lazy"
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                          display: 'block',
-                          transition: 'transform 0.4s ease'
-                        }}
-                        className="game-cover-img"
-                      />
-                      <div 
-                        style={{
-                          position: 'absolute',
-                          inset: 0,
-                          background: 'linear-gradient(to bottom, rgba(14, 20, 27, 0.1) 0%, rgba(14, 20, 27, 0.85) 85%, var(--bg-surface) 100%)'
-                        }}
-                      />
-                      <div style={{ position: 'absolute', top: '12px', left: '12px', display: 'flex', gap: '6px' }}>
-                        <span style={{ background: 'rgba(14, 20, 27, 0.75)', backdropFilter: 'blur(8px)', color: '#38BDF8', padding: '0.25rem 0.65rem', borderRadius: '999px', fontSize: '0.72rem', fontWeight: '700', border: '1px solid rgba(56, 189, 248, 0.3)' }}>
-                          {game.genre}
-                        </span>
-                      </div>
-                      <div style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(14, 20, 27, 0.75)', backdropFilter: 'blur(8px)', padding: '0.2rem 0.55rem', borderRadius: '8px', border: '1px solid rgba(245, 158, 11, 0.3)', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', fontWeight: '700', color: 'var(--amber-light)' }}>
-                        <Star size={11} fill="#F59E0B" color="#F59E0B" />
-                        <span>{game.rating}</span>
-                      </div>
+                  {/* Game Photo / Banner Header (16:9) */}
+                  <div className="game-card-media">
+                    <img 
+                      src={game.image} 
+                      alt={game.title} 
+                      loading="lazy"
+                      referrerPolicy="no-referrer"
+                      className="game-card-img"
+                      onError={(e) => {
+                        e.currentTarget.src = "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80";
+                      }}
+                    />
+                    <div className="game-media-overlay" />
+                    
+                    {/* Genre Tag */}
+                    <div className="game-genre-badge">
+                      {game.genre}
                     </div>
-                  )}
 
-                  <div style={{ padding: '1.25rem 1.5rem 1.25rem 1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.35rem' }}>
-                      <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#fff' }}>
+                    {/* Rating Tag */}
+                    <div className="game-rating-badge">
+                      <Star size={11} fill="#F59E0B" color="#F59E0B" />
+                      <span>{game.rating}</span>
+                    </div>
+                  </div>
+
+                  {/* Card Content Body */}
+                  <div className="game-card-body">
+                    <div className="game-card-title-row">
+                      <h3 className="game-card-title">
                         {game.title}
                       </h3>
-                      <span style={{ color: 'var(--text-dim)', fontSize: '0.8rem', fontWeight: '700' }}>
+                      <span className="game-card-year">
                         {game.year}
                       </span>
                     </div>
 
-                    <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '0.85rem' }}>
+                    <div className="game-card-dev">
                       Dev: <strong style={{ color: '#E2E8F0' }}>{game.developer}</strong>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: '#BAE6FD', marginBottom: '0.85rem', background: 'rgba(56, 189, 248, 0.08)', padding: '0.35rem 0.7rem', borderRadius: '8px' }}>
-                      <Monitor size={14} />
+                    <div className="game-card-platform">
+                      <Monitor size={13} />
                       <span>{game.platform}</span>
                     </div>
 
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', lineHeight: '1.55', marginBottom: '1.25rem', flex: 1 }}>
+                    <p className="game-card-desc">
                       {game.desc}
                     </p>
 
-                    <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '0.9rem', marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: '0.78rem', color: 'var(--amber-light)', fontWeight: '600' }}>
-                        ⚡ {game.highlight}
+                    <div className="game-card-footer">
+                      <span className="game-highlight-tag" title={game.highlight}>
+                        <Sparkles size={12} color="#F59E0B" style={{ flexShrink: 0 }} />
+                        <span>{game.highlight}</span>
                       </span>
+
                       <a
                         href={game.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '6px',
-                          background: 'rgba(56, 189, 248, 0.15)',
-                          color: '#38BDF8',
-                          padding: '0.35rem 0.85rem',
-                          borderRadius: '999px',
-                          fontSize: '0.78rem',
-                          fontWeight: '700',
-                          textDecoration: 'none',
-                          border: '1px solid rgba(56, 189, 248, 0.35)',
-                          transition: 'all 0.2s ease'
-                        }}
+                        className="game-action-btn"
                       >
                         <span>Play / Explore</span>
                         <ExternalLink size={12} />

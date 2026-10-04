@@ -1451,261 +1451,6 @@ button {
   }
 }
 
-/* ==========================================================================
-   Compact Movie Cards & Interactive Hover-Reveal Styles (4 Cards Per Row)
-   ========================================================================== */
-.movie-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-  margin-bottom: 3rem;
-}
-
-@media (max-width: 1100px) {
-  .movie-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.25rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .movie-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .movie-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-}
-
-.movie-card {
-  position: relative;
-  border-radius: 16px;
-  overflow: hidden;
-  height: 380px;
-  background: #0B1015;
-  border: 1px solid var(--border-subtle);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform, box-shadow;
-  cursor: pointer;
-}
-
-@media (max-width: 768px) {
-  .movie-card {
-    height: 330px;
-    border-radius: 14px;
-  }
-}
-
-@media (max-width: 480px) {
-  .movie-card {
-    height: 380px;
-  }
-}
-
-.movie-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  border-color: rgba(245, 158, 11, 0.55);
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.85),
-              0 0 25px -4px rgba(245, 158, 11, 0.35);
-  z-index: 10;
-}
-
-.movie-card-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-              filter 0.5s ease;
-}
-
-.movie-card:hover .movie-card-img {
-  transform: scale(1.08);
-  filter: brightness(0.4) blur(2px);
-}
-
-/* Rating badge: visible in both normal & hover, stays top-right */
-.movie-card-rating {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  background: #F5C518;
-  color: #000;
-  padding: 0.25rem 0.55rem;
-  border-radius: 7px;
-  font-weight: 800;
-  font-size: 0.78rem;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.65);
-  z-index: 6;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.movie-card:hover .movie-card-rating {
-  transform: scale(1.06);
-}
-
-/* Normal State: Movie Title at Bottom */
-.movie-card-normal-info {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 3rem 0.85rem 0.85rem;
-  background: linear-gradient(to top, rgba(7, 10, 14, 0.96) 0%, rgba(7, 10, 14, 0.65) 60%, transparent 100%);
-  z-index: 3;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  pointer-events: none;
-}
-
-.movie-card-normal-title {
-  font-size: 0.96rem;
-  font-weight: 700;
-  color: #fff;
-  line-height: 1.3;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
-}
-
-.movie-card:hover .movie-card-normal-info {
-  opacity: 0;
-  transform: translateY(8px);
-}
-
-/* Hover-Reveal Overlay with Complete Details */
-.movie-card-hover-overlay {
-  position: absolute;
-  inset: 0;
-  padding: 1rem 0.85rem 0.85rem;
-  background: linear-gradient(
-    to top,
-    rgba(9, 13, 19, 0.98) 0%,
-    rgba(9, 13, 19, 0.93) 55%,
-    rgba(9, 13, 19, 0.8) 100%
-  );
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  pointer-events: none;
-  z-index: 5;
-}
-
-.movie-card:hover .movie-card-hover-overlay {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-.movie-hover-header {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-  padding-right: 3.5rem; /* Space for rating badge */
-  margin-bottom: 0.4rem;
-}
-
-.movie-hover-tag {
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 0.18rem 0.48rem;
-  border-radius: 6px;
-  background: rgba(245, 158, 11, 0.15);
-  color: var(--amber-light);
-  border: 1px solid rgba(245, 158, 11, 0.3);
-}
-
-.movie-hover-tag.genre {
-  background: rgba(255, 255, 255, 0.08);
-  color: #E5E7EB;
-  border-color: rgba(255, 255, 255, 0.12);
-}
-
-.movie-hover-body {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  justify-content: center;
-}
-
-.movie-hover-title {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: #fff;
-  line-height: 1.25;
-  margin-bottom: 0.25rem;
-}
-
-.movie-hover-meta {
-  font-size: 0.75rem;
-  color: var(--text-dim);
-  margin-bottom: 0.45rem;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.movie-hover-desc {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  line-height: 1.45;
-  margin-bottom: 0.6rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-@media (max-width: 640px) {
-  .movie-hover-desc {
-    -webkit-line-clamp: 2;
-    font-size: 0.73rem;
-  }
-  .movie-hover-title {
-    font-size: 0.95rem;
-  }
-}
-
-.movie-hover-btn {
-  width: 100%;
-  justify-content: center;
-  font-size: 0.8rem;
-  font-weight: 700;
-  padding: 0.55rem 0.85rem;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.28), rgba(245, 158, 11, 0.1));
-  border: 1px solid rgba(245, 158, 11, 0.5);
-  color: #FDE68A;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
-}
-
-.movie-hover-btn:hover {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.45), rgba(245, 158, 11, 0.25));
-  border-color: var(--amber-primary);
-  color: #fff;
-  transform: translateY(-1px);
-}
 
 /* ==========================================================================
    Sticky Category Filter Bar for Entertainment Page
@@ -6142,21 +5887,38 @@ button {
 }
 
 /* Movie Grid Layout */
+/* Movie Grid Layout */
 .movie-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 1.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3.5rem;
+}
+
+@media (max-width: 640px) {
+  .movie-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .movie-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 }
 
 /* Movie Card Poster Card */
 .movie-card {
   position: relative;
   aspect-ratio: 2 / 3;
-  border-radius: 18px;
+  height: auto;
+  border-radius: 16px;
   overflow: hidden;
   background: #0B1015;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.65);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6);
   cursor: pointer;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
 }
@@ -6164,7 +5926,7 @@ button {
 .movie-card:hover {
   transform: translateY(-8px) scale(1.02);
   border-color: rgba(245, 197, 24, 0.6);
-  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.85), 0 0 30px rgba(245, 197, 24, 0.25);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.85), 0 0 25px rgba(245, 197, 24, 0.25);
 }
 
 .movie-card-img {
@@ -6177,25 +5939,25 @@ button {
 
 .movie-card:hover .movie-card-img {
   transform: scale(1.08);
-  filter: blur(2px) brightness(0.45);
+  filter: blur(2px) brightness(0.42);
 }
 
 /* Gold IMDb Rating Badge */
 .movie-card-rating {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 10px;
+  right: 10px;
   background: #F5C518;
   color: #000;
   font-weight: 800;
-  font-size: 0.78rem;
-  padding: 0.22rem 0.55rem;
-  border-radius: 8px;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 7px;
   display: flex;
   align-items: center;
   gap: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  z-index: 4;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  z-index: 6;
 }
 
 /* Normal Bottom Overlay */
@@ -6204,22 +5966,22 @@ button {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 3rem 1.2rem 1.2rem;
-  background: linear-gradient(to top, rgba(7, 11, 16, 0.98) 0%, rgba(7, 11, 16, 0.75) 60%, transparent 100%);
+  padding: 2.5rem 1rem 0.95rem;
+  background: linear-gradient(to top, rgba(7, 11, 16, 0.98) 0%, rgba(7, 11, 16, 0.65) 60%, transparent 100%);
   z-index: 2;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
 .movie-card:hover .movie-card-normal-info {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(8px);
   pointer-events: none;
 }
 
 .movie-card-normal-title {
   color: #fff;
   font-weight: 800;
-  font-size: 1.05rem;
+  font-size: 1rem;
   line-height: 1.3;
   margin: 0;
   overflow: hidden;
@@ -6233,17 +5995,17 @@ button {
 .movie-card-hover-overlay {
   position: absolute;
   inset: 0;
-  padding: 1.25rem;
-  background: rgba(8, 12, 18, 0.92);
+  padding: 1rem 0.95rem 0.85rem;
+  background: rgba(8, 12, 18, 0.93);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  z-index: 3;
+  z-index: 5;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .movie-card:hover .movie-card-hover-overlay {
@@ -6253,16 +6015,17 @@ button {
 
 .movie-hover-header {
   display: flex;
-  gap: 6px;
+  gap: 5px;
   flex-wrap: wrap;
-  margin-bottom: 0.65rem;
+  padding-right: 3.8rem; /* Clear space for gold rating badge */
+  margin-bottom: 0.45rem;
 }
 
 .movie-hover-tag {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 700;
-  padding: 0.2rem 0.55rem;
-  border-radius: 6px;
+  padding: 0.18rem 0.45rem;
+  border-radius: 5px;
   background: rgba(255, 255, 255, 0.1);
   color: #fff;
 }
@@ -6276,34 +6039,39 @@ button {
 .movie-hover-body {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.25rem;
+  flex: 1;
 }
 
 .movie-hover-title {
   color: #fff;
-  font-size: 1.12rem;
+  font-size: 1.05rem;
   font-weight: 800;
   line-height: 1.25;
-  margin: 0 0 0.25rem;
+  margin: 0 0 0.15rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .movie-hover-meta {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   color: var(--text-dim);
 }
 
 .movie-hover-desc {
-  font-size: 0.78rem;
-  line-height: 1.45;
+  font-size: 0.76rem;
+  line-height: 1.4;
   color: var(--text-muted);
-  margin-top: 0.5rem;
+  margin-top: 0.35rem;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
 
@@ -6311,12 +6079,12 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 5px;
   background: linear-gradient(135deg, #F5C518, #D97706);
   color: #000;
   font-weight: 800;
-  font-size: 0.78rem;
-  padding: 0.55rem 0.85rem;
+  font-size: 0.76rem;
+  padding: 0.5rem 0.75rem;
   border-radius: 8px;
   border: none;
   text-decoration: none;
@@ -6325,6 +6093,221 @@ button {
 
 .movie-hover-btn:hover {
   filter: brightness(1.12);
+  transform: translateY(-1px);
+}
+
+/* =========================================================================
+   GAME HUB STYLING (EntertainmentPage.jsx)
+   ========================================================================= */
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.75rem;
+  margin-bottom: 3.5rem;
+}
+
+@media (max-width: 768px) {
+  .games-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+
+.game-card {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(11, 16, 22, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.35s ease, 
+              box-shadow 0.35s ease;
+}
+
+.game-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(56, 189, 248, 0.55);
+  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.85), 0 0 25px rgba(56, 189, 248, 0.2);
+}
+
+.game-card-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #060A0E;
+}
+
+.game-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.game-card:hover .game-card-img {
+  transform: scale(1.07);
+}
+
+.game-media-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(11, 16, 22, 0.1) 0%, rgba(11, 16, 22, 0.82) 85%, rgba(11, 16, 22, 0.98) 100%);
+  pointer-events: none;
+}
+
+.game-genre-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(14, 20, 27, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #38BDF8;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  z-index: 2;
+}
+
+.game-rating-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(14, 20, 27, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 0.22rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--amber-light);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  z-index: 2;
+}
+
+.game-card-body {
+  padding: 1.25rem 1.4rem 1.4rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-card-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.game-card-title {
+  font-size: 1.22rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.game-card-year {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.game-card-dev {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.game-card-platform {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.76rem;
+  color: #BAE6FD;
+  margin-bottom: 0.85rem;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  padding: 0.3rem 0.65rem;
+  border-radius: 8px;
+  width: fit-content;
+}
+
+.game-card-desc {
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  line-height: 1.55;
+  margin-bottom: 1.25rem;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.game-card-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 0.9rem;
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.game-highlight-tag {
+  font-size: 0.76rem;
+  color: var(--amber-light);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.game-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(56, 189, 248, 0.14);
+  color: #38BDF8;
+  padding: 0.42rem 0.95rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.game-action-btn:hover {
+  background: rgba(56, 189, 248, 0.28);
+  border-color: #38BDF8;
+  color: #fff;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
   transform: translateY(-1px);
 }
 

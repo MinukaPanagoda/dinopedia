@@ -391,7 +391,7 @@ export const GAMES = [
     genre: "Survival Horror",
     platform: "PlayStation, PC",
     rating: "9.0/10",
-    image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80",
     desc: "Directed by Shinji Mikami. Special ops operative Regina investigates an isolated research facility overrun by vicious velociraptors and a relentless Tyrannosaurus.",
     highlight: "Legendary Panic Horror Classic",
     url: "https://en.wikipedia.org/wiki/Dino_Crisis"
