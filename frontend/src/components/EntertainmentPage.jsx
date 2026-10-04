@@ -167,7 +167,7 @@ export default function EntertainmentPage() {
 
       {/* Common Search Box */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-        <div style={{ color: 'var(--text-dim)', fontSize: '0.88rem' }}>
+        <div style={{ color: '#CBD5E1', fontSize: '0.9rem', fontWeight: '500' }}>
           {activeCategory === 'movies' && (
             <span>Showing <strong style={{ color: '#fff' }}>{totalMovieItems > 0 ? movieStartIndex + 1 : 0}–{movieEndIndex}</strong> of <strong style={{ color: '#fff' }}>{totalMovieItems}</strong> IMDb dinosaur movies</span>
           )}
@@ -386,7 +386,7 @@ export default function EntertainmentPage() {
           {/* Movies Grid */}
           {filteredMovies.length === 0 ? (
             <div className="glass-panel" style={{ padding: '3.5rem 2rem', textAlign: 'center', maxWidth: '540px', margin: '2rem auto' }}>
-              <p style={{ color: 'var(--text-muted)', marginBottom: '1.25rem', fontSize: '1.05rem' }}>
+              <p style={{ color: '#CBD5E1', marginBottom: '1.25rem', fontSize: '1.05rem' }}>
                 No dinosaur movies found matching "<span style={{ color: 'var(--amber-primary)' }}>{searchQuery}</span>"
               </p>
               <button
@@ -546,7 +546,7 @@ export default function EntertainmentPage() {
         <div>
           {filteredGames.length === 0 ? (
             <div className="glass-panel" style={{ padding: '3rem 2rem', textAlign: 'center', maxWidth: '500px', margin: '2rem auto' }}>
-              <p style={{ color: 'var(--text-muted)', marginBottom: '1rem' }}>
+              <p style={{ color: '#CBD5E1', marginBottom: '1rem', fontSize: '1.05rem' }}>
                 No dinosaur games found matching "<span style={{ color: 'var(--amber-primary)' }}>{searchQuery}</span>"
               </p>
               <button
@@ -792,7 +792,7 @@ export default function EntertainmentPage() {
           {/* Filtered Books Grid */}
           {filteredBooks.length === 0 ? (
             <div className="glass-panel" style={{ padding: '3.5rem 2rem', textAlign: 'center', maxWidth: '540px', margin: '2rem auto' }}>
-              <p style={{ color: 'var(--text-muted)', marginBottom: '1.25rem', fontSize: '1.05rem' }}>
+              <p style={{ color: '#CBD5E1', marginBottom: '1.25rem', fontSize: '1.05rem' }}>
                 No dinosaur books found matching "<span style={{ color: 'var(--amber-primary)' }}>{searchQuery}</span>"
               </p>
               <button
