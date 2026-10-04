@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, User, Lock, Mail, LogIn, Sparkles, CheckCircle2, Shield } from 'lucide-react';
+import { X, User, Lock, Mail, LogIn, Sparkles, CheckCircle2, Shield, Eye, EyeOff } from 'lucide-react';
 import DinoSkull from './DinoSkull';
 
 export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
@@ -7,6 +7,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -216,13 +217,13 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
             <div style={{ position: 'relative' }}>
               <Lock size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 style={{
                   width: '100%',
-                  padding: '0.7rem 0.85rem 0.7rem 2.4rem',
+                  padding: '0.7rem 2.6rem 0.7rem 2.4rem',
                   borderRadius: '10px',
                   background: 'rgba(255, 255, 255, 0.06)',
                   border: '1px solid var(--border-subtle)',
@@ -233,6 +234,27 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                 }}
                 required
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                style={{
+                  position: 'absolute',
+                  right: '10px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--text-dim)',
+                  cursor: 'pointer',
+                  padding: '4px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
             </div>
           </div>
 
