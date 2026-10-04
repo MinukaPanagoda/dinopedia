@@ -6662,6 +6662,211 @@ button {
   }
 }
 
+/* =========================================================================
+   GEOLOGICAL ROCK FORMATIONS SYSTEM (AgeOfDinosaursPage.jsx)
+   ========================================================================= */
+
+.formations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 1.75rem;
+  margin-bottom: 3.5rem;
+}
+
+@media (max-width: 768px) {
+  .formations-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+
+.formation-card {
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(11, 16, 22, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--formation-accent, rgba(16, 185, 129, 0.3));
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 20px -5px var(--formation-glow, rgba(16, 185, 129, 0.15));
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.35s ease,
+              box-shadow 0.35s ease;
+}
+
+.formation-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--formation-color, #10B981);
+  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.85), 0 0 30px var(--formation-glow, rgba(16, 185, 129, 0.3));
+}
+
+.formation-card-media {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: #080D12;
+}
+
+.formation-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.formation-card:hover .formation-card-img {
+  transform: scale(1.08);
+}
+
+.formation-media-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(11, 16, 22, 0.15) 0%, rgba(11, 16, 22, 0.85) 80%, rgba(11, 16, 22, 1) 100%);
+  pointer-events: none;
+}
+
+.formation-era-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.formation-rock-type-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(14, 20, 27, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 0.22rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #E2E8F0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+
+.formation-card-body {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.formation-time-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.formation-title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 0.35rem;
+  line-height: 1.3;
+}
+
+.formation-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #38BDF8;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.formation-env-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.65rem 0.9rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.formation-significance {
+  color: #D1D5DB;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  margin-bottom: 1.25rem;
+}
+
+.formation-breakthrough-box {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #FEF3C7;
+}
+
+.formation-fossils-section {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 1rem;
+  margin-top: auto;
+}
+
+.formation-fossils-lbl {
+  font-size: 0.74rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.55rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.formation-fossil-pill {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  color: #E2E8F0;
+  padding: 0.22rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+}
+
+.formation-fossil-pill:hover {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--amber-light);
+  border-color: rgba(245, 158, 11, 0.35);
+  transform: translateY(-1px);
+}
+
 
 
 
