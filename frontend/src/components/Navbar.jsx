@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, X, Sparkles, LogIn, LogOut, User, ChevronDown } from 'lucide-react';
 import DinoSkull from './DinoSkull';
 import DinoSearchBar from './DinoSearchBar';
@@ -77,6 +77,17 @@ function JurassicCinemaIcon({ size = 16 }) {
 export default function Navbar({ activeTab, setActiveTab, user, onOpenLogin, onLogout, onSelectDino }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+        setUserDropdownOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const navItems = [
     { id: 'age-of-dinosaurs', label: 'Age of Dinosaurs', icon: DinoSkull },
