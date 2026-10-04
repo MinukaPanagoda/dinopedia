@@ -216,7 +216,7 @@ export default function QuizPage() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--amber-primary)', fontWeight: '700', fontSize: '0.85rem', marginBottom: '4px' }}>
                   <Sparkles size={15} /> Explanation
                 </div>
-                <p style={{ color: '#E5E7EB', fontSize: '0.9rem', lineHeight: '1.5' }}>
+                <p style={{ color: '#F1F5F9', fontSize: '0.95rem', lineHeight: '1.6' }}>
                   {question.explanation}
                 </p>
               </div>
@@ -251,19 +251,23 @@ export default function QuizPage() {
                     {rank.icon}
                   </div>
 
-                  <div style={{ display: 'inline-block', padding: '0.25rem 0.85rem', borderRadius: '999px', background: `${rank.color}22`, border: `1px solid ${rank.color}66`, color: rank.color, fontSize: '0.85rem', fontWeight: '700', marginBottom: '0.75rem' }}>
+                  <div style={{ display: 'inline-block', padding: '0.3rem 0.95rem', borderRadius: '999px', background: `${rank.color}22`, border: `1px solid ${rank.color}66`, color: rank.color, fontSize: '0.88rem', fontWeight: '700', marginBottom: '0.75rem' }}>
                     {rank.title}
                   </div>
 
-                  <h2 style={{ fontSize: '2rem', fontWeight: '800', color: '#fff', marginBottom: '0.5rem' }}>
+                  <h2 style={{ fontSize: '2.1rem', fontWeight: '800', color: '#FFFFFF', marginBottom: '0.5rem' }}>
                     Quiz Completed!
                   </h2>
 
-                  <p style={{ fontSize: '1.15rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
-                    You scored <strong style={{ color: 'var(--amber-primary)', fontSize: '1.4rem' }}>{score}</strong> / <strong>{QUESTIONS.length}</strong> ({pct}%)
+                  <p style={{ fontSize: '1.2rem', color: '#CBD5E1', marginBottom: '0.5rem' }}>
+                    You scored <strong style={{ color: 'var(--amber-primary)', fontSize: '1.5rem', fontWeight: '900' }}>{score}</strong> / <strong>{QUESTIONS.length}</strong> ({pct}%)
                   </p>
 
-                  <p style={{ fontSize: '0.92rem', color: 'var(--text-dim)', maxWidth: '460px', margin: '0 auto 2rem', lineHeight: '1.5' }}>
+                  <div style={{ width: '100%', maxWidth: '340px', height: '10px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '999px', margin: '0.75rem auto 1.25rem', overflow: 'hidden', border: '1px solid rgba(255, 255, 255, 0.12)' }}>
+                    <div style={{ width: `${pct}%`, height: '100%', background: rank.color, borderRadius: '999px', transition: 'width 1s cubic-bezier(0.16, 1, 0.3, 1)' }} />
+                  </div>
+
+                  <p style={{ fontSize: '0.98rem', color: '#E2E8F0', maxWidth: '480px', margin: '0 auto 2rem', lineHeight: '1.6', fontWeight: '500' }}>
                     {rank.msg}
                   </p>
 
